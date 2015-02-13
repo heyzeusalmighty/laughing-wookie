@@ -1,4 +1,4 @@
-﻿app.controller('shipsController', function ($scope, $location, $http, toaster, spaceFactory) {
+﻿app.controller('shipsController', function ($scope, $location, $http, spaceFactory) {
 
 
     $scope.testing = ['test', 'testy', 'testes'];

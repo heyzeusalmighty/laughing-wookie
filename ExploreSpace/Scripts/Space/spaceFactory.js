@@ -20,7 +20,7 @@
 
         service.getPlayerInfo = function() {
             var deferred = $q.defer();
-            $http({ method: "GET", url: "/Space/GetPlayerDetails" }).success(function (data) {
+            $http({ method: "GET", url: "/api/player" }).success(function (data) {
                 deferred.resolve(data);
             }).error(function () {
                 deferred.reject('There was an error');
@@ -28,6 +28,15 @@
             return deferred.promise;
         }
 
+        service.getMapTiles = function() {
+            var deferred = $q.defer();
+            $http({ method: "GET", url: "/api/map" }).success(function (data) {
+                deferred.resolve(data);
+            }).error(function () {
+                deferred.reject('There was an error');
+            });
+            return deferred.promise;
+        }
 
 
         function dummyShips() {

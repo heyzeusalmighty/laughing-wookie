@@ -5,6 +5,12 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExploreSpace", "ExploreSpace\ExploreSpace.csproj", "{8AFE33B7-B434-4AD1-8DC7-2EE2AAA139C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Occultation", "Occultation\Occultation.csproj", "{99FA74B6-C35D-4C6D-B5C8-20D886D565F0}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "GameDatabase", "GameDatabase\GameDatabase.sqlproj", "{14A33654-82E0-4D54-A77A-D26E21B53DEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Occult-Tests", "Occult-Tests\Occult-Tests.csproj", "{A486232F-FC0A-4349-BDD8-7593A2DC8E29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,20 @@ Global
 		{8AFE33B7-B434-4AD1-8DC7-2EE2AAA139C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8AFE33B7-B434-4AD1-8DC7-2EE2AAA139C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8AFE33B7-B434-4AD1-8DC7-2EE2AAA139C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99FA74B6-C35D-4C6D-B5C8-20D886D565F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99FA74B6-C35D-4C6D-B5C8-20D886D565F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99FA74B6-C35D-4C6D-B5C8-20D886D565F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99FA74B6-C35D-4C6D-B5C8-20D886D565F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14A33654-82E0-4D54-A77A-D26E21B53DEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14A33654-82E0-4D54-A77A-D26E21B53DEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14A33654-82E0-4D54-A77A-D26E21B53DEE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{14A33654-82E0-4D54-A77A-D26E21B53DEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14A33654-82E0-4D54-A77A-D26E21B53DEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14A33654-82E0-4D54-A77A-D26E21B53DEE}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A486232F-FC0A-4349-BDD8-7593A2DC8E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A486232F-FC0A-4349-BDD8-7593A2DC8E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A486232F-FC0A-4349-BDD8-7593A2DC8E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A486232F-FC0A-4349-BDD8-7593A2DC8E29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
