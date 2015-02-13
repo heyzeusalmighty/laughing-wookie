@@ -1,0 +1,78 @@
+﻿
+
+.profileHeader {
+    text-decoration: underline;
+}
+
+.coveredOrange {
+    color: black;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 6px;
+    background-color: #df691a;
+    background-color: rgba(223, 105, 26, 1)
+}
+
+.coveredBrown {
+    text-align: center;
+    font-weight: bold;
+    border-radius: 4px;
+    background-color: #df691a;
+    background-color: rgba(223, 105, 26, .25)
+}
+
+.coveredPink {
+    color: black;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 4px;
+    background-color: #d75e5e;
+    background-color: rgba(215, 94, 94, 1)
+}
+
+.uncovered {
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    background-color: #faf2cc  !important;
+    border-radius: 4px;
+}
+
+.orangeIncome {
+    
+}
+
+.table tr > td {
+    width: 50px;
+}
+
+.incomeTable {
+    margin-top: 20px;   
+}
+
+.tile {
+    height: 100px;
+    width: 100%;
+    background-color: #d2b48c;
+    border-radius: 4px;
+    
+}
+
+.tileTrack {
+    text-align: center;
+    color: gray;
+    display: block;
+    margin: auto;
+    padding-top: 15px;
+    /*color: rgba(0, 0, 0, 0.5);*/
+}
+
+.tileImage {
+    display: block;
+    margin: auto;
+    padding-top: 15px;
+}
+
+.tileDetail {
+    width: 100%;
+}

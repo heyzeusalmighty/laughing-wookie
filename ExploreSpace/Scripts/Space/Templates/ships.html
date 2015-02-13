@@ -1,0 +1,49 @@
+﻿
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills">
+            <li role="presentation"><a href="#/">HOME</a></li>
+            <li role="presentation"><a href="#/Profile">Profile</a></li>
+            <li role="presentation"><a href="#/Messages">Messages</a></li>
+            <li role="presentation" class="active"><a href="#/Ships">Ships</a></li>
+            <li role="presentation"><a href="#/Map">Map</a></li>
+        </ul>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-2">
+        <h2 class="profileHeader">Ships</h2>
+
+        <div ng-repeat="ship in ships">
+
+            <div class="list-group">
+                <a class="list-group-item active" ng-click="viewShip()">
+                    {{ship.name}}
+                </a>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Slots : <span class="badge">{{ship.slots}}</span>
+                </li>
+                <li class="list-group-item">
+                    Owned : <span class="badge">{{ship.count}}</span>
+                </li>
+            </ul>
+
+
+
+            <ul>
+                <li ng-repeat="comp in ship.components">
+                    {{comp.name}}
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="col-lg-10">
+
+    </div>
+</div>

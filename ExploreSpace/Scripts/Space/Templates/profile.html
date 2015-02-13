@@ -1,0 +1,121 @@
+﻿
+<div class="row">
+    <div class="col-md-12">
+        <ul class="nav nav-pills">
+            <li role="presentation"><a href="#/">HOME</a></li>
+            <li role="presentation" class="active"><a href="#/Profile">Profile</a></li>
+            <li role="presentation"><a href="#/Messages">Messages</a></li>
+            <li role="presentation"><a href="#/Ships">Ships</a></li>
+            <li role="presentation"><a href="#/Map">Map</a></li>
+        </ul>
+    </div>
+</div>
+
+<h2>your profile</h2>
+
+<div class="row">
+    
+    <div class="col-lg-3">
+        Current Incomes
+        
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="badge">{{currentOrange}}</span>
+                Orange :
+            </li>
+            <li class="list-group-item">
+                <span class="badge">{{currentPink}}</span>
+                Pink :
+            </li>
+            <li class="list-group-item">
+                <span class="badge">{{currentBrown}}</span>
+                Brown :
+            </li>
+        </ul>
+    </div>
+    <div class="col-lg-6">
+        Income Track
+        <table class="table table-bordered">
+            <tr class="">
+                <td ng-repeat="inc in orange" ng-class="inc.covered ? 'coveredOrange' : 'uncovered'">
+                    {{inc.income}}
+                </td>
+            </tr>
+            
+            <tr class="">
+                <td ng-repeat="inc in pink" ng-class="inc.covered ? 'coveredPink' : 'uncovered'">
+                    {{inc.income}}
+                </td>
+            </tr>
+            
+            <tr class="">
+                <td ng-repeat="inc in brown" ng-class="inc.covered ? 'coveredBrown' : 'uncovered'">
+                    {{inc.income}}
+                </td>
+            </tr>
+        </table>
+            
+    </div>
+    
+    <div class="col-lg-3">
+        Unapplied upgrades
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-9">
+        Science Track
+        
+        <table class="table table-bordered">
+            <tr>
+                <td ng-repeat="tile in starTrack">
+                    <div class="tile">
+                        <span class="fa fa-star-o fa-5x tileTrack" ng-hide="tile.Image != null"></span>
+                        
+                        <img class="tileImage" ng-src="{{tile.Image}}" ng-show="tile.Image != null" />
+                        
+                    </div>
+                    <div class="tileDetail">
+                        Cost Reduction : {{tile.CostReduction}}
+                    </div>
+                    <div class="tileDetail">
+                        Points : {{tile.VictoryPoints}}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td ng-repeat="tile in gridTrack">
+                    <div class="tile">
+                        <span class="fa fa-cubes fa-5x tileTrack" ng-hide="tile.Image != null"></span>
+                        <img class="tileImage" ng-src="{{tile.Image}}" ng-show="tile.Image != null" />
+                    </div>
+                    <div class="tileDetail">
+                        Cost Reduction : {{tile.CostReduction}}
+                    </div>
+                    <div class="tileDetail">
+                        Points : {{tile.VictoryPoints}}
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td ng-repeat="tile in gearTrack">
+                    <div class="tile">
+                        <span class="fa fa-cog fa-5x tileTrack" ng-hide="tile.Image != null"></span>
+                        <img class="tileImage" ng-src="{{tile.Image}}" ng-show="tile.Image != null" />
+                    </div>
+                    <div class="tileDetail">
+                        Cost Reduction : {{tile.CostReduction}}
+                    </div>
+                    <div class="tileDetail">
+                        Points : {{tile.VictoryPoints}}
+                    </div>
+                </td>
+            </tr>
+
+            
+        </table>
+
+    </div>
+</div>
