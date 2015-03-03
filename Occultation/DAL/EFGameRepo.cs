@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using Occultation.DAL.EF;
@@ -174,6 +175,23 @@ namespace Occultation.DAL
         public List<MapDeck> GetRevealedTiles(int gameId)
         {
             return context.MapDecks.Where(x => x.GameId == gameId && x.Revealed).ToList();
+        }
+
+        public MapDeck GetNextTile(int gameId, int div, int x, int y)
+        {
+            var tile = context.MapDecks.First(c => c.GameId == gameId && c.Division == div && !c.Revealed);
+            if (tile == null)
+            {
+                return null;
+            }
+            else
+            {
+                tile.Revealed = true;
+                tile.XCoords = x;
+                tile.YCoords = y;
+                context.SaveChanges();
+                return tile;
+            }
         }
 
         public Player GetCurrentUser(int gameId, string userName)

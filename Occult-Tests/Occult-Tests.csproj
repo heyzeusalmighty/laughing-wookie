@@ -60,6 +60,7 @@
     <Compile Include="Tests\GameCreatorTests.cs" />
     <Compile Include="Tests\PlayerVMTests.cs" />
     <Compile Include="Tests\ShipTests.cs" />
+    <Compile Include="Tests\TurnTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fakes\" />

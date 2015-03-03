@@ -28,3 +28,13 @@ app.config(function ($routeProvider) {
     ;
 
 });
+
+
+app.directive('menuBar', function() {
+    return {
+        restrict: 'AE',
+        //replace: true,
+        templateUrl: '/Scripts/Space/Templates/menu.html',
+        controller: 'menuController'
+    }
+});

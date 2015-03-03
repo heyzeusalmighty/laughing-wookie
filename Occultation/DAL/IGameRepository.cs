@@ -19,5 +19,6 @@ namespace Occultation.DAL
         void AddNewShipModel(PlayerShipModel model, List<ShipComponent> components);
         void AddTilesToNewGame(List<MapDeck> tiles);
         List<MapDeck> GetRevealedTiles(int gameId);
+        MapDeck GetNextTile(int gameId, int div, int x, int y);
     }
 }

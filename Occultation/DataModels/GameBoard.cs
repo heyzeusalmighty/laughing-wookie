@@ -24,10 +24,10 @@ namespace Occultation.DataModels
 
 
 
-        public GameBoard(int gameId, List<Tile> MapTiles )
+        public GameBoard(int gameId)
         {
             GameId = gameId;
-            var allTiles = new AvailableMapTile(MapTiles);
+            var allTiles = new AvailableMapTile();
             DivisionOne = allTiles.DivisionOne;
             DivisionTwo = allTiles.DivisionTwo;
             DivisionThree = allTiles.DivisionThree;
@@ -75,17 +75,12 @@ namespace Occultation.DataModels
             // check to see if the coordinates are already taken
             // what division are the coordinates in
             var divs = new DivChecker().Divs;
-
-            //var division = divs.FirstOrDefault(x => x.)
-
-            if (divs.Any(c => c.X == x && c.Y == y))
-            {
-                return "Coordinates already taken";
-            }
-
-
+            var division = divs.FirstOrDefault(c => c.X == x && c.Y == y);
+            var intDiv = (division != null) ? division.Div : 3;
+            
             // get the next item off the division pile 
             // remove from list and create new PlacedMapTile
+
 
 
 

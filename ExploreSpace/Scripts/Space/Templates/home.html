@@ -1,14 +1,4 @@
-﻿<div class="row">
-    <div class="col-md-12">
-        <ul class="nav nav-pills">
-            <li role="presentation" class="active"><a href="#/">HOME</a></li>
-            <li role="presentation"><a href="#/Profile">Profile</a></li>
-            <li role="presentation"><a href="#/Messages">Messages</a></li>
-            <li role="presentation"><a href="#/Ships">Ships</a></li>
-            <li role="presentation"><a href="#/Map">Map</a></li>
-        </ul>
-    </div>
-</div>
+﻿
 <h2>HOME</h2>
 
 <ul>
@@ -16,3 +6,13 @@
         {{test}}
     </li>
 </ul>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="form-group">
+            <label for="" class="control-label">Current Player</label>
+            <select ng-model="currentPlayer" ng-options="player for player in players" class="form-control" ng-change="updatePlayer()"></select>
+        </div>
+    </div>
+</div>

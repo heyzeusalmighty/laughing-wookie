@@ -124,6 +124,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Space\Controllers\homeController.js" />
     <Content Include="Scripts\Space\Controllers\mapController.js" />
+    <Content Include="Scripts\Space\Controllers\menuController.js" />
     <Content Include="Scripts\Space\Controllers\messagesController.js" />
     <Content Include="Scripts\Space\Controllers\profileController.js" />
     <Content Include="Scripts\Space\Controllers\shipsController.js" />
@@ -132,6 +133,7 @@
     <Content Include="Scripts\Space\spaceRoutes.js" />
     <Content Include="Scripts\Space\Templates\home.html" />
     <Content Include="Scripts\Space\Templates\map.html" />
+    <Content Include="Scripts\Space\Templates\menu.html" />
     <Content Include="Scripts\Space\Templates\messages.html" />
     <Content Include="Scripts\Space\Templates\profile.html" />
     <Content Include="Scripts\Space\Templates\ships.html" />

@@ -1,7 +1,16 @@
 ﻿//app.controller('profileController', function ($scope, $location, $http, toaster, spaceFactory) {
-app.controller('profileController', function ($scope, $location, spaceFactory) {
+app.controller('profileController', function ($scope, $location, spaceFactory, $rootScope) {
 
     $scope.testing = ['test', 'testy', 'testes'];
+
+
+    //Sort out the player situation for testing
+    if ($rootScope.currentPlayer == null || $rootScope.currentPlayer == undefined) {
+        console.info('go home');
+        $location.path('/');
+    } else {
+        $scope.currentPlayer = $rootScope.currentPlayer;
+    }
 
     //$scope.ships = spaceFactory.getShips();
 

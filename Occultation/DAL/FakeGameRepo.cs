@@ -147,7 +147,7 @@ namespace Occultation.DAL
                 new Player { UserId = 2, DiscColor = "Black"},
                 new Player { UserId = 3, DiscColor = "Yellow"},
                 new Player { UserId = 4, DiscColor = "White"},
-                new Player { UserId = 5, DiscColor = "Orange"}
+                new Player { UserId = 5, DiscColor = "Blue"}
             };
 
         }
@@ -224,6 +224,22 @@ namespace Occultation.DAL
             throw new NotImplementedException();
         }
 
+        public MapDeck GetNextTile(int gameId, int div, int x, int y)
+        {
+            var tile = context.MapDecks.First(c => c.GameId == gameId && c.Division == div && !c.Revealed);
+            if (tile == null)
+            {
+                return null;
+            }
+            else
+            {
+                tile.Revealed = true;
+                tile.XCoords = x;
+                tile.YCoords = y;
+                context.SaveChanges();
+                return tile;
+            }
+        }
 
         private GameBoard GetFourPlayerBoard()
         {
@@ -242,5 +258,7 @@ namespace Occultation.DAL
                 new User { CurrentOrange = 2, CurrentBrown = 3, CurrentPink = 3, Color = DiscColor.Green, Pass = false },
             };
         }
+
+        //private MapDeck GetTile()
     }
 }
