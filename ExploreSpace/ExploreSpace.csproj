@@ -122,6 +122,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Space\Controllers\gameController.js" />
     <Content Include="Scripts\Space\Controllers\homeController.js" />
     <Content Include="Scripts\Space\Controllers\mapController.js" />
     <Content Include="Scripts\Space\Controllers\menuController.js" />
@@ -131,6 +132,7 @@
     <Content Include="Scripts\Space\hexmap.js" />
     <Content Include="Scripts\Space\spaceFactory.js" />
     <Content Include="Scripts\Space\spaceRoutes.js" />
+    <Content Include="Scripts\Space\Templates\game.html" />
     <Content Include="Scripts\Space\Templates\home.html" />
     <Content Include="Scripts\Space\Templates\map.html" />
     <Content Include="Scripts\Space\Templates\menu.html" />

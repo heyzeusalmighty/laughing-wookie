@@ -20,7 +20,7 @@ namespace Occultation.ViewModels
         private int PlayerId { get; set; }
         public Player CurrentPlayer { get; set; }
         public GameBoard CurrentGame { get; set; }
-        public IGameRepository Repo { get; set; }
+        private IGameRepository Repo { get; set; }
         public ScienceTrack ScienceTrack { get; set; }
 
         public PlayerViewModel(int gameId, string userName, IGameRepository repo)

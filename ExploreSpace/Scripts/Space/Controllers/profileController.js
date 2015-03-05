@@ -5,6 +5,7 @@ app.controller('profileController', function ($scope, $location, spaceFactory, $
 
 
     //Sort out the player situation for testing
+    $rootScope.currentPlayer = "player2";
     if ($rootScope.currentPlayer == null || $rootScope.currentPlayer == undefined) {
         console.info('go home');
         $location.path('/');
@@ -34,12 +35,24 @@ app.controller('profileController', function ($scope, $location, spaceFactory, $
     $scope.starTrack = [];
     $scope.gridTrack = [];
 
-    //spaceFactory.getScienceTrack().then(function(data) {
-    //    console.log(data);
+    $scope.discs = [
+        { cost: "-30", occupied: true },
+        { cost: "-25", occupied: true },
+        { cost: "-21", occupied: true },
+        { cost: "-17", occupied: true },
+        { cost: "-13", occupied: true },
+        { cost: "-10", occupied: true },
+        { cost: "-7", occupied: true },
+        { cost: "-5", occupied: true },
+        { cost: "-3", occupied: true },
+        { cost: "-2", occupied: false },
+        { cost: "-1", occupied: false },
+        { cost: "0", occupied: false },
+        { cost: "0", occupied: false }
 
-        
-        
-    //});
+    ];
+
+    $scope.colonyShips = [{ ship: true }, { ship: true }, { ship: false } ];
 
     spaceFactory.getPlayerInfo().then(function(data) {
 

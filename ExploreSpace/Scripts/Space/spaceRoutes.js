@@ -24,8 +24,11 @@ app.config(function ($routeProvider) {
         .when("/Map", {
             templateUrl: '/Scripts/Space/Templates/map.html',
             controller: 'mapController'
-})
-    ;
+        })
+        .when("/Game", {
+            templateUrl: '/Scripts/Space/Templates/game.html',
+            controller: 'gameController'
+        });
 
 });
 

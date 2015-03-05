@@ -42,5 +42,7 @@ namespace Occultation.DAL.EF
         public int AvailableDiscs { get; set; }
 
         public int UserId { get; set; }
+
+        public int AvailableColonyShips { get; set; }
     }
 }

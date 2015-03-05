@@ -43,25 +43,80 @@
                 </td>
             </tr>
         </table>
+        
+        <table class="table">
+            <tr>
+                <td>
+                    Explore
+                </td>
+                <td>Influence</td>
+                <td>Research</td>
+                <td>Upgrade</td>
+                <td>Build</td>
+                <td>Move</td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="btn">EXP</button>
+                </td>
+                <td>
+                    <button class="btn">INF</button>
+                </td>
+                <td>
+                    <button class="btn">RES</button>
+                </td>
+                <td>
+                    <button class="btn">UPG</button>
+                </td>
+                <td>
+                    <button class="btn">BUI</button>
+                </td>
+                <td>
+                    <button class="btn">MOV</button>
+                </td>
+            </tr>
+            
+        </table>
 
     </div>
 
-    <div class="col-lg-3">
+    <div class="col-lg-2">
         Unapplied upgrades
        
-        <div class="tile tileTrack">
-            <img class="tileImage" src="http://lorempixel.com/75/75/" />
+        <div class="upgradeTile tileTrack">
+            <img class="upgradeImage" src="http://lorempixel.com/75/75/" />
             <div class="tileDetail">Death Stars</div>
         </div>
-        <div class=" tile tileTrack">
-            <img class="tileImage" src="http://lorempixel.com/75/75/" />
+        <div class=" upgradeTile tileTrack">
+            <img class="upgradeImage" src="http://lorempixel.com/75/75/" />
             <div class="tileDetail">Warp Drives</div>
         </div>
         
         
     </div>
+    <div class="col-lg-1 ">
+        <strong>Colony</strong>
+        <div ng-repeat="ship in colonyShips" class="colonyToken">
+            <img src="http://lorempixel.com/50/50/" class="colonyShipImage" />
+        </div>
+    </div>
 </div>
 
+<div class="row">
+    <div class="col-lg-9">
+        <table class="table">
+            <tr>
+                <td ng-repeat="disc in discs" >
+                    <div class="disc" ng-class="(disc.occupied) ? 'unusedDisc' : ''">
+                        {{disc.cost}}
+                    </div>
+                </td>
+                
+            </tr>
+        </table>
+    </div>
+    
+</div>
 
 <div class="row">
     <div class="col-lg-9">
@@ -77,7 +132,7 @@
 
                     </div>
                     <div class="tileDetail">
-                        Cost Reduction : {{tile.CostReduction}}
+                        Reduction : {{tile.CostReduction}}
                     </div>
                     <div class="tileDetail">
                         Points : {{tile.VictoryPoints}}
@@ -91,12 +146,12 @@
                         <img class="tileImage" src="http://lorempixel.com/65/65/" ng-show="tile.Image != null" />
                     </div>
                     <div class="tileDetail">
-                        Cost Reduction : {{tile.CostReduction}}
+                        Reduction : {{tile.CostReduction}}
                     </div>
                     <div class="tileDetail">
                         Points : {{tile.VictoryPoints}}
                     </div>
-                    </t>d
+                </td>
             </tr>
             <tr>
                 <td ng-repeat="tile in gearTrack">
@@ -106,8 +161,7 @@
                         <!--<img class="tileImage" ng-src="{{tile.Image}}" ng-show="tile.Image != null" />-->
                     </div>
                     <div class="tileDetail">
-                        ai
-                          Cost Reduction : {{tile.CostReduction}}
+                        Reduction : {{tile.CostReduction}}
                     </div>
                     <div class="tileDetail">
                         Points : {{tile.VictoryPoints}}

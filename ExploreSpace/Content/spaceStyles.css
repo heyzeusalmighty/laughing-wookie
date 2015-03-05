@@ -76,3 +76,46 @@
 .tileDetail {
     width: 100%;
 }
+
+.disc {
+    height: 50px;
+    width: 100%;
+    background-color: blue;
+    border-radius: 25px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+}
+
+.unusedDisc {
+    font-weight: bold;
+    background-color: #00ced1;
+    color: black;
+}
+
+.colonyToken {
+    width: 100%;
+    height: 75px;
+    background-color: #d2b48c;
+    border-radius: 4px;
+}
+
+.colonyShipImage {
+    display: block;
+    margin: auto;
+    padding-top: 15px;
+}
+
+.upgradeTile {
+    width: 100%;
+    height: 125px;
+    background-color: #d2b48c;
+    border-radius: 4px;
+    color: black;
+}
+
+.upgradeImage {
+    display: block;
+    margin: auto;
+    padding-top: 5px;
+}

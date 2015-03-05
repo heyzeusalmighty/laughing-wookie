@@ -99,7 +99,15 @@ namespace Occultation.DAL
 
         public Player GetCurrentUser(int gameId, string userName)
         {
-            return new Player {UserId = 1, DiscColor = "Green"};
+            return new Player
+            {
+                UserId = 1, DiscColor = "Green", CurrentBrown = 2, 
+                CurrentOrange = 5,
+                CurrentPink = 10,
+                AvailableDiscs = 5,
+                AvailableColonyShips = 3
+
+            };
         }
 
         public List<ScienceTile> GetScienceTrack(int gameId, int playerId)
