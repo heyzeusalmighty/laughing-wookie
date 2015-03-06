@@ -107,6 +107,8 @@
     </Content>
     <Content Include="Content\Site.css" />
     <Content Include="Content\spaceStyles.css" />
+    <Content Include="Content\toastr.min.css" />
+    <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\angToaster.js" />
@@ -139,6 +141,7 @@
     <Content Include="Scripts\Space\Templates\messages.html" />
     <Content Include="Scripts\Space\Templates\profile.html" />
     <Content Include="Scripts\Space\Templates\ships.html" />
+    <Content Include="Scripts\ui-router-0.2.13.min.js" />
     <Content Include="Web.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
