@@ -1,8 +1,5 @@
 ﻿//app.controller('profileController', function ($scope, $location, $http, toaster, spaceFactory) {
-app.controller('profileController', function ($scope, $location, spaceFactory, $rootScope) {
-
-    $scope.testing = ['test', 'testy', 'testes'];
-
+app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$rootScope', 'toaster', function ($scope, $location, spaceFactory, $rootScope, toaster) {
 
     //Sort out the player situation for testing
     $rootScope.currentPlayer = "player2";
@@ -36,23 +33,26 @@ app.controller('profileController', function ($scope, $location, spaceFactory, $
     $scope.gridTrack = [];
 
     $scope.discs = [
-        { cost: "-30", occupied: true },
-        { cost: "-25", occupied: true },
-        { cost: "-21", occupied: true },
-        { cost: "-17", occupied: true },
-        { cost: "-13", occupied: true },
-        { cost: "-10", occupied: true },
-        { cost: "-7", occupied: true },
-        { cost: "-5", occupied: true },
-        { cost: "-3", occupied: true },
-        { cost: "-2", occupied: false },
-        { cost: "-1", occupied: false },
-        { cost: "0", occupied: false },
-        { cost: "0", occupied: false }
+        { cost: -30, occupied: true },
+        { cost: -25, occupied: true },
+        { cost: -21, occupied: true },
+        { cost: -17, occupied: true },
+        { cost: -13, occupied: true },
+        { cost: -10, occupied: true },
+        { cost: -7, occupied: true },
+        { cost: -5, occupied: true },
+        { cost: -3, occupied: true },
+        { cost: -2, occupied: false },
+        { cost: -1, occupied: false },
+        { cost: 0, occupied: false },
+        { cost: 0, occupied: false }
 
     ];
 
-    $scope.colonyShips = [{ ship: true }, { ship: true }, { ship: false } ];
+    $scope.colonyShips = [{ ship: true }, { ship: true }, { ship: false }];
+
+    $scope.takingAction = false;
+
 
     spaceFactory.getPlayerInfo().then(function(data) {
 
@@ -61,17 +61,89 @@ app.controller('profileController', function ($scope, $location, spaceFactory, $
     });
 
 
+
+    //=================================
+    //  ACTIONS
+    //=================================
+    $scope.explore = function() {
+        
+        if (checkForEnoughDiscs()) {
+            $scope.takingAction = true;
+            takeDisc();
+        } else {
+            toaster.pop('warning', '', 'Not enough discs');
+            $scope.takingAction = false;
+        }
+    };
+
+    $scope.influence = function () {
+        $scope.takingAction = true;
+        if (checkForEnoughDiscs()) {
+
+        } else {
+            toaster.pop('warning', '', 'Not enough discs');
+            $scope.takingAction = false;
+        }
+    };
+
+    $scope.research = function () {
+        $scope.takingAction = true;
+        if (checkForEnoughDiscs()) {
+            
+        } else {
+            toaster.pop('warning', '', 'Not enough discs');
+            $scope.takingAction = false;
+        }
+    };
+
+    $scope.upgrade = function () {
+        $scope.takingAction = true;
+        if (checkForEnoughDiscs()) {
+
+        } else {
+            toaster.pop('warning', '', 'Not enough discs');
+            $scope.takingAction = false;
+        }
+    };
+
+    $scope.build = function () {
+        $scope.takingAction = true;
+        if (checkForEnoughDiscs()) {
+
+        } else {
+            toaster.pop('warning', '', 'Not enough discs');
+            $scope.takingAction = false;
+        }
+    };
+
+    $scope.move = function () {
+        $scope.takingAction = true;
+        if (checkForEnoughDiscs()) {
+
+        } else {
+            toaster.pop('warning', '', 'Not enough discs');
+            $scope.takingAction = false;
+        }
+    };
+
+    $scope.cancelAction = function() {
+        $scope.takingAction = false;
+        returnDiscForCancelledAction();
+    };
+
+
     function calculateIncome(uncovered) {
         var inc = [];
         for (var i = 0; i < incomes.length; i++) {
+            var newIncome;
             if (incomes[i] > uncovered) {
-                var newIncome = {
+                newIncome = {
                     income: incomes[i],
                     covered: true
                 };
                 inc.push(newIncome);
             } else {
-                var newIncome = {
+                newIncome = {
                     income: incomes[i],
                     covered: false
                 };
@@ -84,7 +156,7 @@ app.controller('profileController', function ($scope, $location, spaceFactory, $
 
 
     function processScienceTrack(data) {
-        console.log(data);
+        //console.log(data);
 
         for (var i = 0; i < data.GearTiles.length; i++) {
             data.GearTiles[i].CostReduction = (data.GearTiles[i].CostReduction > 0) ? -data.GearTiles[i].CostReduction : 0;
@@ -108,4 +180,53 @@ app.controller('profileController', function ($scope, $location, spaceFactory, $
         $scope.scienceTrack = data;
     }
 
-});
+    function checkForEnoughDiscs() {
+        var toBeUsed = discs[0];
+        return toBeUsed.occupied;
+    }
+
+    function takeDisc() {
+        var discs = $scope.discs;
+
+        var toBeUsed = discs[0];
+        for (var i = 0; i < discs.length; i++) {
+            if (discs[i].occupied && discs[i].cost > toBeUsed.cost) {
+                toBeUsed = discs[i];
+            }
+        }
+
+        if (toBeUsed.occupied == true) {
+            toBeUsed.occupied = false;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function returnDiscForCancelledAction() {
+        var discs = $scope.discs;
+        var badChoice = discs[discs.length - 1];
+
+        for (var i = 0; i < discs.length; i++) {
+            if ((!discs[i].occupied) && (discs[i].cost < badChoice.cost)) {
+                badChoice = discs[i];
+                console.log('new champion => ' + badChoice.cost);
+            }
+
+            //if (!discs[i].occupied) {
+            //    console.log('disc v. champion => ' + (discs[i].cost < badChoice.cost))
+            //    if (discs[i].cost < badChoice.cost) {
+            //        badChoice = discs[i];
+            //        console.log('new champion => ' + badChoice.cost);
+            //    }
+            //}
+            //console.log(badChoice.cost + " vs. " + discs[i].cost + ' :: ' + !discs[i].occupied + ' :: ' + (discs[i].cost < badChoice.cost));
+            //if ((!discs[i].occupied) && (discs[i].cost > badChoice.cost)) {
+            //    badChoice = discs[i];
+            //    console.log('new champion => ' + badChoice.cost);
+            //}
+        }
+        badChoice.occupied = true;
+    }
+
+}]);

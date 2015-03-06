@@ -90,7 +90,12 @@
 .unusedDisc {
     font-weight: bold;
     background-color: #00ced1;
-    color: black;
+    color: gray;
+
+}
+
+.discValue {
+        
 }
 
 .colonyToken {
@@ -118,4 +123,10 @@
     display: block;
     margin: auto;
     padding-top: 5px;
+}
+
+.takingTurns {
+    height: 200px;
+    background-color: green;
+    border-radius: 4px;
 }

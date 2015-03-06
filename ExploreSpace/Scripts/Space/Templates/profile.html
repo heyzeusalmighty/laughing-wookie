@@ -43,7 +43,7 @@
                 </td>
             </tr>
         </table>
-        
+
         <table class="table">
             <tr>
                 <td>
@@ -57,32 +57,32 @@
             </tr>
             <tr>
                 <td>
-                    <button class="btn">EXP</button>
+                    <button class="btn" ng-click="explore()">EXP</button>
                 </td>
                 <td>
-                    <button class="btn">INF</button>
+                    <button class="btn" ng-click="influence()">INF</button>
                 </td>
                 <td>
-                    <button class="btn">RES</button>
+                    <button class="btn" ng-click="research()">RES</button>
                 </td>
                 <td>
-                    <button class="btn">UPG</button>
+                    <button class="btn" ng-click="upgrade()">UPG</button>
                 </td>
                 <td>
-                    <button class="btn">BUI</button>
+                    <button class="btn" ng-click="build()">BUI</button>
                 </td>
                 <td>
-                    <button class="btn">MOV</button>
+                    <button class="btn" ng-click="move()">MOV</button>
                 </td>
             </tr>
-            
+
         </table>
 
     </div>
 
     <div class="col-lg-2">
         Unapplied upgrades
-       
+
         <div class="upgradeTile tileTrack">
             <img class="upgradeImage" src="http://lorempixel.com/75/75/" />
             <div class="tileDetail">Death Stars</div>
@@ -91,8 +91,8 @@
             <img class="upgradeImage" src="http://lorempixel.com/75/75/" />
             <div class="tileDetail">Warp Drives</div>
         </div>
-        
-        
+
+
     </div>
     <div class="col-lg-1 ">
         <strong>Colony</strong>
@@ -104,18 +104,27 @@
 
 <div class="row">
     <div class="col-lg-9">
+
+        <div ng-show="takingAction" class="takingTurns">
+            <div>
+                <button class="btn btn-danger" ng-click="cancelAction()">Cancel Action</button>
+            </div>
+        </div>
+
+
+
         <table class="table">
             <tr>
-                <td ng-repeat="disc in discs" >
-                    <div class="disc" ng-class="(disc.occupied) ? 'unusedDisc' : ''">
-                        {{disc.cost}}
+                <td ng-repeat="disc in discs">
+                    <div class="disc" ng-class="(disc.occupied) ? 'unusedDisc' : ''" title="Cost : {{disc.cost}}">
+                        <span class="discValue" ng-hide="disc.occupied">{{disc.cost}}</span>
                     </div>
                 </td>
-                
+
             </tr>
         </table>
     </div>
-    
+
 </div>
 
 <div class="row">

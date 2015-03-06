@@ -1,36 +1,43 @@
-﻿var app = angular.module('space', ['ngRoute']);
+﻿var app = angular.module('space', ['ui.router', 'toaster']);
 
-app.config(function ($routeProvider) {
+app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
-    $routeProvider
+    $urlRouterProvider.otherwise("/home");
 
+    $stateProvider
         // route for the home page
-        .when('/', {
+        .state('Home', {
+            url: '/Home',
             templateUrl: '/Scripts/Space/Templates/home.html',
             controller: 'homeController'
         })
-        .when('/Profile', {
+        .state('Profile', {
+            url: '/Profile',
             templateUrl: '/Scripts/Space/Templates/profile.html',
             controller: 'profileController'
         })
-        .when('/Messages', {
+        .state('Messages', {
+            url: '/Messages',
             templateUrl: '/Scripts/Space/Templates/messages.html',
             controller: 'messagesController'
         })
-        .when("/Ships", {
+        .state("Ships", {
+            url: '/Ships',
             templateUrl: '/Scripts/Space/Templates/ships.html',
             controller: 'shipsController'
         })
-        .when("/Map", {
+        .state("Map", {
+            url: "/Map",
             templateUrl: '/Scripts/Space/Templates/map.html',
             controller: 'mapController'
         })
-        .when("/Game", {
+        .state("Game", {
+            url: "/Game",
             templateUrl: '/Scripts/Space/Templates/game.html',
             controller: 'gameController'
         });
 
-});
+}]);
 
 
 app.directive('menuBar', function() {
