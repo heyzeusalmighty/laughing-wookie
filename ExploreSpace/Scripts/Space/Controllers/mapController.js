@@ -20,6 +20,7 @@
     //Centralish 
     hexagonGrid.redrawHexAtColRow(sx, sy, central);
 
+    $scope.loading = true;
     spaceFactory.getMapTiles().then(function(data) {
         for (var i = 0; i < data.length; i++) {
 
@@ -39,6 +40,8 @@
 
             hexagonGrid.buildGameHex(data[i]);
         }
+
+        $scope.loading = false;
     });
 
     

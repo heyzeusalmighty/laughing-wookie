@@ -54,10 +54,11 @@ app.controller('profileController', function ($scope, $location, spaceFactory, $
 
     $scope.colonyShips = [{ ship: true }, { ship: true }, { ship: false } ];
 
+    $scope.loading = true;
     spaceFactory.getPlayerInfo().then(function(data) {
 
         processScienceTrack(data.ScienceTrack);
-
+        $scope.loading = false;
     });
 
 
