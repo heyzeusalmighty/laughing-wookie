@@ -59,22 +59,22 @@
             </tr>
             <tr>
                 <td>
-                    <button class="btn" ng-click="explore()">EXP</button>
+                    <button class="btn" ng-click="takeAction('EXPLORE')">EXP</button>
                 </td>
                 <td>
-                    <button class="btn" ng-click="influence()">INF</button>
+                    <button class="btn" ng-click="takeAction('INFLUENCE')">INF</button>
                 </td>
                 <td>
-                    <button class="btn" ng-click="research()">RES</button>
+                    <button class="btn" ng-click="takeAction('RESEARCH')">RES</button>
                 </td>
                 <td>
-                    <button class="btn" ng-click="upgrade()">UPG</button>
+                    <button class="btn" ng-click="takeAction('UPGRADE')">UPG</button>
                 </td>
                 <td>
-                    <button class="btn" ng-click="build()">BUI</button>
+                    <button class="btn" ng-click="takeAction('BUILD')">BUI</button>
                 </td>
                 <td>
-                    <button class="btn" ng-click="move()">MOV</button>
+                    <button class="btn" ng-click="takeAction('MOVE')">MOV</button>
                 </td>
             </tr>
 
@@ -110,6 +110,10 @@
         <div ng-show="takingAction" class="takingTurns">
             <div>
                 <button class="btn btn-danger" ng-click="cancelAction()">Cancel Action</button>
+                <h1>{{currentAction}}</h1>
+                
+                <div ui-view="actionViews"></div>
+
             </div>
         </div>
 

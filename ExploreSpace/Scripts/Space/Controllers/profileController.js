@@ -52,6 +52,7 @@ app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$ro
     $scope.colonyShips = [{ ship: true }, { ship: true }, { ship: false }];
 
     $scope.takingAction = false;
+    $scope.currentAction = '';
 
 
     $scope.loading = true;
@@ -66,64 +67,14 @@ app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$ro
     //=================================
     //  ACTIONS
     //=================================
-    $scope.explore = function() {
-        
+    
+    $scope.takeAction = function(action) {
         if (checkForEnoughDiscs()) {
-            $scope.takingAction = true;
-            takeDisc();
+            if (takeDisc(action)) {
+
+            }
         } else {
             toaster.pop('warning', '', 'Not enough discs');
-            $scope.takingAction = false;
-        }
-    };
-
-    $scope.influence = function () {
-        $scope.takingAction = true;
-        if (checkForEnoughDiscs()) {
-
-        } else {
-            toaster.pop('warning', '', 'Not enough discs');
-            $scope.takingAction = false;
-        }
-    };
-
-    $scope.research = function () {
-        $scope.takingAction = true;
-        if (checkForEnoughDiscs()) {
-            
-        } else {
-            toaster.pop('warning', '', 'Not enough discs');
-            $scope.takingAction = false;
-        }
-    };
-
-    $scope.upgrade = function () {
-        $scope.takingAction = true;
-        if (checkForEnoughDiscs()) {
-
-        } else {
-            toaster.pop('warning', '', 'Not enough discs');
-            $scope.takingAction = false;
-        }
-    };
-
-    $scope.build = function () {
-        $scope.takingAction = true;
-        if (checkForEnoughDiscs()) {
-
-        } else {
-            toaster.pop('warning', '', 'Not enough discs');
-            $scope.takingAction = false;
-        }
-    };
-
-    $scope.move = function () {
-        $scope.takingAction = true;
-        if (checkForEnoughDiscs()) {
-
-        } else {
-            toaster.pop('warning', '', 'Not enough discs');
-            $scope.takingAction = false;
         }
     };
 
@@ -182,11 +133,16 @@ app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$ro
     }
 
     function checkForEnoughDiscs() {
-        var toBeUsed = discs[0];
+        var toBeUsed = $scope.discs[0];
         return toBeUsed.occupied;
     }
 
-    function takeDisc() {
+    function takeDisc(action) {
+        if ($scope.takingAction) {
+            toaster.pop('warning', '', 'Already taking another action');
+            return false;
+        }
+
         var discs = $scope.discs;
 
         var toBeUsed = discs[0];
@@ -198,6 +154,8 @@ app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$ro
 
         if (toBeUsed.occupied == true) {
             toBeUsed.occupied = false;
+            $scope.takingAction = true;
+            $scope.currentAction = action;
             return true;
         } else {
             return false;
