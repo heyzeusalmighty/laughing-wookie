@@ -60,6 +60,7 @@
             <tr>
                 <td>
                     <button class="btn" ng-click="takeAction('EXPLORE')">EXP</button>
+                    
                 </td>
                 <td>
                     <button class="btn" ng-click="takeAction('INFLUENCE')">INF</button>
@@ -104,21 +105,23 @@
     </div>
 </div>
 
+<div class="row" ng-show="takingAction">
+    <div class="col-lg-12">
+        <div>
+            <button class="btn btn-danger" ng-click="cancelAction()">Cancel Action</button>
+            <h1>{{currentAction}}</h1>
+
+            <div ui-view></div>
+
+        </div>
+    </div>
+</div>
+
+
 <div class="row">
     <div class="col-lg-9">
 
-        <div ng-show="takingAction" class="takingTurns">
-            <div>
-                <button class="btn btn-danger" ng-click="cancelAction()">Cancel Action</button>
-                <h1>{{currentAction}}</h1>
-                
-                <div ui-view="actionViews"></div>
-
-            </div>
-        </div>
-
-
-
+        
         <table class="table">
             <tr>
                 <td ng-repeat="disc in discs">

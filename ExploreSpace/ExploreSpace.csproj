@@ -134,6 +134,12 @@
     <Content Include="Scripts\Space\hexmap.js" />
     <Content Include="Scripts\Space\spaceFactory.js" />
     <Content Include="Scripts\Space\spaceRoutes.js" />
+    <Content Include="Scripts\Space\Templates\Actions\build.html" />
+    <Content Include="Scripts\Space\Templates\Actions\explore.html" />
+    <Content Include="Scripts\Space\Templates\Actions\influence.html" />
+    <Content Include="Scripts\Space\Templates\Actions\move.html" />
+    <Content Include="Scripts\Space\Templates\Actions\research.html" />
+    <Content Include="Scripts\Space\Templates\Actions\upgrade.html" />
     <Content Include="Scripts\Space\Templates\game.html" />
     <Content Include="Scripts\Space\Templates\home.html" />
     <Content Include="Scripts\Space\Templates\map.html" />

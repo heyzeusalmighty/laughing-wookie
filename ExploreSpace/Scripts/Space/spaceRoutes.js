@@ -2,7 +2,7 @@
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise("/home");
+    $urlRouterProvider.otherwise("/Home");
 
     $stateProvider
         // route for the home page
@@ -35,6 +35,36 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: "/Game",
             templateUrl: '/Scripts/Space/Templates/game.html',
             controller: 'gameController'
+        })
+        .state('Profile.Exploring', {
+            url: '/Explore',
+            templateUrl: '/Scripts/Space/Templates/Actions/explore.html',
+            controller: 'mapController'
+        })
+        .state('Profile.Influence', {
+            url: '/Influence',
+            templateUrl: '/Scripts/Space/Templates/Actions/influence.html',
+            controller: 'profileController'
+        })
+        .state('Profile.Research', {
+            url: '/Research',
+            templateUrl: '/Scripts/Space/Templates/Actions/research.html',
+            controller: 'profileController'
+        })
+        .state('Profile.Upgrade', {
+            url: '/Upgrade',
+            templateUrl: '/Scripts/Space/Templates/Actions/upgrade.html',
+            controller: 'profileController'
+        })
+        .state('Profile.Build', {
+            url: '/Build',
+            templateUrl: '/Scripts/Space/Templates/Actions/build.html',
+            controller: 'profileController'
+        })
+        .state('Profile.Move', {
+            url: '/Move',
+            templateUrl: '/Scripts/Space/Templates/Actions/move.html',
+            controller: 'profileController'
         });
 
 }]);

@@ -1,5 +1,5 @@
 ﻿//app.controller('profileController', function ($scope, $location, $http, toaster, spaceFactory) {
-app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$rootScope', 'toaster', function ($scope, $location, spaceFactory, $rootScope, toaster) {
+app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$rootScope', 'toaster', '$state', function ($scope, $location, spaceFactory, $rootScope, toaster, $state) {
 
     //Sort out the player situation for testing
     $rootScope.currentPlayer = "player2";
@@ -71,7 +71,29 @@ app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$ro
     $scope.takeAction = function(action) {
         if (checkForEnoughDiscs()) {
             if (takeDisc(action)) {
+                switch (action) {
+                    case 'EXPLORE':
+                        $state.go('Profile.Exploring');
+                        break;
+                    case 'INFLUENCE':
+                        $state.go('Profile.Influence');
+                        break;
+                    case 'RESEARCH':
+                        $state.go('Profile.Research');
+                        break;
+                    case 'UPGRADE':
+                        $state.go('Profile.Upgrade');
+                        break;
+                    case 'BUILD':
+                        $state.go('Profile.Build');
+                        break;
+                    case 'MOVE':
+                        $state.go('Profile.Move');
+                        break;
+                    default:
+                        toast.pop('warning', '', 'Function not recognized');
 
+                }
             }
         } else {
             toaster.pop('warning', '', 'Not enough discs');

@@ -1,6 +1,11 @@
 ﻿app.controller('mapController', function ($scope, $location, $http, spaceFactory) {
 
 
+    $scope.whatIsIt = function() {
+
+        console.log('taking action', $scope.takingAction);
+    }
+
     var central = "rgba(215,40,40,0.8)";
     var divisionOne = "rgba(103,155,153,0.8)";
     var divisionTwo = "rgba(65,129,127,0.8)";
