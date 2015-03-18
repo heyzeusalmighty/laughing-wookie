@@ -5,4 +5,6 @@
         return route === $location.path();
     };
 
+    console.info('menu loaded');
+
 }]);

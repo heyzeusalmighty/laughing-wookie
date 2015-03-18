@@ -7,7 +7,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
     $stateProvider
         // route for the home page
         .state('Home', {
-            url: '/Home',
+            url: '/',
             templateUrl: '/Scripts/Space/Templates/home.html',
             controller: 'homeController'
         })
@@ -39,7 +39,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
         .state('Profile.Exploring', {
             url: '/Explore',
             templateUrl: '/Scripts/Space/Templates/Actions/explore.html',
-            controller: 'mapController'
+            controller: 'exploreController'
         })
         .state('Profile.Influence', {
             url: '/Influence',
