@@ -1,7 +1,10 @@
-﻿CREATE TABLE [dbo].[GameUsers] (
-    [UserId]       INT          IDENTITY (1, 1) NOT NULL,
-    [UserName]     VARCHAR (50) NULL,
-    [EmailAddress] VARCHAR (50) NULL,
-    CONSTRAINT [PK_GameUsers] PRIMARY KEY CLUSTERED ([UserId] ASC)
-);
+﻿CREATE TABLE [dbo].[GameUsers](
+	[UserId] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [varchar](50) NULL,
+	[EmailAddress] [varchar](50) NULL,
+ CONSTRAINT [PK_GameUsers] PRIMARY KEY CLUSTERED 
+(
+	[UserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 

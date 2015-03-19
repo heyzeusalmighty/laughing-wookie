@@ -61,6 +61,7 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ScienceTrack.sql" />
@@ -72,5 +73,7 @@
     <Build Include="dbo\Tables\PlayerShipModel.sql" />
     <Build Include="dbo\Tables\ShipModelComponents.sql" />
     <Build Include="dbo\Tables\MapDeck.sql" />
+    <Build Include="dbo\Tables\Turns.sql" />
+    <None Include="Scripts\ScriptsIgnoredOnImport.sql" />
   </ItemGroup>
 </Project>

@@ -1,19 +1,25 @@
-﻿CREATE TABLE [dbo].[Player] (
-    [PlayerId]       INT          IDENTITY (1, 1) NOT NULL,
-    [Username]       VARCHAR (50) NOT NULL,
-    [GameId]         INT          NOT NULL,
-    [DiscColor]      VARCHAR (12) NOT NULL,
-    [CurrentOrange]  INT          NOT NULL,
-    [CurrentBrown]   INT          NOT NULL,
-    [CurrentPink]    INT          NOT NULL,
-    [OrangeIncome]   INT          NOT NULL,
-    [BrownIncome]    INT          NOT NULL,
-    [PinkIncome]     INT          NOT NULL,
-    [Pass]           BIT          CONSTRAINT [DF_Player_Pass] DEFAULT ((0)) NOT NULL,
-    [TurnOrder]      INT          NOT NULL,
-    [TotalDiscs]     INT          NOT NULL,
-    [AvailableDiscs] INT          NOT NULL,
-    [UserId]         INT          NOT NULL,
-    CONSTRAINT [PK_Player] PRIMARY KEY CLUSTERED ([PlayerId] ASC)
-);
+﻿CREATE TABLE [dbo].[Player](
+	[PlayerId] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [varchar](50) NOT NULL,
+	[GameId] [int] NOT NULL,
+	[DiscColor] [varchar](12) NOT NULL,
+	[CurrentOrange] [int] NOT NULL,
+	[CurrentBrown] [int] NOT NULL,
+	[CurrentPink] [int] NOT NULL,
+	[OrangeIncome] [int] NOT NULL,
+	[BrownIncome] [int] NOT NULL,
+	[PinkIncome] [int] NOT NULL,
+	[Pass] [bit] NOT NULL,
+	[TurnOrder] [int] NOT NULL,
+	[TotalDiscs] [int] NOT NULL,
+	[AvailableDiscs] [int] NOT NULL,
+	[UserId] [int] NOT NULL,
+ CONSTRAINT [PK_Player] PRIMARY KEY CLUSTERED 
+(
+	[PlayerId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 
+
+GO
+ALTER TABLE [dbo].[Player] ADD  CONSTRAINT [DF_Player_Pass]  DEFAULT ((0)) FOR [Pass]

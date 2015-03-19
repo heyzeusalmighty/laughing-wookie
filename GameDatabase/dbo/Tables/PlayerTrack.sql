@@ -1,9 +1,12 @@
-﻿CREATE TABLE [dbo].[PlayerTrack] (
-    [TrackId]  INT          IDENTITY (1, 1) NOT NULL,
-    [PlayerId] INT          NOT NULL,
-    [Track]    VARCHAR (25) NOT NULL,
-    [TileId]   INT          NOT NULL,
-    [Position] INT          NOT NULL,
-    CONSTRAINT [PK_PlayerTrack] PRIMARY KEY CLUSTERED ([TrackId] ASC)
-);
+﻿CREATE TABLE [dbo].[PlayerTrack](
+	[TrackId] [int] IDENTITY(1,1) NOT NULL,
+	[PlayerId] [int] NOT NULL,
+	[Track] [varchar](25) NOT NULL,
+	[TileId] [int] NOT NULL,
+	[Position] [int] NOT NULL,
+ CONSTRAINT [PK_PlayerTrack] PRIMARY KEY CLUSTERED 
+(
+	[TrackId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 

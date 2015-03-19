@@ -19,7 +19,7 @@ namespace Occultation.DataModels
         public List<Guid> DestroyedShips { get; set; }
         public int Counter { get; set; }
 
-
+        
 
 
         // if three people enter one hex

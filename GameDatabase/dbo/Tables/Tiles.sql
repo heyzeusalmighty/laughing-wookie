@@ -1,9 +1,12 @@
-﻿CREATE TABLE [dbo].[Tiles] (
-    [Id]           INT          IDENTITY (1, 1) NOT NULL,
-    [XCoords]      INT          NOT NULL,
-    [YCoords]      INT          NOT NULL,
-    [TileId]       INT          NOT NULL,
-    [ControlledBy] VARCHAR (50) NULL,
-    CONSTRAINT [PK_Tiles] PRIMARY KEY CLUSTERED ([Id] ASC)
-);
+﻿CREATE TABLE [dbo].[Tiles](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[XCoords] [int] NOT NULL,
+	[YCoords] [int] NOT NULL,
+	[TileId] [int] NOT NULL,
+	[ControlledBy] [varchar](50) NULL,
+ CONSTRAINT [PK_Tiles] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 
