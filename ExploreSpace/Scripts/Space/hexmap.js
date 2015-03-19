@@ -448,71 +448,82 @@ HexagonGrid.prototype.buildGameHex = function (tile) {
     //Wormholes
 
     var findIt = "#950000";
-
-    // hole[0]
-    var holeOneX = drawx + (this.width - 45);
-    var holeOneY = drawy;
     var holeColor = "#D4D4D4";
 
-    this.context.strokeStyle = holeColor;
-    this.context.beginPath();
-    this.context.arc(holeOneX, holeOneY, 7, 0, Math.PI, false);
-    this.context.fillStyle = holeColor;
-    this.context.fill();
-    this.context.stroke();
+    // hole[0]
+    if (tile.Wormholes[0] === 1)
+    {
+        var holeOneX = drawx + (this.width - 45);
+        var holeOneY = drawy;
+        this.context.strokeStyle = holeColor;
+        this.context.beginPath();
+        this.context.arc(holeOneX, holeOneY, 7, 0, Math.PI, false);
+        this.context.fillStyle = holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
 
     // hole[1]
-    var holeTwoX = drawx + (this.width - 12);
-    var holeTwoY = drawy + 18;
-    this.context.strokeStyle = holeColor;
-    this.context.beginPath();
-    this.context.arc(holeTwoX, holeTwoY, 7, Math.PI * 1.333, Math.PI * 0.333, true);
-    this.context.fillStyle = holeColor;
-    this.context.fill();
-    this.context.stroke();
+    if (tile.Wormholes[1] === 1) {
+        var holeTwoX = drawx + (this.width - 12);
+        var holeTwoY = drawy + 18;
+        this.context.strokeStyle = holeColor;
+        this.context.beginPath();
+        this.context.arc(holeTwoX, holeTwoY, 7, Math.PI * 1.333, Math.PI * 0.333, true);
+        this.context.fillStyle = holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
 
     // hole[2]
-    var holeThreeX = drawx + (this.width - 12);
-    var holeThreeY = drawy + 58;
-    this.context.strokeStyle = holeColor;
-    this.context.beginPath();
-    this.context.arc(holeThreeX, holeThreeY, 7, Math.PI * 1.666, Math.PI * 0.666, true);
-    this.context.fillStyle = holeColor;
-    this.context.fill();
-    this.context.stroke();
-    
+    if (tile.Wormholes[2] === 1) {
+        var holeThreeX = drawx + (this.width - 12);
+        var holeThreeY = drawy + 58;
+        this.context.strokeStyle = holeColor;
+        this.context.beginPath();
+        this.context.arc(holeThreeX, holeThreeY, 7, Math.PI * 1.666, Math.PI * 0.666, true);
+        this.context.fillStyle = holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
     // hole[3]
-    var holeFourX = drawx + (this.width - 45);
-    var holeFourY = drawy + 78;
-    this.context.strokeStyle = holeColor;
-    this.context.beginPath();
-    this.context.arc(holeFourX, holeFourY, 7, Math.PI, 0, false);
-    this.context.fillStyle = holeColor;
-    this.context.fill();
-    this.context.stroke();
+    if (tile.Wormholes[3] === 1) {
+        var holeFourX = drawx + (this.width - 45);
+        var holeFourY = drawy + 78;
+        this.context.strokeStyle = holeColor;
+        this.context.beginPath();
+        this.context.arc(holeFourX, holeFourY, 7, Math.PI, 0, false);
+        this.context.fillStyle = holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
 
     // hole[4]
-    var holeFiveX = drawx + (this.width - 79);
-    var holeFiveY = drawy + 57;
-    this.context.strokeStyle = holeColor;
-    this.context.beginPath();
-    this.context.arc(holeFiveX, holeFiveY, 7, Math.PI * 1.333, Math.PI * 0.333, false);
-    this.context.fillStyle = holeColor;
-    this.context.fill();
-    this.context.stroke();
+    if (tile.Wormholes[4] === 1) {
+        var holeFiveX = drawx + (this.width - 79);
+        var holeFiveY = drawy + 57;
+        this.context.strokeStyle = holeColor;
+        this.context.beginPath();
+        this.context.arc(holeFiveX, holeFiveY, 7, Math.PI * 1.333, Math.PI * 0.333, false);
+        this.context.fillStyle = holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
 
     // hole[5]
-    var holeSixX = drawx + (this.width - 79);
-    var holeSixY = drawy + 19;
-    this.context.strokeStyle = holeColor;
-    this.context.beginPath();
-    this.context.arc(holeSixX, holeSixY, 7, Math.PI * 0.666, Math.PI * 1.666, true);
-    this.context.fillStyle = holeColor;
-    this.context.fill();
-    this.context.stroke();
+    if (tile.Wormholes[5] === 1) {
+        var holeSixX = drawx + (this.width - 79);
+        var holeSixY = drawy + 19;
+        this.context.strokeStyle = holeColor;
+        this.context.beginPath();
+        this.context.arc(holeSixX, holeSixY, 7, Math.PI * 0.666, Math.PI * 1.666, true);
+        this.context.fillStyle = holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
 
-
-}
+    }
 
 HexagonGrid.prototype.getColor = function (disc) {
     console.log(disc);

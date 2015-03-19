@@ -187,22 +187,22 @@ namespace Occultation.ViewModels
             switch (color)
             {
                 case "Black":
-                    return new Tuple<int, int>(7, 3);
+                    return new Tuple<int, int>(6, 3);
                     break;
                 case "Green":
-                    return new Tuple<int, int>(8, 5);
+                    return new Tuple<int, int>(8, 4);
                     break;
                 case "Blue":
-                    return new Tuple<int, int>(7, 6);
+                    return new Tuple<int, int>(8, 6);
                     break;
                 case "Red":
-                    return new Tuple<int, int>(5, 6);
+                    return new Tuple<int, int>(6, 7);
                     break;
                 case "Yellow":
-                    return new Tuple<int, int>(4, 5);
+                    return new Tuple<int, int>(4, 6);
                     break;
                 case "White":
-                    return new Tuple<int, int>(5, 3);
+                    return new Tuple<int, int>(4, 4);
                     break;
                 default:
                     return null;

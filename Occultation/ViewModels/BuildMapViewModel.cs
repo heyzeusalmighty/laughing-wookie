@@ -56,5 +56,45 @@ namespace Occultation.ViewModels
             }
             return revealed;
         }
+
+        public RemainingMapCounts GetUnrevealedTiles(string gameGuid)
+        {
+            var game = repository.GetGame(gameGuid);
+            var counts = new RemainingMapCounts();
+            if (game != null)
+            {
+                var realTiles = new AvailableMapTile().AllTheTiles;
+                var tiles = repository.GetRevealedTiles(game.GameId);
+                foreach (var tiley in tiles)
+                {
+                    var tileToBeRemoved = realTiles.FirstOrDefault(x => x.MapId == tiley.MapId);
+                    if (tileToBeRemoved != null)
+                    {
+                        realTiles.Remove(tileToBeRemoved);
+                    }
+                }
+
+                //revealed.AddRange(realTiles.Select(remaining => new MapTile {Division = remaining.Division}));
+
+                foreach (var remains in realTiles)
+                {
+                    switch (remains.Division)
+                    {
+                        case 1:
+                            counts.DivisionOne++;
+                            break;
+                        case 2:
+                            counts.DivisionTwo++;
+                            break;
+                        case 3:
+                            counts.DivisionThree++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            return counts;
+        }
     }
 }

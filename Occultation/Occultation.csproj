@@ -71,6 +71,7 @@
     <Compile Include="DataModels\Income.cs" />
     <Compile Include="DataModels\MapTile.cs" />
     <Compile Include="DataModels\PlacedMapTile.cs" />
+    <Compile Include="DataModels\RemainingMapCounts.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModels\ScienceTrack.cs" />
