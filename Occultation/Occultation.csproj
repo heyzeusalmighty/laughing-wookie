@@ -68,6 +68,7 @@
     <Compile Include="DataModels\Division.cs" />
     <Compile Include="DataModels\Fleet.cs" />
     <Compile Include="DataModels\GameBoard.cs" />
+    <Compile Include="DataModels\GameMap.cs" />
     <Compile Include="DataModels\Income.cs" />
     <Compile Include="DataModels\MapTile.cs" />
     <Compile Include="DataModels\PlacedMapTile.cs" />

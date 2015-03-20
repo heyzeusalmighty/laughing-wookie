@@ -15,7 +15,7 @@ namespace ExploreSpace.Controllers
 
         [HttpGet]
         //[ActionName("GameMap")]
-        public IEnumerable<MapTile> GetMapTiles()
+        public GameMap GetMapTiles()
         {
             //hardcoding this for the time being
             const string guid = "239d4ec4-1cd8-4beb-af88-6dbd9f361824";

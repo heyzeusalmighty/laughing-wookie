@@ -4,7 +4,7 @@
     $scope.whatIsIt = function() {
 
         console.log('taking action', $scope.takingAction);
-    }
+    };
 
     var central = "rgba(215,40,40,0.8)";
     var divisionOne = "rgba(103,155,153,0.8)";
@@ -18,36 +18,49 @@
     var radius = 45;
     var sx = 6;
     var sy = 5;
+    var cols = 13;
+    var rows = 11;
 
-    var hexagonGrid = new HexagonGrid("HexCanvas", radius, background, orange, brown, pink);
-    hexagonGrid.drawHexGrid(11, 13, radius, radius, true);
+    var hexagonGrid = new HexagonGrid("HexCanvas", radius, background, orange, brown, pink, cols, rows);
+    //hexagonGrid.drawHexGrid(11, 13, radius, radius, true);
 
     //Centralish 
-    hexagonGrid.redrawHexAtColRow(sx, sy, central);
+    //hexagonGrid.redrawHexAtColRow(sx, sy, central);
 
     $scope.loading = true;
-    spaceFactory.getMapTiles().then(function(data) {
-        for (var i = 0; i < data.length; i++) {
+    spaceFactory.getMapTiles().then(function (data) {
 
-            switch (data[i].Division) {
+        $scope.mapTiles = data.MapTiles;
+
+        processMapTiles($scope.mapTiles);
+
+        $scope.tileCounts = data.Counts;
+
+        $scope.loading = false;
+    });
+
+
+    function processMapTiles(tiles) {
+        for (var i = 0; i < tiles.length; i++) {
+
+            switch (tiles[i].Division) {
                 case 1:
-                    data[i].color = divisionOne;
+                    tiles[i].color = divisionOne;
                     break;
                 case 2:
-                    data[i].color = divisionTwo;
+                    tiles[i].color = divisionTwo;
                     break;
                 case 3:
-                    data[i].color = divisionThree;
+                    tiles[i].color = divisionThree;
                     break;
                 default:
                     console.log('division not found');
             }
 
-            hexagonGrid.buildGameHex(data[i]);
+            //hexagonGrid.buildGameHex(tiles[i]);
         }
-
-        $scope.loading = false;
-    });
+        hexagonGrid.setGameHexes(tiles);
+    }
 
     
 

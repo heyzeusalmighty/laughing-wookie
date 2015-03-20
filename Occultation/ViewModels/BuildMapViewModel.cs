@@ -17,7 +17,17 @@ namespace Occultation.ViewModels
             repository = repo;
         }
 
-        public List<MapTile> GetGameMap(string gameGuid)
+        public GameMap GetGameMap(string gameGuid)
+        {
+            var map = new GameMap
+            {
+                MapTiles = GetMapTiles(gameGuid),
+                Counts = GetUnrevealedTiles(gameGuid)
+            };
+            return map;
+        }
+
+        private List<MapTile> GetMapTiles(string gameGuid)
         {
             var game = repository.GetGame(gameGuid);
             var revealed = new List<MapTile>();
@@ -57,7 +67,7 @@ namespace Occultation.ViewModels
             return revealed;
         }
 
-        public RemainingMapCounts GetUnrevealedTiles(string gameGuid)
+        private RemainingMapCounts GetUnrevealedTiles(string gameGuid)
         {
             var game = repository.GetGame(gameGuid);
             var counts = new RemainingMapCounts();

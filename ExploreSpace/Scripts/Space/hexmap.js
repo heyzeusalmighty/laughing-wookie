@@ -2,7 +2,7 @@
 
 //  Repo - https://github.com/rrreese/Hexagon.js
 
-function HexagonGrid(canvasId, radius, background, orange, brown, pink) {
+function HexagonGrid(canvasId, radius, background, orange, brown, pink, cols, rows) {
     //this.radius = radius;
     this.radius = radius;
     this.background = background;
@@ -10,6 +10,10 @@ function HexagonGrid(canvasId, radius, background, orange, brown, pink) {
     this.brown = brown;
     this.pink = pink;
     this.softWhite = "rgba(103,155,153,0.2)";
+    this.bigHexUp = false;
+    this.gameTiles = [];
+    this.cols = cols;
+    this.rows = rows;
 
     //Player Colors
     this.greenPlayer = "#2C8437";
@@ -18,7 +22,7 @@ function HexagonGrid(canvasId, radius, background, orange, brown, pink) {
     this.redPlayer = "#D10F40";
     this.yellowPlayer = "#FFD700";
     this.whitePlayer = "#C4C2B6";
-
+    this.central = "rgba(215,40,40,0.8)";
 
 
     this.setNewHexDimensions();
@@ -38,9 +42,12 @@ HexagonGrid.prototype.setNewHexDimensions = function () {
     this.side = (3 / 2) * this.radius;
 };
 
-HexagonGrid.prototype.drawHexGrid = function (rows, cols, originX, originY, isDebug) {
+HexagonGrid.prototype.drawHexGrid = function (originX, originY, isDebug) {
     this.canvasOriginX = originX;
     this.canvasOriginY = originY;
+
+    var cols = this.cols;
+    var rows = this.rows;
 
     var currentHexX;
     var currentHexY;
@@ -289,33 +296,42 @@ HexagonGrid.prototype.isPointInTriangle = function isPointInTriangle(pt, v1, v2,
 };
 
 HexagonGrid.prototype.clickEvent = function (e) {
-    var mouseX = e.pageX;
-    var mouseY = e.pageY;
+    if (!this.bigHexUp) {
+        var mouseX = e.pageX;
+        var mouseY = e.pageY;
 
-    var localX = mouseX - this.canvasOriginX;
-    var localY = mouseY - this.canvasOriginY;
+        var localX = mouseX - this.canvasOriginX;
+        var localY = mouseY - this.canvasOriginY;
 
-    var tile = this.getSelectedTile(localX, localY);
-    if (tile.column >= 0 && tile.row >= 0) {
+        var tile = this.getSelectedTile(localX, localY);
+        if (tile.column >= 0 && tile.row >= 0) {
 
-        console.info("column : " + tile.column + " :: row : " + tile.row);
+            console.info("column : " + tile.column + " :: row : " + tile.row);
 
-        var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
-        var drawx = (tile.column * this.side) + this.canvasOriginX;
+            var drawy = tile.column % 2 == 0 ? (tile.row * this.height) + this.canvasOriginY + 6 : (tile.row * this.height) + this.canvasOriginY + 6 + (this.height / 2);
+            var drawx = (tile.column * this.side) + this.canvasOriginX;
 
-        //console.info("x : " + drawx + " :: y : " + drawy);
+            //console.info("x : " + drawx + " :: y : " + drawy);
 
-        //this.drawHex(drawx, drawy - 6, "rgba(110,110,70,0.3)", "");
+            this.drawHex(drawx, drawy - 6, "rgba(110,110,70,0.3)", "");
+            this.bigHexUp = true;
+            this.drawBigHex(tile.column, tile.row);
+        }
+    } else {
+        console.log('Big hex up');
+        this.bigHexUp = false;
+        this.buildGameHexes();
     }
+    
 };
 
 
-var GameTile = function (x, y, color, victoryPoints) {
+var GameTile = function(x, y, color, victoryPoints) {
     this.x = x;
     this.y = y;
     this.color = color;
     this.victoryPoints = victoryPoints;
-}
+};
 
 
 HexagonGrid.prototype.clickyEvent = function (e) {
@@ -339,13 +355,21 @@ HexagonGrid.prototype.clickyEvent = function (e) {
     }
 };
 
-//function(column, row, color, text) {
-HexagonGrid.prototype.buildGameHex = function (tile) {
+HexagonGrid.prototype.buildCentralHex = function(tile) {
+    this.redrawHexAtColRow(tile.x, tile.y, this.getColor(tile.Occupied));
+};
+
+HexagonGrid.prototype.buildGameHex = function(tile) {
     var drawy = tile.x % 2 == 0 ? (tile.y * this.height) + this.canvasOriginY : (tile.y * this.height) + this.canvasOriginY + (this.height / 2);
     var drawx = (tile.x * this.side) + this.canvasOriginX;
     this.removeHex(drawx, drawy);
     //this.drawHex(drawx, drawy, tile.color, tile.victoryPoints);
 
+    if (tile.Occupied === 'Central') {
+        this.buildCentralHex(tile);
+        return false;
+    } 
+    
 
     this.context.strokeStyle = "#003432";
     this.context.setLineDash([5, 2]);
@@ -430,7 +454,7 @@ HexagonGrid.prototype.buildGameHex = function (tile) {
         this.context.fill();
     }
 
-
+    
     //Player
     if (tile.Occupied != 'Aliens') {
         var playerX = drawx + (this.width - 65);
@@ -444,6 +468,8 @@ HexagonGrid.prototype.buildGameHex = function (tile) {
         this.context.fillStyle = playerColor;
         this.context.fill();
     }
+    
+    
 
     //Wormholes
 
@@ -451,8 +477,7 @@ HexagonGrid.prototype.buildGameHex = function (tile) {
     var holeColor = "#D4D4D4";
 
     // hole[0]
-    if (tile.Wormholes[0] === 1)
-    {
+    if (tile.Wormholes[0] === 1) {
         var holeOneX = drawx + (this.width - 45);
         var holeOneY = drawy;
         this.context.strokeStyle = holeColor;
@@ -523,25 +548,298 @@ HexagonGrid.prototype.buildGameHex = function (tile) {
         this.context.stroke();
     }
 
+};
+
+HexagonGrid.prototype.drawBigHex = function(column, row) {
+    var x0 = 250;
+    var y0 = 250;
+    var radius = 250;
+
+    var fillColor = "#003432";
+
+    var height = Math.sqrt(3) * radius;
+    var width = 2 * radius;
+    var side = (3 / 2) * radius;
+
+
+    //this.context.strokeStyle = "#003432";
+    this.context.strokeStyle = "#000000";
+    //this.context.setLineDash([5, 2]);
+    this.context.beginPath();
+    this.context.moveTo(x0 + width - side, y0);
+    this.context.lineTo(x0 + side, y0);
+    this.context.lineTo(x0 + width, y0 + (height / 2));
+    this.context.lineTo(x0 + side, y0 + height);
+    this.context.lineTo(x0 + width - side, y0 + height);
+    this.context.lineTo(x0, y0 + (height / 2));
+
+    this.context.fillStyle = fillColor;
+    this.context.fill();
+    this.context.closePath();
+    this.context.stroke();
+
+
+    //now get the tile attributes
+    var tiles = this.gameTiles;
+    console.info(this.gameTiles);
+    var selectedTile;
+    for (var i = 0; i < tiles.length; i++) {
+        if (tiles[i].y == row && tiles[i].x == column) {
+            selectedTile = tiles[i];
+            break;
+        }
     }
 
-HexagonGrid.prototype.getColor = function (disc) {
-    console.log(disc);
+    if (selectedTile == undefined) {
+        
+    } else {
+        console.log("selected", selectedTile);
+        var cont = this.context;
+        if (selectedTile.VictoryPoints) {
+            this.context.font = "32px Open Sans";
+            this.context.fillStyle = "#FFD300";
+            this.context.fillText("Victory Points: " + selectedTile.VictoryPoints,
+                x0 + 50,
+                y0 + ((height / 2)));
+        }
+
+        if (selectedTile.Division) {
+            this.context.font = "32px Open Sans";
+            this.context.fillStyle = "#FFD300";
+            this.context.fillText("Division " + selectedTile.Division, x0 + 50, y0 + (height / 2) + 30);
+        }
+
+        //Incomes
+
+        var incomeX = x0 + 135;
+        var incomeY = y0;
+
+        if (selectedTile.Pink > 0) {
+            incomeY += 25;
+
+            this.context.beginPath();
+            this.context.restore();
+            this.context.strokeStyle = this.pink;
+            this.context.setLineDash([]);
+
+            var pinkX = incomeX;
+            var pinkY = incomeY;
+            
+            this.context.arc(pinkX, pinkY, 10, 0, Math.PI * 2, false);
+            this.context.fillStyle = this.pink;
+            this.context.fill();
+            this.context.stroke();
+
+            this.context.font = "20px Open Sans";
+            this.context.fillText(" " + selectedTile.Pink, pinkX + 10, pinkY + 5 );
+        }
+
+        if (selectedTile.Orange > 0) {
+            incomeY += 25;
+
+            this.context.beginPath();
+            this.context.restore();
+            this.context.strokeStyle = this.orange;
+            this.context.setLineDash([]);
+
+            var orangeX = incomeX;
+            var orangeY = incomeY;
+
+            this.context.arc(orangeX, orangeY, 10, 0, Math.PI * 2, false);
+            this.context.fillStyle = this.orange;
+            this.context.fill();
+            this.context.stroke();
+
+            this.context.font = "20px Open Sans";
+            this.context.fillText(" " + selectedTile.Orange, orangeX + 10, orangeY + 5);
+        }
+
+        if (selectedTile.Brown > 0) {
+            incomeY += 25;
+
+            this.context.beginPath();
+            this.context.restore();
+            this.context.strokeStyle = this.brown;
+            this.context.setLineDash([]);
+
+            var brownX = incomeX;
+            var brownY = incomeY;
+
+            this.context.arc(brownX, brownY, 10, 0, Math.PI * 2, false);
+            this.context.fillStyle = this.brown;
+            this.context.fill();
+            this.context.stroke();
+
+            this.context.font = "20px Open Sans";
+            this.context.fillText(" " + selectedTile.Brown, brownX + 10, brownY + 5);
+        }
+
+        if (selectedTile.White > 0) {
+            incomeY += 25;
+
+            this.context.beginPath();
+            this.context.restore();
+            this.context.strokeStyle = "#111111";
+            this.context.setLineDash([]);
+
+            var whiteX = incomeX;
+            var whiteY = incomeY;
+
+            this.context.arc(whiteX, whiteY, 10, 0, Math.PI * 2, false);
+            this.context.fillStyle = "#111111";
+            this.context.fill();
+            this.context.stroke();
+
+            this.context.font = "20px Open Sans";
+            this.context.fillText(" " + selectedTile.Brown, whiteX + 10, whiteY + 5);
+        }
+
+
+        //reset coordinates
+        var adIncomeX = x0 + 175;
+        var adIncomeY = y0;
+
+        if (selectedTile.PinkAdvanced > 0) {
+            adIncomeY += 25;
+            
+            this.context.beginPath();
+            this.context.restore();
+            this.context.strokeStyle = this.pink;
+            this.context.setLineDash([]);
+
+            var adPinkX = adIncomeX;
+            var adPinkY = adIncomeY;
+
+            this.context.arc(adPinkX, adPinkY, 10, 0, Math.PI * 2, false);
+            this.context.fillStyle = this.pink;
+            this.context.fill();
+            this.context.stroke();
+
+            //Triangle Time
+            adPinkX -= 5;
+            adPinkY -= 5;
+            this.context.strokeStyle = "#000000";
+            this.context.fillStyle = "#000000";
+            this.context.beginPath();
+            //Top midpoint
+            this.context.moveTo(adPinkX + 5, adPinkY);
+            this.context.lineTo(adPinkX + 10, adPinkY + 10);
+            this.context.lineTo(adPinkX, adPinkY + 10);
+            this.context.lineTo(adPinkX + 5, adPinkY);
+            this.context.closePath();
+            this.context.fill();
+
+
+        }
+
+        if (selectedTile.OrangeAdvanced > 0) {
+            adIncomeY += 25;
+            this.context.beginPath();
+            this.context.restore();
+            this.context.strokeStyle = this.pink;
+            this.context.setLineDash([]);
+
+            var adOrX = adIncomeX;
+            var adOrY = adIncomeY;
+
+            this.context.arc(adOrX, adOrY, 10, 0, Math.PI * 2, false);
+            this.context.fillStyle = this.orange;
+            this.context.fill();
+            this.context.stroke();
+
+            //Triangle Time
+            adOrX -= 5;
+            adOrY -= 5;
+            this.context.strokeStyle = "#000000";
+            this.context.fillStyle = "#000000";
+            this.context.beginPath();
+            //Top midpoint
+            this.context.moveTo(adOrX + 5, adOrY);
+            this.context.lineTo(adOrX + 10, adOrY + 10);
+            this.context.lineTo(adOrX, adOrY + 10);
+            this.context.lineTo(adOrX + 5, adOrY);
+            this.context.closePath();
+            this.context.fill();
+        }
+
+        if (selectedTile.BrownAdvanced > 0) {
+            adIncomeY += 25;
+            this.context.beginPath();
+            this.context.restore();
+            this.context.strokeStyle = this.brown;
+            this.context.setLineDash([]);
+
+            var adBrownX = adIncomeX;
+            var adBrownY = adIncomeY;
+
+            this.context.arc(adBrownX, adBrownY, 10, 0, Math.PI * 2, false);
+            this.context.fillStyle = this.pink;
+            this.context.fill();
+            this.context.stroke();
+
+            //Triangle Time
+            adBrownX -= 5;
+            adBrownY -= 5;
+            this.context.strokeStyle = "#000000";
+            this.context.fillStyle = "#000000";
+            this.context.beginPath();
+            //Top midpoint
+            this.context.moveTo(adBrownX + 5, adBrownY);
+            this.context.lineTo(adBrownX + 10, adBrownY + 10);
+            this.context.lineTo(adBrownX, adBrownY + 10);
+            this.context.lineTo(adBrownX + 5, adBrownY);
+            this.context.closePath();
+            this.context.fill();
+        }
+
+
+        ////Add Image
+        //var img = new Image();
+        //img.src = '../Content/Images/advancedEconomy.png';
+        //img.onload = function() {
+        //    cont.drawImage(img, x0 + 120, y0 + 10);
+        //};
+
+    }
+
+};
+
+HexagonGrid.prototype.setGameHexes = function(tiles) {
+    this.gameTiles = tiles;
+    this.buildGameHexes();
+};
+
+HexagonGrid.prototype.buildGameHexes = function () {
+
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.drawHexGrid(this.radius, this.radius, true);
+
+    //console.log("building hexes :: count => ", this.gameTiles.length);
+    for (var i = 0; i < this.gameTiles.length; i++) {
+        this.buildGameHex(this.gameTiles[i]);
+    }
+};
+
+HexagonGrid.prototype.getColor = function(disc) {
+    //console.log(disc);
 
     switch (disc) {
-        case 'Black':
-            return this.blackPlayer;
-        case 'Green':
-            return this.greenPlayer;
-        case 'White':
-            return this.whitePlayer;
-        case 'Red':
-            return this.redPlayer;
-        case 'Blue':
-            return this.bluePlayer;
-        case 'Yellow':
-            return this.yellowPlayer;
-        default:
-            return this.background;
+    case 'Black':
+        return this.blackPlayer;
+    case 'Green':
+        return this.greenPlayer;
+    case 'White':
+        return this.whitePlayer;
+    case 'Red':
+        return this.redPlayer;
+    case 'Blue':
+        return this.bluePlayer;
+    case 'Yellow':
+        return this.yellowPlayer;
+    case 'Central':
+        return this.central;
+    default:
+        return this.background;
     }
-}
+};

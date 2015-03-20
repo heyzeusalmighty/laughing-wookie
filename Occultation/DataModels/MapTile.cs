@@ -24,6 +24,7 @@ namespace Occultation.DataModels
         public int[] Wormholes { get; set; }
         public int Aliens { get; set; }
         public string Occupied { get; set; }
+        public bool Reward { get; set; }
 
     }
 

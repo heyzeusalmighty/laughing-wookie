@@ -58,6 +58,7 @@
     <Compile Include="Tests\FleetTests.cs" />
     <Compile Include="Tests\GameBoardTests.cs" />
     <Compile Include="Tests\GameCreatorTests.cs" />
+    <Compile Include="Tests\MapTests.cs" />
     <Compile Include="Tests\PlayerVMTests.cs" />
     <Compile Include="Tests\ShipTests.cs" />
     <Compile Include="Tests\TurnTests.cs" />

@@ -26,24 +26,30 @@
 
     $scope.loading = true;
     spaceFactory.getMapTiles().then(function (data) {
-        for (var i = 0; i < data.length; i++) {
+        var tiles = data.MapTiles;
 
-            switch (data[i].Division) {
+        for (var i = 0; i < tiles.length; i++) {
+
+            switch (tiles[i].Division) {
                 case 1:
-                    data[i].color = divisionOne;
+                    tiles[i].color = divisionOne;
                     break;
                 case 2:
-                    data[i].color = divisionTwo;
+                    tiles[i].color = divisionTwo;
                     break;
                 case 3:
-                    data[i].color = divisionThree;
+                    tiles[i].color = divisionThree;
                     break;
                 default:
                     console.log('division not found');
             }
 
-            hexagonGrid.buildGameHex(data[i]);
+            //hexagonGrid.buildGameHex(tiles[i]);
         }
+
+        hexagonGrid.setGameHexes(tiles);
+
+        $scope.tileCounts = data.Counts;
 
         $scope.loading = false;
     });

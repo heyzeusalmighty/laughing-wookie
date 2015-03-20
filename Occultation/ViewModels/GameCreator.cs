@@ -11,9 +11,13 @@ namespace Occultation.ViewModels
     {
         private IGameRepository Repository;
         private List<Player> Players;
+        private List<MapTile> PlayerTiles;
+        private AvailableMapTile TileBuilder;
         public GameCreator(IGameRepository repo)
         {
             Repository = repo;
+            TileBuilder = new AvailableMapTile();
+            PlayerTiles = TileBuilder.PlayerTiles();
         }
 
 
@@ -107,11 +111,11 @@ namespace Occultation.ViewModels
         public void BuildMapTiles(int gameId)
         {
 
-            var tiles = new AvailableMapTile();
+            
             var gameMap = new List<MapDeck>();
 
             var counter = 1;
-            foreach (var tile1 in tiles.DivisionOne)
+            foreach (var tile1 in TileBuilder.DivisionOne)
             {
                 gameMap.Add(new MapDeck
                 {
@@ -120,14 +124,14 @@ namespace Occultation.ViewModels
                     MapId = tile1.MapId,
                     SortOrder = counter,
                     Revealed = false,
-                    Occupied = (tile1.Aliens > 0) ? "Aliens" : ""
+                    Occupied = tile1.Occupied
                 });
                 counter++;
             }
 
             gameMap.AddRange(BuildPlayerBases(gameId));
             counter = 1;
-            foreach (var tile2 in tiles.DivisionTwo)
+            foreach (var tile2 in TileBuilder.DivisionTwo)
             {
                 gameMap.Add(new MapDeck
                 {
@@ -136,14 +140,14 @@ namespace Occultation.ViewModels
                     MapId = tile2.MapId,
                     SortOrder = counter,
                     Revealed = false,
-                    Occupied = (tile2.Aliens > 0) ? "Aliens" : ""
+                    Occupied = tile2.Occupied
                 });
                 counter++;
             }
 
 
             counter = 1;
-            foreach (var tile3 in tiles.DivisionThree)
+            foreach (var tile3 in TileBuilder.DivisionThree)
             {
                 gameMap.Add(new MapDeck
                 {
@@ -152,7 +156,7 @@ namespace Occultation.ViewModels
                     MapId = tile3.MapId,
                     SortOrder = counter,
                     Revealed = false,
-                    Occupied = (tile3.Aliens > 0) ? "Aliens" : ""
+                    Occupied = tile3.Occupied
                 });
                 counter++;
             }
@@ -164,23 +168,167 @@ namespace Occultation.ViewModels
         public List<MapDeck> BuildPlayerBases(int gameId)
         {
             var bases = new List<MapDeck>();
-            foreach (var playa in Players)
+
+            var playerCount = Players.Count();
+
+            switch (playerCount)
             {
-                var coords = GetCoordsForColor(playa.DiscColor);
-                bases.Add(new MapDeck
+                case 2:
+                    bases.Add(BuildBlackPlayer(gameId));
+                    bases.Add(BuildRedPlayer(gameId));
+                    break;
+                case 3:
+                    bases.Add(BuildYellowPlayer(gameId));
+                    bases.Add(BuildBlackPlayer(gameId));
+                    bases.Add(BuildBluePlayer(gameId));
+                    break;
+                case 4:
+                    bases.Add(BuildWhitePlayer(gameId));
+                    bases.Add(BuildYellowPlayer(gameId));
+                    bases.Add(BuildGreenPlayer(gameId));
+                    bases.Add(BuildBluePlayer(gameId));
+                    break;
+                case 5:
+                    bases.Add(BuildWhitePlayer(gameId));
+                    bases.Add(BuildYellowPlayer(gameId));
+                    bases.Add(BuildGreenPlayer(gameId));
+                    bases.Add(BuildBluePlayer(gameId));
+                    bases.Add(BuildBlackPlayer(gameId));
+                    break;
+                case 6:
+                    bases.Add(BuildWhitePlayer(gameId));
+                    bases.Add(BuildYellowPlayer(gameId));
+                    bases.Add(BuildGreenPlayer(gameId));
+                    bases.Add(BuildBluePlayer(gameId));
+                    bases.Add(BuildBlackPlayer(gameId));
+                    bases.Add(BuildRedPlayer(gameId));
+                    break;
+            }
+
+            return bases;
+        }
+
+        private MapDeck BuildBluePlayer(int gameId)
+        {
+            var black = PlayerTiles.FirstOrDefault(x => x.Occupied.Equals("Blue"));
+            var coords = GetCoordsForColor("Blue");
+            if (black != null)
+            {
+                return new MapDeck
                 {
                     Division = 2,
                     GameId = gameId,
-                    MapId = 666,
+                    MapId = black.MapId,
                     SortOrder = 0,
                     Revealed = true,
-                    Occupied = playa.DiscColor,
                     XCoords = coords.Item1,
                     YCoords = coords.Item2
-                });
+                };
             }
-            return bases;
+            return null;
         }
+
+        private MapDeck BuildRedPlayer(int gameId)
+        {
+            var black = PlayerTiles.FirstOrDefault(x => x.Occupied.Equals("Red"));
+            var coords = GetCoordsForColor("Red");
+            if (black != null)
+            {
+                return new MapDeck
+                {
+                    Division = 2,
+                    GameId = gameId,
+                    MapId = black.MapId,
+                    SortOrder = 0,
+                    Revealed = true,
+                    XCoords = coords.Item1,
+                    YCoords = coords.Item2
+                };
+            }
+            return null;
+        }
+
+        private MapDeck BuildGreenPlayer(int gameId)
+        {
+            var black = PlayerTiles.FirstOrDefault(x => x.Occupied.Equals("Green"));
+            var coords = GetCoordsForColor("Green");
+            if (black != null)
+            {
+                return new MapDeck
+                {
+                    Division = 2,
+                    GameId = gameId,
+                    MapId = black.MapId,
+                    SortOrder = 0,
+                    Revealed = true,
+                    XCoords = coords.Item1,
+                    YCoords = coords.Item2
+                };
+            }
+            return null;
+        }
+
+        private MapDeck BuildYellowPlayer(int gameId)
+        {
+            var black = PlayerTiles.FirstOrDefault(x => x.Occupied.Equals("Yellow"));
+            var coords = GetCoordsForColor("Yellow");
+            if (black != null)
+            {
+                return new MapDeck
+                {
+                    Division = 2,
+                    GameId = gameId,
+                    MapId = black.MapId,
+                    SortOrder = 0,
+                    Revealed = true,
+                    XCoords = coords.Item1,
+                    YCoords = coords.Item2
+                };
+            }
+            return null;
+        }
+
+        private MapDeck BuildWhitePlayer(int gameId)
+        {
+            var black = PlayerTiles.FirstOrDefault(x => x.Occupied.Equals("White"));
+            var coords = GetCoordsForColor("White");
+            if (black != null)
+            {
+                return new MapDeck
+                {
+                    Division = 2,
+                    GameId = gameId,
+                    MapId = black.MapId,
+                    SortOrder = 0,
+                    Revealed = true,
+                    XCoords = coords.Item1,
+                    YCoords = coords.Item2
+                };
+            }
+            return null;
+        }
+
+        private MapDeck BuildBlackPlayer(int gameId)
+        {
+            var black = PlayerTiles.FirstOrDefault(x => x.Occupied.Equals("Black"));
+            var coords = GetCoordsForColor("Black");
+            if (black != null)
+            {
+                return new MapDeck
+                {
+                    Division = 2,
+                    GameId = gameId,
+                    MapId = black.MapId,
+                    SortOrder = 0,
+                    Revealed = true,
+                    XCoords = coords.Item1,
+                    YCoords = coords.Item2
+                };
+            }
+            return null;
+        }
+
+        
 
         private static Tuple<int, int> GetCoordsForColor(string color)
         {
