@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Occultation.DAL;
 using Occultation.DAL.EF;
@@ -20,7 +21,7 @@ namespace Occultation.ViewModels
             PlayerTiles = TileBuilder.PlayerTiles();
         }
 
-
+        
         public string AddPlayerToGame(int userId, string gameGuid, string color)
         {
             var game = Repository.GetGame(gameGuid);
@@ -32,12 +33,12 @@ namespace Occultation.ViewModels
                     return "Cannot play twice in one game";
                 }
 
-                if (Players.Any(x => x.DiscColor == color))
-                {
-                    return "Please select a different color";
-                }
+                //if (Players.Any(x => x.DiscColor == color))
+                //{
+                //    return "Please select a different color";
+                //}
 
-                var msg = Repository.AddPlayerToGame(userId, game.GameId, color);
+                var msg = Repository.AddPlayerToGame(userId, game.GameId);
 
                 if (Players.Count == 5)
                 {
@@ -128,8 +129,11 @@ namespace Occultation.ViewModels
                 });
                 counter++;
             }
+            //Player Bases
+            var playerTiles = BuildPlayerBases(gameId);
+            SavePlayerPositions(playerTiles);
+            gameMap.AddRange(playerTiles);
 
-            gameMap.AddRange(BuildPlayerBases(gameId));
             counter = 1;
             foreach (var tile2 in TileBuilder.DivisionTwo)
             {
@@ -160,6 +164,21 @@ namespace Occultation.ViewModels
                 });
                 counter++;
             }
+
+            // Central Tile
+            var central = TileBuilder.GetCentralTile();
+            gameMap.Add(new MapDeck
+            {
+                Division = 0,
+                GameId = gameId,
+                MapId = central.MapId,
+                SortOrder = 0,
+                Revealed = true,
+                Occupied = central.Occupied,
+                XCoords = 6,
+                YCoords = 5
+            });
+
 
             Repository.AddTilesToNewGame(gameMap);
 
@@ -222,7 +241,8 @@ namespace Occultation.ViewModels
                     SortOrder = 0,
                     Revealed = true,
                     XCoords = coords.Item1,
-                    YCoords = coords.Item2
+                    YCoords = coords.Item2,
+                    Occupied = "Blue"
                 };
             }
             return null;
@@ -242,7 +262,8 @@ namespace Occultation.ViewModels
                     SortOrder = 0,
                     Revealed = true,
                     XCoords = coords.Item1,
-                    YCoords = coords.Item2
+                    YCoords = coords.Item2,
+                    Occupied = "Red"
                 };
             }
             return null;
@@ -262,7 +283,8 @@ namespace Occultation.ViewModels
                     SortOrder = 0,
                     Revealed = true,
                     XCoords = coords.Item1,
-                    YCoords = coords.Item2
+                    YCoords = coords.Item2,
+                    Occupied = "Green"
                 };
             }
             return null;
@@ -282,7 +304,8 @@ namespace Occultation.ViewModels
                     SortOrder = 0,
                     Revealed = true,
                     XCoords = coords.Item1,
-                    YCoords = coords.Item2
+                    YCoords = coords.Item2,
+                    Occupied = "Yellow"
                 };
             }
             return null;
@@ -302,7 +325,8 @@ namespace Occultation.ViewModels
                     SortOrder = 0,
                     Revealed = true,
                     XCoords = coords.Item1,
-                    YCoords = coords.Item2
+                    YCoords = coords.Item2,
+                    Occupied = "White"
                 };
             }
             return null;
@@ -322,13 +346,25 @@ namespace Occultation.ViewModels
                     SortOrder = 0,
                     Revealed = true,
                     XCoords = coords.Item1,
-                    YCoords = coords.Item2
+                    YCoords = coords.Item2,
+                    Occupied = "Black"
                 };
             }
             return null;
         }
 
-        
+        private void SavePlayerPositions(List<MapDeck> tiles)
+        {
+            var playerList = Players.ToArray();
+
+            var count = 0;
+            foreach (var tile in tiles)
+            {
+                Repository.SetPlayerColor(playerList[count].PlayerId, tile.Occupied);
+                count++;
+            }
+            Repository.Save();
+        }
 
         private static Tuple<int, int> GetCoordsForColor(string color)
         {

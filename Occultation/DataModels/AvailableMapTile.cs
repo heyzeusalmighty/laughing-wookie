@@ -54,7 +54,12 @@ namespace Occultation.DataModels
             }
 
 
-
+            AllTheTiles = new List<MapTile>();
+            AllTheTiles.AddRange(DivisionOne);
+            AllTheTiles.AddRange(DivisionTwo);
+            AllTheTiles.AddRange(DivisionThree);
+            AllTheTiles.AddRange(PlayerTiles());
+            AllTheTiles.Add(GetCentralTile());
             //DivisionOne = AllTheTiles.Where(x => x.Division == 1).ToList();
             //DivisionTwo = AllTheTiles.Where(x => x.Division == 2).ToList();
             //DivisionThree = AllTheTiles.Where(x => x.Division == 3).ToList();
@@ -542,6 +547,7 @@ namespace Occultation.DataModels
                 MapId = 1,
                 Reward = true,
                 Occupied = "Aliens",
+                Aliens = 1,
                 VictoryPoints = 4,
                 White = 2,
                 Orange = 1,

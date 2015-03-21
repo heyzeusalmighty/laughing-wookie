@@ -99,7 +99,7 @@ namespace Occultation.DAL
             return newGame.GameId;
         }
 
-        public string AddPlayerToGame(int userId, int gameId, string color)
+        public string AddPlayerToGame(int userId, int gameId)
         {
             var user = context.GameUsers.FirstOrDefault(x => x.UserId == userId);
             if (user != null)
@@ -115,14 +115,16 @@ namespace Occultation.DAL
                     CurrentBrown = 3,
                     CurrentPink = 3,
                     CurrentOrange = 2,
-                    DiscColor = color,
+                    DiscColor = "Super",
+                    //DiscColor = color,
                     Pass = false,
                     TurnOrder = 0,
                     UserId = userId,
                     GameId = gameId
                 };
                 context.Players.Add(playa);
-                context.SaveChanges();
+                //context.SaveChanges();
+                Save();
                 return "Success";
             }
 
@@ -138,6 +140,11 @@ namespace Occultation.DAL
         public Game GetGame(string gameGuid)
         {
             return context.Games.FirstOrDefault(x => x.GameIdentifier == gameGuid);
+        }
+
+        public Game GetGame(int gameId)
+        {
+            return context.Games.FirstOrDefault(x => x.GameId == gameId);
         }
 
         public void AddScienceTileToTrack(PlayerTrack track)
@@ -192,6 +199,22 @@ namespace Occultation.DAL
                 context.SaveChanges();
                 return tile;
             }
+        }
+
+        public void SetPlayerColor(int playerId, string color)
+        {
+
+            var user = context.Players.FirstOrDefault(x => x.PlayerId == playerId);
+            if (user != null)
+            {
+                user.DiscColor = color;
+            }
+
+        }
+
+        public List<GameUser> GetAllGameUsers()
+        {
+            return context.GameUsers.ToList();
         }
 
         public Player GetCurrentUser(int gameId, string userName)

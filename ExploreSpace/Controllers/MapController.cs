@@ -18,7 +18,8 @@ namespace ExploreSpace.Controllers
         public GameMap GetMapTiles()
         {
             //hardcoding this for the time being
-            const string guid = "239d4ec4-1cd8-4beb-af88-6dbd9f361824";
+            //const string guid = "239d4ec4-1cd8-4beb-af88-6dbd9f361824";
+            const string guid = "747ab3e9-a240-478f-b83a-f81ffe69f6a5";
             var model = new BuildMapViewModel(new EFGameRepo());
             return model.GetGameMap(guid);
         }

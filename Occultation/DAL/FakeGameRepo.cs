@@ -138,11 +138,11 @@ namespace Occultation.DAL
             return 0;
         }
 
-        public string AddPlayerToGame(int userId, int gameId, string color)
+        public string AddPlayerToGame(int userId, int gameId)
         {
             AddedPlayers = new List<Player>
             {
-                new Player { UserId = userId, GameId = gameId, DiscColor = color}
+                new Player { UserId = userId, GameId = gameId}
             };
             return "success";
         }
@@ -173,6 +173,11 @@ namespace Occultation.DAL
                 Round = 0,
                 Status = "CREATED"
             };
+        }
+
+        public Game GetGame(int gameId)
+        {
+            throw new NotImplementedException();
         }
 
         public void AddScienceTileToTrack(PlayerTrack track)
@@ -247,6 +252,16 @@ namespace Occultation.DAL
                 context.SaveChanges();
                 return tile;
             }
+        }
+
+        public void SetPlayerColor(int playerId, string color)
+        {
+            AddedPlayers.Add(new Player { PlayerId = playerId, DiscColor = color});
+        }
+
+        public List<GameUser> GetAllGameUsers()
+        {
+            throw new NotImplementedException();
         }
 
         private GameBoard GetFourPlayerBoard()

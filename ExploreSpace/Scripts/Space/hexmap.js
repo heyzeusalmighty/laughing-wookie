@@ -452,6 +452,14 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
         //this.context.lineTo(31, 37);
         this.context.fillStyle = '#242437';
         this.context.fill();
+
+        //Add Image
+        var img = new Image();
+        img.src = '../Content/Images/alienHeadx25.png';
+        var cont = this.context;
+        img.onload = function () {
+            cont.drawImage(img, alienX, alienY);
+        };
     }
 
     
@@ -467,6 +475,10 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
         //this.context.lineTo(31, 37);
         this.context.fillStyle = playerColor;
         this.context.fill();
+
+        
+
+
     }
     
     

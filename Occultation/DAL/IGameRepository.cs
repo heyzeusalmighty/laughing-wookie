@@ -7,18 +7,22 @@ namespace Occultation.DAL
 {
     public interface IGameRepository : IDisposable
     {
+        void Save();
         GameBoard GetGameBoard(int gameId);
         Player GetCurrentUser(int gameId, string userName);
         List<ScienceTile> GetScienceTrack(int gameId, int playerId);
         
         int CreateGame();
-        string AddPlayerToGame(int userId, int gameId, string color);
+        string AddPlayerToGame(int userId, int gameId);
         List<Player> GetPlayersForGame(int gameId);
         Game GetGame(string gameGuid);
+        Game GetGame(int gameId);
         void AddScienceTileToTrack(PlayerTrack track);
         void AddNewShipModel(PlayerShipModel model, List<ShipComponent> components);
         void AddTilesToNewGame(List<MapDeck> tiles);
         List<MapDeck> GetRevealedTiles(int gameId);
         MapDeck GetNextTile(int gameId, int div, int x, int y);
+        void SetPlayerColor(int playerId, string color);
+        List<GameUser> GetAllGameUsers();
     }
 }
