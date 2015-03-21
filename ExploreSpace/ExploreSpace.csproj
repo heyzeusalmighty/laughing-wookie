@@ -113,11 +113,15 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\alienHeadx100.png" />
     <Content Include="Content\Images\alienHeadx256.png" />
     <Content Include="Content\Images\alienHeadx25.png" />
     <Content Include="Content\Images\blankScienceTile.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Images\rocketx100.png" />
+    <Content Include="Content\Images\rocketx128.png" />
+    <Content Include="Content\Images\rocketx25.png" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\spaceStyles.css" />
     <Content Include="Content\toastr.min.css" />

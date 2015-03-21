@@ -21,7 +21,7 @@
     var cols = 13;
     var rows = 11;
 
-    var hexagonGrid = new HexagonGrid("HexCanvas", radius, background, orange, brown, pink, cols, rows);
+    var hexagonGrid = new HexagonGrid("HexCanvas", radius, background, orange, brown, pink, cols, rows, false);
     //hexagonGrid.drawHexGrid(11, 13, radius, radius, true);
 
     //Centralish 

@@ -2,7 +2,7 @@
 
 //  Repo - https://github.com/rrreese/Hexagon.js
 
-function HexagonGrid(canvasId, radius, background, orange, brown, pink, cols, rows) {
+function HexagonGrid(canvasId, radius, background, orange, brown, pink, cols, rows, explore) {
     //this.radius = radius;
     this.radius = radius;
     this.background = background;
@@ -14,6 +14,7 @@ function HexagonGrid(canvasId, radius, background, orange, brown, pink, cols, ro
     this.gameTiles = [];
     this.cols = cols;
     this.rows = rows;
+    this.explore = explore;
 
     //Player Colors
     this.greenPlayer = "#2C8437";
@@ -42,7 +43,7 @@ HexagonGrid.prototype.setNewHexDimensions = function () {
     this.side = (3 / 2) * this.radius;
 };
 
-HexagonGrid.prototype.drawHexGrid = function (originX, originY, isDebug) {
+HexagonGrid.prototype.drawHexGrid = function (originX, originY, explore) {
     this.canvasOriginX = originX;
     this.canvasOriginY = originY;
 
@@ -66,9 +67,14 @@ HexagonGrid.prototype.drawHexGrid = function (originX, originY, isDebug) {
                 currentHexY = (row * this.height) + originY + (this.height * 0.5);
             }
 
-            if (isDebug) {
+            if (explore) {
+                debugText = this.whatDivAmI(col, row);
+            } else {
                 debugText = col + "," + row;
             }
+
+            
+            //debugText = col + "," + row;
 
             this.drawHex(currentHexX, currentHexY, this.softWhite, debugText);
         }
@@ -186,7 +192,11 @@ HexagonGrid.prototype.drawHex = function (x0, y0, fillColor, debugText) {
     this.context.closePath();
     this.context.stroke();
 
-    if (debugText) {
+    if (this.explore) {
+        this.context.font = "Bold 36px Sans-Serif";
+        this.context.fillStyle = "rgb(158,101,101,0.5)";
+        this.context.fillText(debugText, x0 + (this.width / 2) - 10, y0 + (this.height - 25));
+    } else {
         this.context.font = "10px sans serif";
         this.context.fillStyle = "#000";
         this.context.fillText(debugText, x0 + (this.width / 2) - (this.width / 4), y0 + (this.height - 5));
@@ -370,6 +380,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
         return false;
     } 
     
+    var playerColor = this.getColor(tile.Occupied);
 
     this.context.strokeStyle = "#003432";
     this.context.setLineDash([5, 2]);
@@ -381,7 +392,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     this.context.lineTo(drawx + this.width - this.side, drawy + this.height);
     this.context.lineTo(drawx, drawy + (this.height / 2));
 
-    this.context.fillStyle = tile.color;
+    this.context.fillStyle = playerColor;
     this.context.fill();
 
     this.context.closePath();
@@ -443,23 +454,62 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
 
     //ALIENS
     if (tile.Aliens > 0) {
-        var alienX = drawx + (this.width - 65);
-        var alienY = drawy + ((this.height / 2) + 5);
-        this.context.strokeStyle = "#000016";
-        this.context.beginPath();
-        this.context.arc(alienX, alienY, 13, Math.PI / 7, -Math.PI / 7, false);
-        this.context.lineTo(alienX - 6, alienY);
-        //this.context.lineTo(31, 37);
-        this.context.fillStyle = '#242437';
-        this.context.fill();
+        var alienX = drawx + (this.width - 75);
+        var alienY = drawy + ((this.height / 2) -5 );
+        //this.context.strokeStyle = "#000016";
+        //this.context.beginPath();
+        //this.context.arc(alienX, alienY, 13, Math.PI / 7, -Math.PI / 7, false);
+        //this.context.lineTo(alienX - 6, alienY);
+        ////this.context.lineTo(31, 37);
+        //this.context.fillStyle = '#242437';
+        //this.context.fill();
 
         //Add Image
-        var img = new Image();
-        img.src = '../Content/Images/alienHeadx25.png';
-        var cont = this.context;
-        img.onload = function () {
-            cont.drawImage(img, alienX, alienY);
-        };
+        
+
+        if (tile.Aliens == 2) {
+
+            alienY -= 8;
+
+            var img1 = new Image();
+            img1.src = '../Content/Images/alienHeadx25.png';
+            var cont = this.context;
+            img1.onload = function() {
+                cont.drawImage(img1, alienX, alienY - 12);
+            };
+
+            var img2 = new Image();
+            img2.src = '../Content/Images/alienHeadx25.png';
+            var cont2 = this.context;
+            img2.onload = function() {
+                cont.drawImage(img2, alienX, alienY + 12);
+            };
+        } else {
+            var img = new Image();
+            img.src = '../Content/Images/alienHeadx25.png';
+            var cont = this.context;
+            img.onload = function () {
+                cont.drawImage(img, alienX, alienY);
+            };
+        }
+    }
+
+    //SHIPS
+    if (true) {
+
+        if (tile.Aliens == 0) {
+            var shipX = drawx + (this.width - 75);
+            var shipY = drawy + ((this.height / 2) - 5);
+
+            var ships = new Image();
+            ships.src = '../Content/Images/rocketx25.png';
+            var cont = this.context;
+            ships.onload = function () {
+                cont.drawImage(ships, shipX, shipY - 12);
+            };
+        }
+
+        
     }
 
     
@@ -467,7 +517,6 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     if (tile.Occupied != 'Aliens') {
         var playerX = drawx + (this.width - 65);
         var playerY = drawy + ((this.height / 2) + 5);
-        var playerColor = this.getColor(tile.Occupied);
         this.context.strokeStyle = playerColor;
         this.context.beginPath();
         this.context.arc(playerX, playerY, 13, 0, Math.PI * 2, false);
@@ -487,12 +536,13 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
 
     var findIt = "#950000";
     var holeColor = "#D4D4D4";
+    var wormHoleLine = this.background;
 
     // hole[0]
     if (tile.Wormholes[0] === 1) {
         var holeOneX = drawx + (this.width - 45);
         var holeOneY = drawy;
-        this.context.strokeStyle = holeColor;
+        this.context.strokeStyle = wormHoleLine;
         this.context.beginPath();
         this.context.arc(holeOneX, holeOneY, 7, 0, Math.PI, false);
         this.context.fillStyle = holeColor;
@@ -504,7 +554,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     if (tile.Wormholes[1] === 1) {
         var holeTwoX = drawx + (this.width - 12);
         var holeTwoY = drawy + 18;
-        this.context.strokeStyle = holeColor;
+        this.context.strokeStyle = wormHoleLine;
         this.context.beginPath();
         this.context.arc(holeTwoX, holeTwoY, 7, Math.PI * 1.333, Math.PI * 0.333, true);
         this.context.fillStyle = holeColor;
@@ -516,7 +566,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     if (tile.Wormholes[2] === 1) {
         var holeThreeX = drawx + (this.width - 12);
         var holeThreeY = drawy + 58;
-        this.context.strokeStyle = holeColor;
+        this.context.strokeStyle = wormHoleLine;
         this.context.beginPath();
         this.context.arc(holeThreeX, holeThreeY, 7, Math.PI * 1.666, Math.PI * 0.666, true);
         this.context.fillStyle = holeColor;
@@ -528,7 +578,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     if (tile.Wormholes[3] === 1) {
         var holeFourX = drawx + (this.width - 45);
         var holeFourY = drawy + 78;
-        this.context.strokeStyle = holeColor;
+        this.context.strokeStyle = wormHoleLine;
         this.context.beginPath();
         this.context.arc(holeFourX, holeFourY, 7, Math.PI, 0, false);
         this.context.fillStyle = holeColor;
@@ -540,7 +590,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     if (tile.Wormholes[4] === 1) {
         var holeFiveX = drawx + (this.width - 79);
         var holeFiveY = drawy + 57;
-        this.context.strokeStyle = holeColor;
+        this.context.strokeStyle = wormHoleLine;
         this.context.beginPath();
         this.context.arc(holeFiveX, holeFiveY, 7, Math.PI * 1.333, Math.PI * 0.333, false);
         this.context.fillStyle = holeColor;
@@ -552,7 +602,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     if (tile.Wormholes[5] === 1) {
         var holeSixX = drawx + (this.width - 79);
         var holeSixY = drawy + 19;
-        this.context.strokeStyle = holeColor;
+        this.context.strokeStyle = wormHoleLine;
         this.context.beginPath();
         this.context.arc(holeSixX, holeSixY, 7, Math.PI * 0.666, Math.PI * 1.666, true);
         this.context.fillStyle = holeColor;
@@ -603,17 +653,34 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
     }
 
     if (selectedTile == undefined) {
-        
+        this.context.font = "62px Sans-Serif";
+        this.context.fillStyle = "#FFD300";
+        this.context.fillText("Not discovered",
+            x0 + 50,
+            y0 + ((height / 2)) + 25);
     } else {
         console.log("selected", selectedTile);
         var cont = this.context;
         if (selectedTile.VictoryPoints) {
-            this.context.font = "32px Open Sans";
+            //this.context.font = "32px Open Sans";
+            //this.context.fillStyle = "#FFD300";
+            //this.context.fillText("Victory Points: " + selectedTile.VictoryPoints,
+            //    x0 + 50,
+            //    y0 + ((height / 2)));
+
+            this.context.font = "72px Sans-Serif";
             this.context.fillStyle = "#FFD300";
-            this.context.fillText("Victory Points: " + selectedTile.VictoryPoints,
-                x0 + 50,
-                y0 + ((height / 2)));
-        }
+            this.context.fillText(selectedTile.VictoryPoints,
+                x0 + 420,
+                y0 + ((height / 2)) + 25);
+
+            //this.context.font = "65px Open Sans";
+            //this.context.fillStyle = fillColor;
+            //this.context.fillText(selectedTile.VictoryPoints,
+            //    x0 + 420,
+            //    y0 + ((height / 2)) + 25);
+
+        } 
 
         if (selectedTile.Division) {
             this.context.font = "32px Open Sans";
@@ -805,6 +872,17 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
         }
 
 
+        if (selectedTile.Aliens > 0) {
+            
+            var img = new Image();
+            img.src = '../Content/Images/alienHeadx100.png';
+            var cont = this.context;
+            img.onload = function () {
+                cont.drawImage(img, x0 + 100, y0 + 150);
+            };
+
+        }
+
         ////Add Image
         //var img = new Image();
         //img.src = '../Content/Images/advancedEconomy.png';
@@ -825,7 +903,7 @@ HexagonGrid.prototype.buildGameHexes = function () {
 
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.drawHexGrid(this.radius, this.radius, true);
+    this.drawHexGrid(this.radius, this.radius, this.explore);
 
     //console.log("building hexes :: count => ", this.gameTiles.length);
     for (var i = 0; i < this.gameTiles.length; i++) {
@@ -854,4 +932,56 @@ HexagonGrid.prototype.getColor = function(disc) {
     default:
         return this.background;
     }
+};
+
+HexagonGrid.prototype.whatDivAmI = function(x, y) {
+
+    if (x < 4 || x > 8 || y < 3 || y > 7) {
+        return 3;
+    }
+
+    
+    switch(x) {
+    
+        case 4:
+        case 8:
+            if (y < 4 || y > 6) {
+                return 3;
+            } else {
+                return 2;
+            }
+            break;
+        case 5:
+        case 7:
+            if (y < 3 || y > 6) {
+                return 3;
+            } else if (y == 3 || y == 6) {
+                return 2;
+            } else {
+                return 1;
+            }
+            break;
+
+        case 6:
+            if (y < 3 || y > 7) {
+                return 3;
+            } else if (y == 3 || y == 7) {
+                return 2;
+            } else if (y === 4 || y === 6) {
+                return 1;
+            } else {
+                return 0;
+            }
+            break;
+        default:
+            console.warn('div not found');
+    }
+
+
+
+
+    return null;
+
+
+    
 };

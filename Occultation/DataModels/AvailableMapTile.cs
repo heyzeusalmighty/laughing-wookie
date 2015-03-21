@@ -469,6 +469,7 @@ namespace Occultation.DataModels
                     MapId = 230,
                     Reward = false,
                     Occupied = "Blue",
+                    Division = 2,
                     VictoryPoints = 3,
                     Pink = 1,
                     PinkAdvanced = 1,
@@ -481,6 +482,7 @@ namespace Occultation.DataModels
                     MapId = 231,
                     Reward = false,
                     Occupied = "Red",
+                    Division = 2,
                     VictoryPoints = 3,
                     Pink = 1,
                     PinkAdvanced = 1,
@@ -493,6 +495,7 @@ namespace Occultation.DataModels
                     MapId = 232,
                     Reward = false,
                     Occupied = "Green",
+                    Division = 2,
                     VictoryPoints = 3,
                     Pink = 1,
                     PinkAdvanced = 1,
@@ -505,6 +508,7 @@ namespace Occultation.DataModels
                     MapId = 233,
                     Reward = false,
                     Occupied = "Yellow",
+                    Division = 2,
                     VictoryPoints = 3,
                     Pink = 1,
                     PinkAdvanced = 1,
@@ -517,6 +521,7 @@ namespace Occultation.DataModels
                     MapId = 234,
                     Reward = false,
                     Occupied = "White",
+                    Division = 2,
                     VictoryPoints = 3,
                     Pink = 1,
                     PinkAdvanced = 1,
@@ -529,6 +534,7 @@ namespace Occultation.DataModels
                     MapId = 235,
                     Reward = false,
                     Occupied = "Black",
+                    Division = 2,
                     VictoryPoints = 3,
                     Pink = 1,
                     PinkAdvanced = 1,
@@ -547,6 +553,7 @@ namespace Occultation.DataModels
                 MapId = 1,
                 Reward = true,
                 Occupied = "Aliens",
+                Division = 0,
                 Aliens = 1,
                 VictoryPoints = 4,
                 White = 2,
@@ -558,91 +565,7 @@ namespace Occultation.DataModels
             };
         }
 
-        public List<MapTile> BringABunchOfDummyTiles()
-        {
-            return new List<MapTile>{ new MapTile
-            {
-                MapId = 1,
-                Aliens = 2, 
-                Orange = 1, 
-                OrangeAdvanced = 1, 
-                Pink = 1, 
-                PinkAdvanced = 1, 
-                VictoryPoints = 2, 
-                Wormholes = new[]{1,1,0,1,1,0},
-                Occupied = ""
-            }, 
-            new MapTile
-            {
-                MapId = 2,
-                Aliens = 1,
-                Orange = 1,
-                BrownAdvanced = 1,
-                Brown = 1,
-                VictoryPoints = 2,
-                Wormholes = new[] { 0, 1, 1, 1, 1, 1 },
-                Occupied = ""
-            }, 
-            new MapTile
-            {
-                MapId = 3,
-                Pink = 1,
-                PinkAdvanced = 1,
-                VictoryPoints = 3,
-                Wormholes = new[] { 1, 0, 1, 1, 0, 1 },
-                Occupied = ""
-            },
-                new MapTile
-            {
-                MapId = 4,
-                Brown = 1,
-                Pink = 1,
-                VictoryPoints = 2,
-                Wormholes = new[] {1,1,1,1,0,0 },
-                Occupied = ""
-            },
-            new MapTile
-            {
-                MapId = 5,
-                Aliens = 1,
-                Orange = 1,
-                Pink = 1,
-                BrownAdvanced = 1,
-                VictoryPoints = 3,
-                Wormholes = new[] {1,1,0,1,1,1 },
-                Occupied = ""
-            },
-            new MapTile
-            {
-                MapId = 6,
-                Aliens = 1,
-                White = 1,
-                OrangeAdvanced = 1,
-                Pink = 1,
-                VictoryPoints = 2,
-                Wormholes = new[] {1,1,0,1,1,0},
-                Occupied = ""
-            },
-            new MapTile
-            {
-                MapId = 7,
-                Orange = 1,
-                BrownAdvanced = 1,
-                PinkAdvanced = 1,
-                VictoryPoints = 2,
-                Wormholes = new[] {1,1,1,1,0,1},
-                Occupied = ""
-            },
-            new MapTile
-            {
-                MapId = 8,
-                OrangeAdvanced = 1,
-                White = 1,
-                VictoryPoints = 2,
-                Wormholes = new[] {1,1,1,0,1,1},
-                Occupied = ""
-            }};
-        }
+        
         
     }
 

@@ -17,12 +17,14 @@
     var radius = 45;
     var sx = 6;
     var sy = 5;
+    var cols = 13;
+    var rows = 11;
 
-    var hexagonGrid = new HexagonGrid("HexCanvas", radius, background, orange, brown, pink);
-    hexagonGrid.drawHexGrid(11, 13, radius, radius, true);
+    var hexagonGrid = new HexagonGrid("HexCanvas", radius, background, orange, brown, pink, cols, rows, true);
+    //hexagonGrid.drawHexGrid(11, 13, radius, radius, true);
 
     //Centralish 
-    hexagonGrid.redrawHexAtColRow(sx, sy, central);
+    //hexagonGrid.redrawHexAtColRow(sx, sy, central);
 
     $scope.loading = true;
     spaceFactory.getMapTiles().then(function (data) {
@@ -31,6 +33,7 @@
         for (var i = 0; i < tiles.length; i++) {
 
             switch (tiles[i].Division) {
+                case 0:
                 case 1:
                     tiles[i].color = divisionOne;
                     break;
@@ -41,7 +44,8 @@
                     tiles[i].color = divisionThree;
                     break;
                 default:
-                    console.log('division not found');
+                    console.log('division not found', tiles[i]);
+                    
             }
 
             //hexagonGrid.buildGameHex(tiles[i]);
