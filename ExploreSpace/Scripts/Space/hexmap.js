@@ -19,12 +19,14 @@ function HexagonGrid(canvasId, radius, background, orange, brown, pink, cols, ro
     //Player Colors
     this.greenPlayer = "#2C8437";
     this.blackPlayer = "#010101";
-    this.bluePlayer = "#021B61";
+    this.bluePlayer = "rgba(2,105,255,0.5)";
     this.redPlayer = "#D10F40";
-    this.yellowPlayer = "#FFD700";
+    this.yellowPlayer = "rgba(255,215,0,0.3)";
     this.whitePlayer = "#C4C2B6";
     this.central = "rgba(215,40,40,0.8)";
-
+    this.holeColor = "#D4D4D4";
+    this.outline = "#000000";
+    this.background = "rgba(225,93,15,0.2)";
 
     this.setNewHexDimensions();
 
@@ -399,97 +401,61 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     this.context.stroke();
 
     if (tile.VictoryPoints) {
-        this.context.font = "20px Open Sans";
+        this.context.font = "20px Sans-Serif";
         this.context.fillStyle = "#FFD300";
-
         this.context.fillText(tile.VictoryPoints,
             drawx + (this.width - 20),
             drawy + ((this.height / 2) + 5));
+
     }
 
 
     //orange circle
     if (tile.Orange > 0) {
-        this.context.beginPath();
-        this.context.restore();
-        this.context.strokeStyle = this.orange;
-        this.context.setLineDash([]);
-        var orangeX = drawx + (this.width - 40);
-        var orangeY = drawy + ((this.height / 2) + 5);
-        this.context.arc(orangeX, orangeY, 5, 0, Math.PI * 2, false);
-
-        this.context.fillStyle = this.orange;
-        this.context.fill();
-
-        this.context.stroke();
+        this.drawOrangeSmall(drawx, drawy);
     }
 
     //brown circle
     if (tile.Brown > 0) {
-        this.context.beginPath();
-        this.context.restore();
-        this.context.strokeStyle = this.brown;
-        this.context.setLineDash([]);
-        var brownX = drawx + (this.width - 40);
-        var brownY = drawy + ((this.height / 2) + 25);
-        this.context.arc(brownX, brownY, 5, 0, Math.PI * 2, false);
-        this.context.fillStyle = this.brown;
-        this.context.fill();
-        this.context.stroke();
+        this.drawBrownSmall(drawx, drawy);
     }
 
     //pink circle
     if (tile.Pink > 0) {
-        this.context.beginPath();
-        this.context.restore();
-        this.context.strokeStyle = this.pink;
-        this.context.setLineDash([]);
-        var pinkX = drawx + (this.width - 40);
-        var pinkY = drawy + ((this.height / 2) - 20);
-        this.context.arc(pinkX, pinkY, 5, 0, Math.PI * 2, false);
-        this.context.fillStyle = this.pink;
-        this.context.fill();
-        this.context.stroke();
+        this.drawPinkSmall(drawx, drawy);
+    }
+
+    if (tile.White > 0) {
+        this.drawWhiteSmall(drawx, drawy);
     }
 
     //ALIENS
     if (tile.Aliens > 0) {
         var alienX = drawx + (this.width - 75);
-        var alienY = drawy + ((this.height / 2) -5 );
-        //this.context.strokeStyle = "#000016";
-        //this.context.beginPath();
-        //this.context.arc(alienX, alienY, 13, Math.PI / 7, -Math.PI / 7, false);
-        //this.context.lineTo(alienX - 6, alienY);
-        ////this.context.lineTo(31, 37);
-        //this.context.fillStyle = '#242437';
-        //this.context.fill();
-
-        //Add Image
+        var alienY = drawy + ((this.height / 2) -10 );
         
-
         if (tile.Aliens == 2) {
 
             alienY -= 8;
 
             var img1 = new Image();
             img1.src = '../Content/Images/alienHeadx25.png';
-            var cont = this.context;
+            var cont1 = this.context;
             img1.onload = function() {
-                cont.drawImage(img1, alienX, alienY - 12);
+                cont1.drawImage(img1, alienX, alienY - 7);
             };
 
             var img2 = new Image();
             img2.src = '../Content/Images/alienHeadx25.png';
-            var cont2 = this.context;
             img2.onload = function() {
-                cont.drawImage(img2, alienX, alienY + 12);
+                cont1.drawImage(img2, alienX, alienY + 17);
             };
         } else {
             var img = new Image();
             img.src = '../Content/Images/alienHeadx25.png';
-            var cont = this.context;
+            var contUno = this.context;
             img.onload = function () {
-                cont.drawImage(img, alienX, alienY);
+                contUno.drawImage(img, alienX, alienY);
             };
         }
     }
@@ -514,101 +480,22 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
 
     
     //Player
-    if (tile.Occupied != 'Aliens') {
-        var playerX = drawx + (this.width - 65);
-        var playerY = drawy + ((this.height / 2) + 5);
-        this.context.strokeStyle = playerColor;
-        this.context.beginPath();
-        this.context.arc(playerX, playerY, 13, 0, Math.PI * 2, false);
-        this.context.lineTo(alienX - 6, alienY);
-        //this.context.lineTo(31, 37);
-        this.context.fillStyle = playerColor;
-        this.context.fill();
-
+    //if (tile.Occupied != 'Aliens') {
+    //    var playerX = drawx + (this.width - 65);
+    //    var playerY = drawy + ((this.height / 2) + 5);
+    //    this.context.strokeStyle = playerColor;
+    //    this.context.beginPath();
+    //    this.context.arc(playerX, playerY, 13, 0, Math.PI * 2, false);
+    //    this.context.lineTo(alienX - 6, alienY);
+    //    //this.context.lineTo(31, 37);
+    //    this.context.fillStyle = playerColor;
+    //    this.context.fill();
         
-
-
-    }
+    //}
     
-    
-
     //Wormholes
+    this.drawWormHolesSmall(drawx, drawy, tile.Wormholes);
 
-    var findIt = "#950000";
-    var holeColor = "#D4D4D4";
-    var wormHoleLine = this.background;
-
-    // hole[0]
-    if (tile.Wormholes[0] === 1) {
-        var holeOneX = drawx + (this.width - 45);
-        var holeOneY = drawy;
-        this.context.strokeStyle = wormHoleLine;
-        this.context.beginPath();
-        this.context.arc(holeOneX, holeOneY, 7, 0, Math.PI, false);
-        this.context.fillStyle = holeColor;
-        this.context.fill();
-        this.context.stroke();
-    }
-
-    // hole[1]
-    if (tile.Wormholes[1] === 1) {
-        var holeTwoX = drawx + (this.width - 12);
-        var holeTwoY = drawy + 18;
-        this.context.strokeStyle = wormHoleLine;
-        this.context.beginPath();
-        this.context.arc(holeTwoX, holeTwoY, 7, Math.PI * 1.333, Math.PI * 0.333, true);
-        this.context.fillStyle = holeColor;
-        this.context.fill();
-        this.context.stroke();
-    }
-
-    // hole[2]
-    if (tile.Wormholes[2] === 1) {
-        var holeThreeX = drawx + (this.width - 12);
-        var holeThreeY = drawy + 58;
-        this.context.strokeStyle = wormHoleLine;
-        this.context.beginPath();
-        this.context.arc(holeThreeX, holeThreeY, 7, Math.PI * 1.666, Math.PI * 0.666, true);
-        this.context.fillStyle = holeColor;
-        this.context.fill();
-        this.context.stroke();
-    }
-
-    // hole[3]
-    if (tile.Wormholes[3] === 1) {
-        var holeFourX = drawx + (this.width - 45);
-        var holeFourY = drawy + 78;
-        this.context.strokeStyle = wormHoleLine;
-        this.context.beginPath();
-        this.context.arc(holeFourX, holeFourY, 7, Math.PI, 0, false);
-        this.context.fillStyle = holeColor;
-        this.context.fill();
-        this.context.stroke();
-    }
-
-    // hole[4]
-    if (tile.Wormholes[4] === 1) {
-        var holeFiveX = drawx + (this.width - 79);
-        var holeFiveY = drawy + 57;
-        this.context.strokeStyle = wormHoleLine;
-        this.context.beginPath();
-        this.context.arc(holeFiveX, holeFiveY, 7, Math.PI * 1.333, Math.PI * 0.333, false);
-        this.context.fillStyle = holeColor;
-        this.context.fill();
-        this.context.stroke();
-    }
-
-    // hole[5]
-    if (tile.Wormholes[5] === 1) {
-        var holeSixX = drawx + (this.width - 79);
-        var holeSixY = drawy + 19;
-        this.context.strokeStyle = wormHoleLine;
-        this.context.beginPath();
-        this.context.arc(holeSixX, holeSixY, 7, Math.PI * 0.666, Math.PI * 1.666, true);
-        this.context.fillStyle = holeColor;
-        this.context.fill();
-        this.context.stroke();
-    }
 
 };
 
@@ -662,28 +549,24 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
         console.log("selected", selectedTile);
         var cont = this.context;
         if (selectedTile.VictoryPoints) {
-            //this.context.font = "32px Open Sans";
-            //this.context.fillStyle = "#FFD300";
-            //this.context.fillText("Victory Points: " + selectedTile.VictoryPoints,
-            //    x0 + 50,
-            //    y0 + ((height / 2)));
 
-            this.context.font = "72px Sans-Serif";
-            this.context.fillStyle = "#FFD300";
-            this.context.fillText(selectedTile.VictoryPoints,
+            this.context.font = "Bold 72px Sans-Serif";
+            this.context.setLineDash([0]);
+            this.context.strokeStyle = "#FFD300";
+            this.context.strokeText(selectedTile.VictoryPoints,
                 x0 + 420,
                 y0 + ((height / 2)) + 25);
 
-            //this.context.font = "65px Open Sans";
-            //this.context.fillStyle = fillColor;
+            //this.context.fillStyle = "#FFD300";
             //this.context.fillText(selectedTile.VictoryPoints,
             //    x0 + 420,
             //    y0 + ((height / 2)) + 25);
 
+
         } 
 
         if (selectedTile.Division) {
-            this.context.font = "32px Open Sans";
+            this.context.font = "32px Sans-Serif";
             this.context.fillStyle = "#FFD300";
             this.context.fillText("Division " + selectedTile.Division, x0 + 50, y0 + (height / 2) + 30);
         }
@@ -984,4 +867,135 @@ HexagonGrid.prototype.whatDivAmI = function(x, y) {
 
 
     
+};
+
+HexagonGrid.prototype.drawWormHolesSmall = function(x, y, wormholes) {
+    
+    var wormHoleLine = this.outline;
+
+    // hole[0]
+    if (wormholes[0] === 1) {
+        var holeOneX = x + (this.width - 45);
+        var holeOneY = y;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeOneX, holeOneY, 7, 0, Math.PI, false);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    // hole[1]
+    if (wormholes[1] === 1) {
+        var holeTwoX = x + (this.width - 12);
+        var holeTwoY = y + 18;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeTwoX, holeTwoY, 7, Math.PI * 1.333, Math.PI * 0.333, true);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    // hole[2]
+    if (wormholes[2] === 1) {
+        var holeThreeX = x + (this.width - 12);
+        var holeThreeY = y + 58;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeThreeX, holeThreeY, 7, Math.PI * 1.666, Math.PI * 0.666, true);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    // hole[3]
+    if (wormholes[3] === 1) {
+        var holeFourX = x + (this.width - 45);
+        var holeFourY = y + 78;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeFourX, holeFourY, 7, Math.PI, 0, false);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    // hole[4]
+    if (wormholes[4] === 1) {
+        var holeFiveX = x + (this.width - 79);
+        var holeFiveY = y + 57;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeFiveX, holeFiveY, 7, Math.PI * 1.333, Math.PI * 0.333, false);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    // hole[5]
+    if (wormholes[5] === 1) {
+        var holeSixX = x + (this.width - 79);
+        var holeSixY = y + 19;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeSixX, holeSixY, 7, Math.PI * 0.666, Math.PI * 1.666, true);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+};
+
+HexagonGrid.prototype.drawOrangeSmall = function(x, y) {
+    this.context.beginPath();
+    this.context.restore();
+    this.context.strokeStyle = this.outline;
+    this.context.setLineDash([]);
+    var orangeX = x + (this.width - 40);
+    var orangeY = y + ((this.height / 2) + 10);
+    this.context.arc(orangeX, orangeY, 5, 0, Math.PI * 2, false);
+
+    this.context.fillStyle = this.orange;
+    this.context.fill();
+
+    this.context.stroke();
+};
+
+HexagonGrid.prototype.drawPinkSmall = function (x, y) {
+    this.context.beginPath();
+    this.context.restore();
+    this.context.strokeStyle = this.outline;
+    this.context.setLineDash([]);
+    var pinkX = x + (this.width - 40);
+    var pinkY = y + ((this.height / 2) - 20);
+    this.context.arc(pinkX, pinkY, 5, 0, Math.PI * 2, false);
+    this.context.fillStyle = this.pink;
+    this.context.fill();
+    this.context.stroke();
+};
+
+HexagonGrid.prototype.drawBrownSmall = function (x, y) {
+    this.context.beginPath();
+    this.context.restore();
+    this.context.strokeStyle = this.outline;
+    this.context.setLineDash([]);
+    var brownX = x + (this.width - 40);
+    var brownY = y + ((this.height / 2) - 5);
+    this.context.arc(brownX, brownY, 5, 0, Math.PI * 2, false);
+    this.context.fillStyle = this.brown;
+    this.context.fill();
+    this.context.stroke();
+};
+
+HexagonGrid.prototype.drawWhiteSmall = function (x, y) {
+    this.context.beginPath();
+    this.context.restore();
+    this.context.strokeStyle = this.outline;
+    this.context.setLineDash([]);
+    var brownX = x + (this.width - 40);
+    var brownY = y + ((this.height / 2) + 25);
+    this.context.arc(brownX, brownY, 5, 0, Math.PI * 2, false);
+    this.context.fillStyle = this.holeColor;
+    this.context.fill();
+    this.context.stroke();
 };
