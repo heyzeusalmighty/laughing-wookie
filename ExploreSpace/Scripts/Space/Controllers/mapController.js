@@ -1,4 +1,4 @@
-﻿app.controller('mapController', function ($scope, $location, $http, spaceFactory) {
+﻿app.controller('mapController',['$scope', '$location', 'spaceFactory', function ($scope, $location, spaceFactory) {
 
 
     $scope.whatIsIt = function() {
@@ -66,4 +66,4 @@
 
    
 
-});
+}]);

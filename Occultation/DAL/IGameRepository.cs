@@ -17,6 +17,7 @@ namespace Occultation.DAL
         List<Player> GetPlayersForGame(int gameId);
         Game GetGame(string gameGuid);
         Game GetGame(int gameId);
+        Game GetLastGame();
         void AddScienceTileToTrack(PlayerTrack track);
         void AddNewShipModel(PlayerShipModel model, List<ShipComponent> components);
         void AddTilesToNewGame(List<MapDeck> tiles);
@@ -24,5 +25,6 @@ namespace Occultation.DAL
         MapDeck GetNextTile(int gameId, int div, int x, int y);
         void SetPlayerColor(int playerId, string color);
         List<GameUser> GetAllGameUsers();
+        
     }
 }

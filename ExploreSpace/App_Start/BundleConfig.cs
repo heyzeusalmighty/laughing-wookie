@@ -39,6 +39,7 @@ namespace ExploreSpace
                 "~/Scripts/Space/Controllers/exploreController.js"
                ));
 
+            BundleTable.EnableOptimizations = true;
         }
 
     }

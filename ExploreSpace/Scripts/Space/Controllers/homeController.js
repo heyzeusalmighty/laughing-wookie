@@ -1,4 +1,4 @@
-﻿app.controller('homeController', function($scope, $rootScope) {
+﻿app.controller('homeController', ['$scope', '$rootScope', function($scope, $rootScope) {
 
 
     $scope.testing = ['test', 'testy', 'testes'];
@@ -11,4 +11,4 @@
         console.info('changed to ' + $scope.currentPlayer);
     };
 
-});
+}]);

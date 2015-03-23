@@ -1,4 +1,4 @@
-﻿app.controller('shipsController', function ($scope, $location, $http, spaceFactory) {
+﻿app.controller('shipsController',['$scope', 'spaceFactory', function ($scope, spaceFactory) {
 
 
     $scope.testing = ['test', 'testy', 'testes'];
@@ -10,4 +10,4 @@
         console.log(this.ship);
     };
 
-});
+}]);

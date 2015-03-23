@@ -180,6 +180,11 @@ namespace Occultation.DAL
             throw new NotImplementedException();
         }
 
+        public Game GetLastGame()
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddScienceTileToTrack(PlayerTrack track)
         {
             if (Tracks == null)

@@ -147,6 +147,11 @@ namespace Occultation.DAL
             return context.Games.FirstOrDefault(x => x.GameId == gameId);
         }
 
+        public Game GetLastGame()
+        {
+            return context.Games.OrderByDescending(x => x.GameId).First();
+        }
+
         public void AddScienceTileToTrack(PlayerTrack track)
         {
             context.PlayerTracks.Add(track);

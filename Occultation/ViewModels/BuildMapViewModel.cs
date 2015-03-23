@@ -17,6 +17,13 @@ namespace Occultation.ViewModels
             repository = repo;
         }
 
+
+        public string GetLastGame()
+        {
+            var game = repository.GetLastGame();
+            return game.GameIdentifier;
+        }
+
         public GameMap GetGameMap(string gameGuid)
         {
             var map = new GameMap
