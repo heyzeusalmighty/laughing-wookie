@@ -91,7 +91,12 @@ namespace Occultation.ViewModels
                 TileId = 1
             };
             Repository.AddScienceTileToTrack(spacePort);
+        }
 
+        public string BuildGame(string title)
+        {
+
+            return "ddd";
         }
 
 

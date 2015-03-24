@@ -24,5 +24,12 @@ namespace ExploreSpace.Controllers
             var lastGame = model.GetLastGame();
             return model.GetGameMap(lastGame);
         }
+
+        public GameMap GetMapTiles(string guid)
+        {
+            var model = new BuildMapViewModel();
+            return model.GetGameMap(guid);
+            
+        }
     }
 }

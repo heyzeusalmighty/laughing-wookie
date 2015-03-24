@@ -14,5 +14,10 @@
             <label for="" class="control-label">Current Player</label>
             <select ng-model="currentPlayer" ng-options="player for player in players" class="form-control" ng-change="updatePlayer()"></select>
         </div>
+        
+        <div class="form-group">
+            <label for="" class="control-label">Current Game</label>
+            <select ng-model="currentGame" ng-options="game.GameIdentifier as game.Title for game in games" class="form-control" ng-change="updateGame()"></select>
+        </div>
     </div>
 </div>

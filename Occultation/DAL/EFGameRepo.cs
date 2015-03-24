@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using Occultation.DAL.EF;
 using Occultation.DataModels;
 
@@ -86,13 +87,14 @@ namespace Occultation.DAL
             return null;
         }
 
-        public int CreateGame()
+        public int CreateGame(string title)
         {
             var newGame = new Game
             {
                 Round = 0,
                 GameIdentifier = Guid.NewGuid().ToString(),
-                Status = "CREATED"
+                Status = "CREATED",
+                Title = title
             };
             context.Games.Add(newGame);
             context.SaveChanges();
@@ -220,6 +222,11 @@ namespace Occultation.DAL
         public List<GameUser> GetAllGameUsers()
         {
             return context.GameUsers.ToList();
+        }
+
+        public List<Game> GetAllGames()
+        {
+            return context.Games.ToList();
         }
 
         public Player GetCurrentUser(int gameId, string userName)

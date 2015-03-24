@@ -133,7 +133,7 @@ namespace Occultation.DAL
             return list;
         }
 
-        public int CreateGame()
+        public int CreateGame(string title)
         {
             return 0;
         }
@@ -265,6 +265,11 @@ namespace Occultation.DAL
         }
 
         public List<GameUser> GetAllGameUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Game> GetAllGames()
         {
             throw new NotImplementedException();
         }

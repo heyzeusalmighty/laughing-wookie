@@ -76,6 +76,15 @@
     <Compile Include="DataModels\PlacedMapTile.cs" />
     <Compile Include="DataModels\RemainingMapCounts.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Migrations\201503052221009_InitialCreate.cs" />
+    <Compile Include="Migrations\201503052221009_InitialCreate.Designer.cs">
+      <DependentUpon>201503052221009_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201503240100512_DumbDumb.cs" />
+    <Compile Include="Migrations\201503240100512_DumbDumb.Designer.cs">
+      <DependentUpon>201503240100512_DumbDumb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModels\ScienceTrack.cs" />
     <Compile Include="DataModels\ScoreCard.cs" />
@@ -83,12 +92,21 @@
     <Compile Include="DataModels\User.cs" />
     <Compile Include="ViewModels\BuildMapViewModel.cs" />
     <Compile Include="ViewModels\GameCreator.cs" />
+    <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\PlayerViewModel.cs" />
     <Compile Include="ViewModels\ProfileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201503052221009_InitialCreate.resx">
+      <DependentUpon>201503052221009_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201503240100512_DumbDumb.resx">
+      <DependentUpon>201503240100512_DumbDumb.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

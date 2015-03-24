@@ -2,7 +2,7 @@
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
-    $urlRouterProvider.otherwise("/Home");
+    $urlRouterProvider.otherwise("/");
 
     $stateProvider
         // route for the home page

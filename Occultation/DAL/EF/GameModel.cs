@@ -32,6 +32,10 @@ namespace Occultation.DAL.EF
                 .Property(e => e.GameIdentifier)
                 .IsUnicode(false);
 
+            //modelBuilder.Entity<Game>()
+            //    .Property(e => e.Title)
+            //    .IsUnicode(false);
+
             modelBuilder.Entity<GameUser>()
                 .Property(e => e.UserName)
                 .IsUnicode(false);

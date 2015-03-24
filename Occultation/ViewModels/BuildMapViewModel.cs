@@ -12,12 +12,17 @@ namespace Occultation.ViewModels
     {
 
         private IGameRepository repository;
+
+        public BuildMapViewModel()
+        {
+            repository = new EFGameRepo();
+        }
+
         public BuildMapViewModel(IGameRepository repo)
         {
             repository = repo;
         }
-
-
+        
         public string GetLastGame()
         {
             var game = repository.GetLastGame();

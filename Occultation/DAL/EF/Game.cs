@@ -22,5 +22,8 @@ namespace Occultation.DAL.EF
         [Required]
         [StringLength(50)]
         public string GameIdentifier { get; set; }
+
+        public string Title { get; set; }
+
     }
 }

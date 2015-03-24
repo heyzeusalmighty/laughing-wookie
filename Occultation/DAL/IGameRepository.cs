@@ -12,7 +12,7 @@ namespace Occultation.DAL
         Player GetCurrentUser(int gameId, string userName);
         List<ScienceTile> GetScienceTrack(int gameId, int playerId);
         
-        int CreateGame();
+        int CreateGame(string title);
         string AddPlayerToGame(int userId, int gameId);
         List<Player> GetPlayersForGame(int gameId);
         Game GetGame(string gameGuid);
@@ -25,6 +25,7 @@ namespace Occultation.DAL
         MapDeck GetNextTile(int gameId, int div, int x, int y);
         void SetPlayerColor(int playerId, string color);
         List<GameUser> GetAllGameUsers();
-        
+        List<Game> GetAllGames();
+
     }
 }
