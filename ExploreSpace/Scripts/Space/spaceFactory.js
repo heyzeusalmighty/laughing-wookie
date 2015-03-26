@@ -58,6 +58,16 @@
             return deferred.promise;
         };
 
+        service.resetButton = function () {
+            var deferred = $q.defer();
+            $http({ method: "GET", url: "/Game/ResetGames" }).success(function (data) {
+                deferred.resolve(data);
+            }).error(function () {
+                deferred.reject('There was an error');
+            });
+            return deferred.promise;
+        };
+
 
         function dummyShips() {
             var ships = [];

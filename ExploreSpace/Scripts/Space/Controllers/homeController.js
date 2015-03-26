@@ -16,6 +16,8 @@
         console.info('changed to ', $rootScope.currentGame);
     };
 
+    
+
     spaceFactory.getAllGames().then(function(data) {
         $scope.games = data;
     });

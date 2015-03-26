@@ -119,6 +119,9 @@
     <Content Include="Content\Images\blankScienceTile.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Images\rocket-white-x100.png" />
+    <Content Include="Content\Images\rocket-white-x128.png" />
+    <Content Include="Content\Images\rocket-white-x25.png" />
     <Content Include="Content\Images\rocketx100.png" />
     <Content Include="Content\Images\rocketx128.png" />
     <Content Include="Content\Images\rocketx25.png" />
@@ -173,6 +176,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\MapController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\SpaceController.cs" />

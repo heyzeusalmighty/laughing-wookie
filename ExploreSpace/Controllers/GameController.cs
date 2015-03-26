@@ -17,5 +17,11 @@ namespace ExploreSpace.Controllers
             return Json(model.GetAllGames(), JsonRequestBehavior.AllowGet);
         }
 
+        public string ResetGames()
+        {
+            var model = new GameViewModel();
+            return model.ResetGames();
+        }
+
     }
 }

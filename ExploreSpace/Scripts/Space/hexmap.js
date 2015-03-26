@@ -468,7 +468,8 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
             var shipY = drawy + ((this.height / 2) - 5);
 
             var ships = new Image();
-            ships.src = '../Content/Images/rocketx25.png';
+            ships.src = (tile.Occupied == 'Black') ? '../Content/Images/rocket-white-x25.png' : '../Content/Images/rocketx25.png';
+            //ships.src = '../Content/Images/rocketx25.png';
             var cont = this.context;
             ships.onload = function () {
                 cont.drawImage(ships, shipX, shipY - 12);
