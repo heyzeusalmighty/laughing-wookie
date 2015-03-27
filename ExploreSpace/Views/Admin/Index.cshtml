@@ -1,0 +1,205 @@
+﻿@model ExploreSpace.Models.AdminViewModel
+@{
+    ViewBag.Title = "Admin";
+}
+
+<link href="~/Content/toastr.min.css" rel="stylesheet" />
+<style type="text/css">
+    input {
+        color: black;
+    }
+
+    table tr td {
+        text-align: center;
+    }
+
+    th {
+        text-align: center;
+    }
+
+    .good {
+        background-color: #5cb85c;
+        color: white;
+        padding: 5px;
+        font-weight: bold;
+    }
+
+    .bad {
+        background-color: #d9534f;
+        color: white;
+        padding: 5px;
+        font-weight: bold;
+    }
+
+    .game {
+        color: blueviolet;
+    }
+
+    .admin {
+        color: gold;
+    }
+</style>
+
+<h2>
+    Admin Area
+</h2>
+
+<div ng-app="heyzeus">
+    <div ng-controller="AdminCtrl">
+
+        <div class="loadingBox row" ng-show="loadingTracker.active()">
+            <div class="col-lg-4 col-lg-offset-3">
+                <img src="~/Content/Images/loading.gif" />
+            </div>
+        </div>
+
+        <div ng-show="TODO">
+            <h4>TO DO</h4>
+
+            <ol>
+                <li><a href="http://www.troyhunt.com/2013/09/the-complete-guide-to-loading-free-ssl.html"> Get SSL working on domain </a></li>
+                <li>Get Role stuff working</li>
+                <li> Receta </li>
+                <li>Password Reset</li>
+            </ol>
+
+
+        </div>
+
+        <div id="theSelector">
+            <button class="btn" ng-click="goToUsers()" ng-class="{'btn-info': usersSelected, 'btn-warning': (!usersSelected)}">Users</button>
+            <button class="btn" ng-click="goToGames()" ng-class="{'btn-info': gamesSelected, 'btn-warning': (!gamesSelected)}">Games</button>
+            <button class="btn" ng-click="goToLogs()" ng-class="{'btn-info': logsSelected, 'btn-warning': (!logsSelected)}">Logs</button>
+            <button class="btn" ng-click="engageToDo()" ng-class="{'btn-info': TODO, 'btn-warning': (!TODO)}">To DO</button>
+        </div>
+
+        <div id="userTable" ng-hide="loadingTracker.active() || (!usersSelected)" ng-show="usersSelected">
+            <table class="table table-bordered">
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>PlayerId</th>
+                    <th>IsActive</th>
+                    <td>Roles</td>
+                </tr>
+
+                <tr ng-repeat="user in allTheUsers track by $index">
+                    <td><button class="btn btn-success" ng-click="editUser(user)">Edit</button></td>
+                    <td>
+                        {{user.UserName}}
+                    </td>
+                    <td>
+                        {{user.ContactEmail}}
+                    </td>
+                    <td>
+                        {{user.PlayerId}}
+                    </td>
+                    <td>
+                        <span ng-class="{good: user.IsActive, bad: (!user.IsActive)}">{{user.IsActive}}</span>
+                    </td>
+                    <td>
+                        {{user.Roles}}
+                    </td>
+
+
+                </tr>
+            </table>
+        </div>
+
+        <div class="row">
+            <div ng-show="selectedUser != null">
+
+                <h2>{{selectedUser.UserName}}</h2>
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button class="btn btn-success" ng-click="saveUser()">Save</button>
+                        <button class="btn btn-danger" ng-click="cancelUser()">Cancel</button>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Email</td>
+                                <td>
+                                    <input type="text" ng-model="selectedUser.ContactEmail" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Active</td>
+                                <td>
+                                    <button class="btn btn-warning" ng-show="(selectedUser.IsActive)" ng-click="Inactivate()">Set to Inactive</button>
+                                    <button class="btn btn-danger" ng-show="(selectedUser.IsActive)" ng-click="BanThisUser()">BAN</button>
+                                    <button class="btn btn-success" ng-show="(selectedUser.NewUser)" ng-click="activate()">Activate</button>
+                                    <button class="btn btn-danger" ng-show="(selectedUser.Banned)" ng-click="unBan()">Unban</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <div class="row" ng-show="gamesSelected" ng-hide="loadingTracker.active() || (!gamesSelected)">
+            <h4>Game Controls</h4>
+
+
+            <div class="col-lg-6">
+                <table class="table table-condensed">
+                    <tr>
+                        <th></th>
+                        <th>Game Name</th>
+                        <th>Players Count</th>
+                        <th>Game Status</th>
+                    </tr>
+                    <tr ng-repeat="game in allTheGames">
+                        <td><button class="btn btn-danger" ng-click="deleteGame(game)">DELETE</button> <button class="btn btn-info" ng-click="editGame(game)">EDIT</button></td>
+                        <td>{{game.GameName}}</td>
+                        <td>{{game.Players.length}}</td>
+                        <td>{{game.GameStatus}}</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-lg-6">
+                <h4>{{selectedGame.GameName}}</h4>
+            </div>
+
+        </div>
+
+        <div ng-show="logsSelected" ng-hide="loadingTracker.active() || (!logsSelected)">
+            <h4>SHOW ME THE LOGS</h4>
+            <div ng-repeat="log in allThemLogs">
+                <span ng-class="{game: log.LogType == 'GAME', admin: log.LogType == 'ADMIN'}">{{log.Content}}</span>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    @*<script src="~/bundles/queueScripts"></script>*@
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.min.js"></script>
+    <script src="~/Scripts/promiseTracker.js"></script>
+    <script src="~/Scripts/toastr.min.js"></script>
+    <script src="~/Scripts/admin.js"></script>
+
+    <script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-40063997-1', 'heyzeusalmighty.com');
+    ga('send', 'pageview');
+
+    </script>
+
+}
