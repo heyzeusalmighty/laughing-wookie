@@ -65,6 +65,11 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
             url: '/Move',
             templateUrl: '/Scripts/Space/Templates/Actions/move.html',
             controller: 'profileController'
+        })
+        .state('Admin', {
+            url: '/Admin',
+            templateUrl: '/Scripts/Space/Templates/admin.html',
+            controller: 'adminController'
         });
 
 }]);

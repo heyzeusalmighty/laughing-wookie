@@ -1,0 +1,32 @@
+﻿
+<h2>Admin</h2>
+
+
+<table class="table table-striped">
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Active</th>
+    </tr>
+    <tr ng-repeat ="user in users">
+        <td><button class="btn btn-default" ng-click="addToAdmin()">Button</button></td>
+        <td>{{user.UserName}}</td>
+        <td>{{user.Email}}</td>
+        <td>Probs</td>
+    </tr>
+</table>
+
+
+
+<h4>Manage Roles</h4>
+<table class="table table-striped">
+    <tr>
+        <th></th>
+        <th>Role</th>
+    </tr>
+    <tr ng-repeat="role in roles">
+        <td><button class="btn btn-default">Button</button></td>
+        <td>{{role}}</td>
+    </tr>
+</table>

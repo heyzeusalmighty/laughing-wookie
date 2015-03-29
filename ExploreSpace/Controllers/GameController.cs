@@ -17,6 +17,7 @@ namespace ExploreSpace.Controllers
             return Json(model.GetAllGames(), JsonRequestBehavior.AllowGet);
         }
 
+        [Authorize(Roles = "Admin")]
         public string ResetGames()
         {
             var model = new GameViewModel();

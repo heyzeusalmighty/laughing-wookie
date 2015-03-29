@@ -68,6 +68,27 @@
             return deferred.promise;
         };
 
+        service.getRollsAndUsers = function() {
+            var deferred = $q.defer();
+            $http({ method: "GET", url: "/Admin/GetUsersAndRolls" }).success(function (data) {
+                deferred.resolve(data);
+            }).error(function () {
+                deferred.reject('You are not authorized to view this.');
+            });
+            return deferred.promise;
+        };
+
+        service.addUserToGroup = function (user, role) {
+            var deferred = $q.defer();
+            console.info(user, role);
+            $http({ method: "GET", url: "/Admin/AddUserToRole", params:{ userName: user, roleName: role} }).success(function (data) {
+                deferred.resolve(data);
+            }).error(function () {
+                deferred.reject('You are not authorized to perform that action.');
+            });
+            return deferred.promise;
+        };
+
 
         function dummyShips() {
             var ships = [];

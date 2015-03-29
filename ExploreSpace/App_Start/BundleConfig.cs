@@ -36,7 +36,8 @@ namespace ExploreSpace
                 "~/Scripts/Space/Controllers/mapController.js",
                 "~/Scripts/Space/Controllers/menuController.js",
                 "~/Scripts/Space/Controllers/gameController.js",
-                "~/Scripts/Space/Controllers/exploreController.js"
+                "~/Scripts/Space/Controllers/exploreController.js",
+                "~/Scripts/Space/Controllers/adminController.js"
                ));
 
             //BundleTable.EnableOptimizations = true;

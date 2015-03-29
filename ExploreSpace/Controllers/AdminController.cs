@@ -3,16 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using ExploreSpace.Models;
 
 namespace ExploreSpace.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        // GET: Admin
-        [Authorize(Roles="Admin")]
+        
         public ActionResult Index()
         {
             return View();
+        }
+
+        public JsonResult GetUsersAndRolls()
+        {
+            var model = new AdminViewModel();
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        public string AddUserToRole(string userName, string roleName)
+        {
+            var vm = new AdminViewModel();
+            return vm.AddUserToRole(userName, roleName);
         }
     }
 }

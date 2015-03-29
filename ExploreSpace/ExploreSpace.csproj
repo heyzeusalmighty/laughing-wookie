@@ -171,6 +171,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\Space\Controllers\adminController.js" />
     <Content Include="Scripts\Space\Controllers\exploreController.js" />
     <Content Include="Scripts\Space\Controllers\gameController.js" />
     <Content Include="Scripts\Space\Controllers\homeController.js" />
@@ -188,6 +189,7 @@
     <Content Include="Scripts\Space\Templates\Actions\move.html" />
     <Content Include="Scripts\Space\Templates\Actions\research.html" />
     <Content Include="Scripts\Space\Templates\Actions\upgrade.html" />
+    <Content Include="Scripts\Space\Templates\admin.html" />
     <Content Include="Scripts\Space\Templates\game.html" />
     <Content Include="Scripts\Space\Templates\home.html" />
     <Content Include="Scripts\Space\Templates\map.html" />
@@ -220,6 +222,7 @@
     <Compile Include="Models\AdminViewModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SimpleUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

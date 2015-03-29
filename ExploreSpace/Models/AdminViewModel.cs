@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net.Mime;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -11,65 +12,65 @@ namespace ExploreSpace.Models
     public class AdminViewModel
     {
 
+        public List<string> Rolls { get; set; }
+        public List<SimpleUser> Users { get; set; }
+
+        private ApplicationDbContext db;
         public AdminViewModel()
         {
-            
+            db = new ApplicationDbContext();
+            GetAllRolesAndUsers();
+        }
+
+
+        public void GetAllRolesAndUsers()
+        {
+            Rolls = db.Roles.Select(x => x.Name).ToList();
+            Users = db.Users.Select(x => new SimpleUser{ Email = x.Email, UserName = x.UserName}).ToList();
+        }
+
+        public List<IdentityRole> GetAllRoles()
+        {
+            return db.Roles.ToList();
         }
 
 
         public string GetUserRoles(string userId)
         {
-            using (var db = new ApplicationDbContext())
+           
+            var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+
+            var allThoseRoles = um.GetRoles(userId);
+
+            var rollList = "";
+
+            foreach (var roll in allThoseRoles)
             {
-                var um = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
-
-                var allThoseRoles = um.GetRoles(userId);
-
-                var rollList = "";
-
-                foreach (var roll in allThoseRoles)
-                {
-                    rollList += roll + ", ";
-                }
-
-                var catconcat = rollList.Length < 2 ? rollList : rollList.Substring(0, rollList.Length - 2);
-
-                return catconcat;
-
+                rollList += roll + ", ";
             }
+
+            var catconcat = rollList.Length < 2 ? rollList : rollList.Substring(0, rollList.Length - 2);
+
+            return catconcat;
+
+            
         }
 
 
-        public List<AdminPlayer> GetAllTheUsers()
+        public string AddUserToRole(string userName, string roleName)
         {
-            using (var db = new ApplicationDbContext())
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            try
             {
-                var toBuild = new List<AdminPlayer>();
-                var other = db.Users.Include("PlayerInfo").ToList();
-                foreach (var dummy in other)
-                {
-                    var playerInfo = db.PlayerInformations.FirstOrDefault(x => x.UserIdentity == dummy.Id);
-
-                    if (playerInfo != null)
-                    {
-                        var userName = dummy.UserName;
-
-
-
-                        var builder = new AdminPlayer
-                        {
-                            UserName = userName,
-                            PlayerId = playerInfo.Id,
-                            ContactEmail = playerInfo.ContactEmailAddress,
-                            IsActive = playerInfo.IsActive,
-                            Roles = GetUserRoles(dummy.Id)
-                        };
-                        toBuild.Add(builder);
-                    }
-                }
-
-                return toBuild;
-
+                var user = userManager.FindByName(userName);
+                userManager.AddToRole(user.Id, roleName);
+                db.SaveChanges();
+                return "Success";
+            }
+            catch
+            {
+                throw;
+                return "Ruh roh";
             }
         }
 
