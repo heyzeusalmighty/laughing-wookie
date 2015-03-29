@@ -512,6 +512,7 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
     var side = (3 / 2) * radius;
 
 
+    this.context.globalAlpha = 1;
     //this.context.strokeStyle = "#003432";
     this.context.strokeStyle = "#000000";
     //this.context.setLineDash([5, 2]);
@@ -678,23 +679,20 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
             this.context.fill();
             this.context.stroke();
 
-            //Triangle Time
-            adPinkX -= 5;
-            adPinkY -= 5;
-            this.context.strokeStyle = "#000000";
-            this.context.fillStyle = "#000000";
-            this.context.beginPath();
-            //Top midpoint
-            this.context.moveTo(adPinkX + 5, adPinkY);
-            this.context.lineTo(adPinkX + 10, adPinkY + 10);
-            this.context.lineTo(adPinkX, adPinkY + 10);
-            this.context.lineTo(adPinkX + 5, adPinkY);
-            this.context.closePath();
-            this.context.fill();
+           
+            var pinkAdv = new Image();
+            pinkAdv.src = '../Content/Images/AdvancedStar.png';
+            var cont1 = this.context;
+            
+            pinkAdv.onload = function () {
+                //cont1.globalAlpha = 0.7;
+                cont1.drawImage(pinkAdv, adPinkX-10, adPinkY - 11, 20, 20);
+            };
 
 
         }
 
+        
         if (selectedTile.OrangeAdvanced > 0) {
             adIncomeY += 25;
             this.context.beginPath();
@@ -710,19 +708,15 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
             this.context.fill();
             this.context.stroke();
 
-            //Triangle Time
-            adOrX -= 5;
-            adOrY -= 5;
-            this.context.strokeStyle = "#000000";
-            this.context.fillStyle = "#000000";
-            this.context.beginPath();
-            //Top midpoint
-            this.context.moveTo(adOrX + 5, adOrY);
-            this.context.lineTo(adOrX + 10, adOrY + 10);
-            this.context.lineTo(adOrX, adOrY + 10);
-            this.context.lineTo(adOrX + 5, adOrY);
-            this.context.closePath();
-            this.context.fill();
+            var orAdv = new Image();
+            orAdv.src = '../Content/Images/AdvancedStar.png';
+            this.context.globalAlpha = 0.7;
+            var cont2 = this.context;
+            
+            //cont2.globalAlpha = 0.7;
+            orAdv.onload = function () {
+                cont2.drawImage(orAdv, adOrX - 10, adOrY - 11, 20, 20);
+            };
         }
 
         if (selectedTile.BrownAdvanced > 0) {
@@ -740,29 +734,24 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
             this.context.fill();
             this.context.stroke();
 
-            //Triangle Time
-            adBrownX -= 5;
-            adBrownY -= 5;
-            this.context.strokeStyle = "#000000";
-            this.context.fillStyle = "#000000";
-            this.context.beginPath();
-            //Top midpoint
-            this.context.moveTo(adBrownX + 5, adBrownY);
-            this.context.lineTo(adBrownX + 10, adBrownY + 10);
-            this.context.lineTo(adBrownX, adBrownY + 10);
-            this.context.lineTo(adBrownX + 5, adBrownY);
-            this.context.closePath();
-            this.context.fill();
+            var brownAdv = new Image();
+            brownAdv.src = '../Content/Images/AdvancedStar.png';
+            var cont3 = this.context;
+            cont3.globalAlpha = 0.7;
+            brownAdv.onload = function () {
+                cont3.drawImage(brownAdv, adBrownX - 10, adBrownY - 11, 20, 20);
+            };
         }
 
-
+        
         if (selectedTile.Aliens > 0) {
             
             var img = new Image();
             img.src = '../Content/Images/alienHeadx100.png';
-            var cont = this.context;
+            var contAliens = this.context;
             img.onload = function () {
-                cont.drawImage(img, x0 + 100, y0 + 150);
+                contAliens.globalAlpha = 1;
+                contAliens.drawImage(img, x0 + 100, y0 + 150);
             };
 
         }
@@ -773,6 +762,9 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
         //img.onload = function() {
         //    cont.drawImage(img, x0 + 120, y0 + 10);
         //};
+
+        //wormholes
+        this.drawWormHolesBig(x0, y0, selectedTile.Wormholes);
 
     }
 
@@ -947,6 +939,103 @@ HexagonGrid.prototype.drawWormHolesSmall = function(x, y, wormholes) {
     }
 };
 
+HexagonGrid.prototype.drawWormHolesBig = function (x, y, wormholes) {
+
+    var wormHoleLine = this.outline;
+
+    var radius = 250;
+
+    var bigRad = 30;
+
+    this.context.globalAlpha = 1;
+
+    var fillColor = "#003432";
+
+    wormholes = [1, 1, 1, 1, 1, 1];
+
+    var height = Math.sqrt(3) * radius;
+    var width = 2 * radius;
+    var side = (3 / 2) * radius;
+
+    // hole[0]
+    if (wormholes[0] === 1) {
+        var holeOneX = x + (width - 250);
+        var holeOneY = y;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeOneX, holeOneY, bigRad, 0, Math.PI, false);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+
+        
+    }
+
+    // hole[1]
+    if (wormholes[1] === 1) {
+        var holeTwoX = x + (width - 65);
+        var holeTwoY = y + 105;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeTwoX, holeTwoY, bigRad, Math.PI * 1.333, Math.PI * 0.333, true);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    // hole[2]
+    if (wormholes[2] === 1) {
+        var holeThreeX = x + (width - 62);
+        var holeThreeY = y + 323;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeThreeX, holeThreeY, bigRad, Math.PI * 1.666, Math.PI * 0.666, true);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    // hole[3]
+    if (wormholes[3] === 1) {
+        var holeFourX = x + (width - 250);
+        var holeFourY = y + height;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeFourX, holeFourY, bigRad, Math.PI, 0, false);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    // hole[4]
+    if (wormholes[4] === 1) {
+        var holeFiveX = x + (width - 255);
+        var holeFiveY = y + 57;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeFiveX, holeFiveY, bigRad, Math.PI * 1.333, Math.PI * 0.333, false);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
+
+    //// hole[5]
+    //if (wormholes[5] === 1) {
+    //    var holeSixX = x + (width - 255);
+    //    var holeSixY = y + 19;
+    //    this.context.strokeStyle = wormHoleLine;
+    //    this.context.beginPath();
+    //    this.context.arc(holeSixX, holeSixY, 7, Math.PI * 0.666, Math.PI * 1.666, true);
+    //    this.context.fillStyle = this.holeColor;
+    //    this.context.fill();
+    //    this.context.stroke();
+    //}
+
+
+    this.context.globalAlpha = 0.7;
+
+};
+
 HexagonGrid.prototype.drawOrangeSmall = function(x, y) {
     this.context.beginPath();
     this.context.restore();
@@ -1000,3 +1089,5 @@ HexagonGrid.prototype.drawWhiteSmall = function (x, y) {
     this.context.fill();
     this.context.stroke();
 };
+
+Hex
