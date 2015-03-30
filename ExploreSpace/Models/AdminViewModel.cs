@@ -26,7 +26,19 @@ namespace ExploreSpace.Models
         public void GetAllRolesAndUsers()
         {
             Rolls = db.Roles.Select(x => x.Name).ToList();
-            Users = db.Users.Select(x => new SimpleUser{ Email = x.Email, UserName = x.UserName}).ToList();
+
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            //Users = db.Users.Select(x => new SimpleUser{ Email = x.Email, UserName = x.UserName}).ToList();
+            Users = new List<SimpleUser>();
+            foreach (var user in db.Users)
+            {
+                //user.IsAdmin = userManager.IsInRole(user., "Admin");
+                //var isAdmin = userManager.IsInRole(user.Id, "Admin");
+                Users.Add(new SimpleUser
+                {
+                    Email = user.Email, UserName = user.UserName, IsAdmin = userManager.IsInRole(user.Id, "Admin")
+                });
+            }
         }
 
         public List<IdentityRole> GetAllRoles()
@@ -65,9 +77,26 @@ namespace ExploreSpace.Models
                 var user = userManager.FindByName(userName);
                 userManager.AddToRole(user.Id, roleName);
                 db.SaveChanges();
-                return "Success";
+                return "Added";
             }
             catch
+            {
+                throw;
+                return "Ruh roh";
+            }
+        }
+
+        public string RemoveUserFromRole(string userName, string roleName)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(db));
+            try
+            {
+                var user = userManager.FindByName(userName);
+                userManager.RemoveFromRole(user.Id, roleName);
+                db.SaveChanges();
+                return "Removed";
+            }
+            catch (Exception)
             {
                 throw;
                 return "Ruh roh";

@@ -100,5 +100,10 @@ namespace Occult_Tests.Tests
 
 
         }
+
+        public void CreateIdentities()
+        {
+
+        }
     }
 }

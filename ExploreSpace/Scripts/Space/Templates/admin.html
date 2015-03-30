@@ -4,13 +4,16 @@
 
 <table class="table table-striped">
     <tr>
-        <th></th>
+        <th>Toggle Admin</th>
         <th>Name</th>
         <th>Email</th>
         <th>Active</th>
     </tr>
     <tr ng-repeat ="user in users">
-        <td><button class="btn btn-default" ng-click="addToAdmin()">Button</button></td>
+        <td>
+            <button class="btn btn-success" ng-hide="user.IsAdmin" ng-click="addToAdmin()">Make Admin</button>
+            <button class="btn btn-danger" ng-show="user.IsAdmin" ng-click="removeAdmin()">Demote Admin</button>
+        </td>
         <td>{{user.UserName}}</td>
         <td>{{user.Email}}</td>
         <td>Probs</td>

@@ -12,9 +12,22 @@
 
         $scope.addToAdmin = function() {
 
-            
-            spaceFactory.addUserToGroup(this.user.UserName, "Admin").then(function(data) {
+            var user = this.user;
+            spaceFactory.addUserToGroup(user.UserName, "Admin").then(function(data) {
                 console.info(data);
+                if (data == 'Added') {
+                    user.IsAdmin = true;
+                }
+            });
+        };
+
+        $scope.removeAdmin = function () {
+            var user = this.user;
+            spaceFactory.removeUserFromGroup(user.UserName, "Admin").then(function(data) {
+                console.info(data);
+                if (data == 'Removed') {
+                    user.IsAdmin = false;
+                }
             });
         };
 

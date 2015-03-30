@@ -89,6 +89,17 @@
             return deferred.promise;
         };
 
+        service.removeUserFromGroup = function (user, role) {
+            var deferred = $q.defer();
+            console.info(user, role);
+            $http({ method: "GET", url: "/Admin/RemoveUserFromRole", params: { userName: user, roleName: role } }).success(function (data) {
+                deferred.resolve(data);
+            }).error(function () {
+                deferred.reject('You are not authorized to perform that action.');
+            });
+            return deferred.promise;
+        };
+
 
         function dummyShips() {
             var ships = [];
