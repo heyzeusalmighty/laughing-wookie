@@ -12,6 +12,7 @@ using Microsoft.Owin;
 namespace ExploreSpace.Controllers
 {
     [Authorize]
+    [RequireHttps]
     public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

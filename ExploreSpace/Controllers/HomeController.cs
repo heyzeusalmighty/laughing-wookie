@@ -6,10 +6,10 @@ using System.Web.Mvc;
 
 namespace ExploreSpace.Controllers
 {
-    [Authorize]
-    public class SpaceController : Controller
+    [AllowAnonymous]
+    public class HomeController : Controller
     {
-        // GET: Space
+        // GET: Home
         public ActionResult Index()
         {
             return View();

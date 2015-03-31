@@ -7,6 +7,7 @@ using ExploreSpace.Models;
 
 namespace ExploreSpace.Controllers
 {
+    [RequireHttps]
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {

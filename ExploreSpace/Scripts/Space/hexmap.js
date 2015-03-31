@@ -950,9 +950,7 @@ HexagonGrid.prototype.drawWormHolesBig = function (x, y, wormholes) {
     this.context.globalAlpha = 1;
 
     var fillColor = "#003432";
-
-    wormholes = [1, 1, 1, 1, 1, 1];
-
+    
     var height = Math.sqrt(3) * radius;
     var width = 2 * radius;
     var side = (3 / 2) * radius;
@@ -1009,8 +1007,8 @@ HexagonGrid.prototype.drawWormHolesBig = function (x, y, wormholes) {
 
     // hole[4]
     if (wormholes[4] === 1) {
-        var holeFiveX = x + (width - 255);
-        var holeFiveY = y + 57;
+        var holeFiveX = x + 62;
+        var holeFiveY = y + 323;
         this.context.strokeStyle = wormHoleLine;
         this.context.beginPath();
         this.context.arc(holeFiveX, holeFiveY, bigRad, Math.PI * 1.333, Math.PI * 0.333, false);
@@ -1019,17 +1017,17 @@ HexagonGrid.prototype.drawWormHolesBig = function (x, y, wormholes) {
         this.context.stroke();
     }
 
-    //// hole[5]
-    //if (wormholes[5] === 1) {
-    //    var holeSixX = x + (width - 255);
-    //    var holeSixY = y + 19;
-    //    this.context.strokeStyle = wormHoleLine;
-    //    this.context.beginPath();
-    //    this.context.arc(holeSixX, holeSixY, 7, Math.PI * 0.666, Math.PI * 1.666, true);
-    //    this.context.fillStyle = this.holeColor;
-    //    this.context.fill();
-    //    this.context.stroke();
-    //}
+    // hole[5]
+    if (wormholes[5] === 1) {
+        var holeSixX = x + 65;
+        var holeSixY = y + 105;
+        this.context.strokeStyle = wormHoleLine;
+        this.context.beginPath();
+        this.context.arc(holeSixX, holeSixY, bigRad, Math.PI * 0.666, Math.PI * 1.666, true);
+        this.context.fillStyle = this.holeColor;
+        this.context.fill();
+        this.context.stroke();
+    }
 
 
     this.context.globalAlpha = 0.7;
@@ -1089,5 +1087,3 @@ HexagonGrid.prototype.drawWhiteSmall = function (x, y) {
     this.context.fill();
     this.context.stroke();
 };
-
-Hex
