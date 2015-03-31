@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace ExploreSpace.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Player, Admin")]
     public class SpaceController : Controller
     {
         // GET: Space

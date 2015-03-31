@@ -34,5 +34,11 @@ namespace ExploreSpace.Controllers
             var vm = new AdminViewModel();
             return vm.RemoveUserFromRole(userName, roleName);
         }
+
+        public string AddNewRole(string roleName)
+        {
+            var vm = new AdminViewModel();
+            return vm.AddNewRole(roleName);
+        }
     }
 }

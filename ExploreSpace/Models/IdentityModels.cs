@@ -52,6 +52,13 @@ namespace ExploreSpace.Models
                 var roleresult = RoleManager.Create(new IdentityRole(name));
             }
 
+            //Create Role Player if it does not exist
+            if (!RoleManager.RoleExists("Player"))
+            {
+                var playerResult = RoleManager.Create(new IdentityRole("Player"));
+            }
+
+
             //Create User=Admin with password=123456
             var user = new ApplicationUser();
             user.UserName = name;

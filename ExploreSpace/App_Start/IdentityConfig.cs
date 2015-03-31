@@ -30,6 +30,7 @@ namespace ExploreSpace
             // Configure the client:
             System.Net.Mail.SmtpClient client =
                 new System.Net.Mail.SmtpClient("mailHosting.com");
+            
 
             client.Port = 587;
             client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;

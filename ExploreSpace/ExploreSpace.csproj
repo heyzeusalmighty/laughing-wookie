@@ -148,6 +148,7 @@
     <Content Include="Content\Images\blankScienceTile.svg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Images\loadingRedCircle.gif" />
     <Content Include="Content\Images\rocket-white-x100.png" />
     <Content Include="Content\Images\rocket-white-x128.png" />
     <Content Include="Content\Images\rocket-white-x25.png" />
@@ -261,6 +262,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\Awaiting.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

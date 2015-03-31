@@ -36,7 +36,10 @@ namespace ExploreSpace.Models
                 //var isAdmin = userManager.IsInRole(user.Id, "Admin");
                 Users.Add(new SimpleUser
                 {
-                    Email = user.Email, UserName = user.UserName, IsAdmin = userManager.IsInRole(user.Id, "Admin")
+                    Email = user.Email, 
+                    UserName = user.UserName, 
+                    IsAdmin = userManager.IsInRole(user.Id, "Admin"),
+                    IsPlayer = userManager.IsInRole(user.Id, "Player")
                 });
             }
         }
@@ -101,6 +104,18 @@ namespace ExploreSpace.Models
                 throw;
                 return "Ruh roh";
             }
+        }
+
+        public string AddNewRole(string roleName)
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
+            IdentityResult roleResult;
+            if (!roleManager.RoleExists(roleName))
+            {
+                roleResult = roleManager.Create(new IdentityRole(roleName));
+                return "Success";
+            }
+            return "Already Exists";
         }
 
     }

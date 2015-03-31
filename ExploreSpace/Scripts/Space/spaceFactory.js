@@ -100,6 +100,16 @@
             return deferred.promise;
         };
 
+        service.addNewRole = function (role) {
+            var deferred = $q.defer();
+            $http({ method: "GET", url: "/Admin/AddNewRole", params: { roleName: role } }).success(function (data) {
+                deferred.resolve(data);
+            }).error(function () {
+                deferred.reject('You are not authorized to perform that action.');
+            });
+            return deferred.promise;
+        };
+
 
         function dummyShips() {
             var ships = [];
