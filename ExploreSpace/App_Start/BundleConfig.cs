@@ -12,7 +12,7 @@ namespace ExploreSpace
 
             bundles.Add(new StyleBundle("~/bundles/css").Include(
                 "~/Content/bootstrap.min.css",
-                "~/Content/toaster.min.css",
+                "~/Content/toastr.min.css",
                 "~/Content/spaceStyles.css"
             ));
 

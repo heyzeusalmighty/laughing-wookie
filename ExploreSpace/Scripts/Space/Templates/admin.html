@@ -1,35 +1,86 @@
 ﻿
 <h2>Admin</h2>
 
+<div class="col-lg-8">
+    <h4>Manage Users</h4>
+    <table class="table table-striped">
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        <tr ng-repeat="user in users">
+            <td>
+                <button class="btn btn-primary" ng-click="editUser()">Edit</button>
+            </td>
+            <td>{{user.UserName}}</td>
+            <td>{{user.Email}}</td>
+        </tr>
+    </table>
+    
+    <div ng-show="editingUser">
 
-<table class="table table-striped">
-    <tr>
-        <th>Toggle Admin</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Active</th>
-    </tr>
-    <tr ng-repeat ="user in users">
-        <td>
-            <button class="btn btn-success" ng-hide="user.IsAdmin" ng-click="addToAdmin()">Make Admin</button>
-            <button class="btn btn-danger" ng-show="user.IsAdmin" ng-click="removeAdmin()">Demote Admin</button>
-        </td>
-        <td>{{user.UserName}}</td>
-        <td>{{user.Email}}</td>
-        <td>Probs</td>
-    </tr>
+        <h4>Edit {{user.UserName}}</h4>
+
+        <button class="btn btn-danger" ng-click="cancelEditUser()">Close</button>
+        
+        <table class="table table-bordered">
+            <tr>
+                <td>
+                    <button class="btn btn-success" ng-hide="user.IsAdmin" ng-click="addToAdmin()">Add</button>
+                    <button class="btn btn-danger" ng-show="user.IsAdmin" ng-click="removeAdmin()">Remove</button>
+                </td>
+                <td>
+                    Admin
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button class="btn btn-success" ng-hide="user.IsPlayer" ng-click="addToPlayers()">Add</button>
+                    <button class="btn btn-danger" ng-show="user.IsPlayer" ng-click="removeFromPlayers()">Remove</button>
+                </td>
+                <td>
+                    Player
+                </td>
+            </tr>
 </table>
 
+    </div>
+</div>
 
 
-<h4>Manage Roles</h4>
-<table class="table table-striped">
-    <tr>
-        <th></th>
-        <th>Role</th>
-    </tr>
-    <tr ng-repeat="role in roles">
-        <td><button class="btn btn-default">Button</button></td>
-        <td>{{role}}</td>
-    </tr>
-</table>
+<div class="col-lg-4">
+    <h4>Manage Roles </h4>
+    <table class="table table-striped">
+        <tr>
+            
+            <th>
+                <button class="btn btn-success btn-xs" ng-click="addRole()">
+                    <i class="glyphicon glyphicon-plus"></i>
+                </button>
+                Role
+            </th>
+        </tr>
+        <tr ng-repeat="role in roles">
+            
+            <td>{{role}}</td>
+        </tr>
+    </table>
+    
+    <div ng-show="roleRow">
+        <div class="form-group">
+            <label class="control-label">Role Name</label>
+            <input type="text" ng-model="newRole" class="form-control" />
+        </div>
+        <button class="btn btn-success" ng-click="createRole()">
+            <i class="glyphicon glyphicon-ok"></i>
+        </button>
+        
+        <button class="btn btn-danger" ng-click="cancelCreateRole()">
+            <i class="glyphicon glyphicon-remove"></i>
+        </button>
+
+    </div>
+
+</div>
+
