@@ -1,3 +1,5 @@
+using Occultation.DataModels;
+
 namespace Occultation.DAL.EF
 {
     using System;
@@ -21,6 +23,8 @@ namespace Occultation.DAL.EF
         public virtual DbSet<ScienceTrack> ScienceTracks { get; set; }
         public virtual DbSet<ShipModelComponent> ShipModelComponents { get; set; }
         public virtual DbSet<Tile> Tiles { get; set; }
+
+        public virtual DbSet<EmailSettings> EmailSettings { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

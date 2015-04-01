@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ExploreSpace.Models;
+using Newtonsoft.Json;
+using Occultation.DataModels;
 
 namespace ExploreSpace.Controllers
 {
@@ -39,6 +41,20 @@ namespace ExploreSpace.Controllers
         {
             var vm = new AdminViewModel();
             return vm.AddNewRole(roleName);
+        }
+
+        public JsonResult GetEmailSettings()
+        {
+            var vm = new AdminViewModel();
+            return Json(vm.GetEmailSettings(), JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public void UpdateEmailSettings(string settings)
+        {
+            var set = JsonConvert.DeserializeObject<EmailSettings>(settings);
+            var vm = new AdminViewModel();
+            vm.UpdateEmailSettings(set);
         }
     }
 }

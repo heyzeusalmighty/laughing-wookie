@@ -110,6 +110,27 @@
             return deferred.promise;
         };
 
+        service.getEmailSettings = function() {
+            //GetEmailSettings
+            var deferred = $q.defer();
+            $http({ method: "GET", url: "/Admin/GetEmailSettings" }).success(function (data) {
+                deferred.resolve(data);
+            }).error(function () {
+                deferred.reject('You are not authorized to perform that action.');
+            });
+            return deferred.promise;
+        }
+
+        service.updateEmailSettings = function(settings) {
+            var deferred = $q.defer();
+            $http({ method: "POST", url: "/Admin/UpdateEmailSettings", params: {settings : settings} }).success(function (data) {
+                deferred.resolve(data);
+            }).error(function () {
+                deferred.reject('You are not authorized to perform that action.');
+            });
+            return deferred.promise;
+        }
+
 
         function dummyShips() {
             var ships = [];

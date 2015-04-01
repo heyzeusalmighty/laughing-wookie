@@ -1,4 +1,5 @@
 using Occultation.DAL.EF;
+using Occultation.DataModels;
 
 namespace Occultation.Migrations
 {
@@ -39,6 +40,19 @@ namespace Occultation.Migrations
                 new GameUser { UserName = "AbeLincoln", EmailAddress = "x@x.com"},
                 new GameUser { UserName = "TeddyRoooooo", EmailAddress = "x@x.com"},
                 new GameUser { UserName = "TommyJefferson", EmailAddress = "x@x.com"}
+                );
+
+            context.EmailSettings.AddOrUpdate(
+                p => p.Id,
+                new EmailSettings
+                {
+                    Address = "dummy.dummyHosting.com", 
+                    UserName = "dummy@dummy.com",
+                    Password = "Dummy",
+                    Sender = "dummy@dummy.com",
+                    Title = "Dummy Email Settings"
+                }
+                
                 );
 
         }

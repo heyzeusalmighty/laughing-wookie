@@ -11,6 +11,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using Occultation.DAL.EF;
 
 
 namespace ExploreSpace
@@ -22,36 +23,46 @@ namespace ExploreSpace
             // Plug in your email service here to send an email.
             //return Task.FromResult(0);
 
+            using (var db = new GameModel())
+            {
+                var settings = db.EmailSettings.First();
 
-            var credentialUserName = "game@xxxxx.com";
-            var sentFrom = "game@xxxx.com";
-            var pwd = "ddddd";
+                if (settings != null)
+                {
+                    var credentialUserName = "game@xxxxx.com";
+                    var sentFrom = "game@xxxx.com";
+                    var pwd = "ddddd";
 
-            // Configure the client:
-            System.Net.Mail.SmtpClient client =
-                new System.Net.Mail.SmtpClient("mailHosting.com");
-            
+                    // Configure the client:
+                    System.Net.Mail.SmtpClient client =
+                        new System.Net.Mail.SmtpClient(settings.Address);
 
-            client.Port = 587;
-            client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
-            client.UseDefaultCredentials = false;
 
-            // Create the credentials:
-            System.Net.NetworkCredential credentials =
-                new System.Net.NetworkCredential(credentialUserName, pwd);
+                    client.Port = 587;
+                    client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
 
-            //client.EnableSsl = true;
-            client.Credentials = credentials;
+                    // Create the credentials:
+                    System.Net.NetworkCredential credentials =
+                        new System.Net.NetworkCredential(settings.UserName, settings.Password);
 
-            // Create the message:
-            var mail =
-                new System.Net.Mail.MailMessage(sentFrom, message.Destination);
+                    //client.EnableSsl = true;
+                    client.Credentials = credentials;
 
-            mail.Subject = message.Subject;
-            mail.Body = message.Body;
+                    // Create the message:
+                    var mail =
+                        new System.Net.Mail.MailMessage(settings.Sender, message.Destination);
 
-            // Send:
-            return client.SendMailAsync(mail);
+                    mail.Subject = message.Subject;
+                    mail.Body = message.Body;
+
+                    // Send first email:
+                    return client.SendMailAsync(mail);
+                }
+
+                return Task.FromResult(0);
+                
+            }
 
 
         }

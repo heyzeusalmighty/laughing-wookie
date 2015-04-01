@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net.Mime;
+using System.Threading.Tasks;
 using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Occultation.DAL.EF;
+using Occultation.DataModels;
 
 namespace ExploreSpace.Models
 {
@@ -118,5 +122,77 @@ namespace ExploreSpace.Models
             return "Already Exists";
         }
 
+        public EmailSettings GetEmailSettings()
+        {
+            using (var model = new GameModel())
+            {
+                return model.EmailSettings.First();
+            }
+        }
+
+
+        public void UpdateEmailSettings(EmailSettings settings)
+        {
+            using (var model = new GameModel())
+            {
+                var oldSettings = model.EmailSettings.First();
+                if (oldSettings != null)
+                {
+                    oldSettings.Address = settings.Address;
+                    oldSettings.Password = settings.Password;
+                    oldSettings.Sender = settings.Sender;
+                    oldSettings.UserName = settings.UserName;
+                    oldSettings.AdminEmail = settings.AdminEmail;
+                    model.SaveChanges();
+                }
+                else
+                {
+                    model.EmailSettings.Add(settings);
+                    model.SaveChanges();
+                }
+            }
+        }
+
+        public void SendNewUserEmail(string username)
+        {
+            using (var db = new GameModel())
+            {
+                var settings = db.EmailSettings.First();
+
+                if (settings != null)
+                {
+                    // Configure the client:
+                    System.Net.Mail.SmtpClient client =
+                        new System.Net.Mail.SmtpClient(settings.Address);
+
+
+                    client.Port = 587;
+                    client.DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = false;
+
+                    // Create the credentials:
+                    System.Net.NetworkCredential credentials =
+                        new System.Net.NetworkCredential(settings.UserName, settings.Password);
+
+                    //client.EnableSsl = true;
+                    client.Credentials = credentials;
+
+                    // Create the message:
+                    var mail =
+                        new System.Net.Mail.MailMessage(settings.Sender, settings.AdminEmail);
+
+                    mail.Subject = "New User Has Signed Up";
+                    mail.Body = username + " has signed up";
+
+                    // Send first email:
+                    client.Send(mail);
+
+                    
+                }
+
+                
+
+            }
+        }
     }
 }

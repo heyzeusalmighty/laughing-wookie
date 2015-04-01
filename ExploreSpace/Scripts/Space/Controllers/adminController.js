@@ -6,11 +6,18 @@
     $scope.user = {};
     $scope.roleRow = false;
     $scope.newRole = "";
+    $scope.emailSettings = {};
+    $scope.emailUpdate = {};
+    $scope.emailUpdating = false;
 
 
     spaceFactory.getRollsAndUsers().then(function(data) {
         $scope.users = data.Users;
         $scope.roles = data.Rolls;
+    });
+
+    spaceFactory.getEmailSettings().then(function(data) {
+        $scope.emailSettings = data;
     });
 
     $scope.addToAdmin = function() {
@@ -97,5 +104,28 @@
         $scope.roleRow = false;
         $scope.newRole = "";
     }
+
+    $scope.editEmail = function() {
+        console.log('editing');
+        $scope.emailUpdating = true;
+        $scope.emailUpdate = angular.copy($scope.emailSettings);
+    };
+
+    $scope.saveEmail = function() {
+        $scope.emailUpdating = false;
+        $scope.emailSettings = angular.copy($scope.emailUpdate);
+
+        spaceFactory.updateEmailSettings($scope.emailUpdate);
+
+        $scope.emailUpdate = {};
+        toaster.pop('success', '', 'Email Settings Updated');
+    };
+
+    $scope.cancelEmail = function() {
+        $scope.emailUpdating = false;
+        $scope.emailUpdate = {};
+        toaster.pop('warning', '', 'Email update cancelled');
+    };
+
 
 }]);

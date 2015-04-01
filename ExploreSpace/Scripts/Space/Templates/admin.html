@@ -1,86 +1,161 @@
 ﻿
 <h2>Admin</h2>
-
-<div class="col-lg-8">
-    <h4>Manage Users</h4>
-    <table class="table table-striped">
-        <tr>
-            <th></th>
-            <th>Name</th>
-            <th>Email</th>
-        </tr>
-        <tr ng-repeat="user in users">
-            <td>
-                <button class="btn btn-primary" ng-click="editUser()">Edit</button>
-            </td>
-            <td>{{user.UserName}}</td>
-            <td>{{user.Email}}</td>
-        </tr>
-    </table>
-    
-    <div ng-show="editingUser">
-
-        <h4>Edit {{user.UserName}}</h4>
-
-        <button class="btn btn-danger" ng-click="cancelEditUser()">Close</button>
-        
-        <table class="table table-bordered">
+<div class="row">
+    <div class="col-lg-8">
+        <h4>Manage Users</h4>
+        <table class="table table-striped">
             <tr>
-                <td>
-                    <button class="btn btn-success" ng-hide="user.IsAdmin" ng-click="addToAdmin()">Add</button>
-                    <button class="btn btn-danger" ng-show="user.IsAdmin" ng-click="removeAdmin()">Remove</button>
-                </td>
-                <td>
-                    Admin
-                </td>
+                <th></th>
+                <th>Name</th>
+                <th>Email</th>
             </tr>
+            <tr ng-repeat="user in users">
+                <td>
+                    <button class="btn btn-primary" ng-click="editUser()">Edit</button>
+                </td>
+                <td>{{user.UserName}}</td>
+                <td>{{user.Email}}</td>
+            </tr>
+        </table>
+
+        <div ng-show="editingUser">
+
+            <h4>Edit {{user.UserName}}</h4>
+
+            <button class="btn btn-danger" ng-click="cancelEditUser()">Close</button>
+
+            <table class="table table-bordered">
+                <tr>
+                    <td>
+                        <button class="btn btn-success" ng-hide="user.IsAdmin" ng-click="addToAdmin()">Add</button>
+                        <button class="btn btn-danger" ng-show="user.IsAdmin" ng-click="removeAdmin()">Remove</button>
+                    </td>
+                    <td>
+                        Admin
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-success" ng-hide="user.IsPlayer" ng-click="addToPlayers()">Add</button>
+                        <button class="btn btn-danger" ng-show="user.IsPlayer" ng-click="removeFromPlayers()">Remove</button>
+                    </td>
+                    <td>
+                        Player
+                    </td>
+                </tr>
+            </table>
+
+        </div>
+    </div>
+
+
+    <div class="col-lg-4">
+        <h4>Manage Roles </h4>
+        <table class="table table-striped">
             <tr>
-                <td>
-                    <button class="btn btn-success" ng-hide="user.IsPlayer" ng-click="addToPlayers()">Add</button>
-                    <button class="btn btn-danger" ng-show="user.IsPlayer" ng-click="removeFromPlayers()">Remove</button>
-                </td>
-                <td>
-                    Player
-                </td>
+
+                <th>
+                    <button class="btn btn-success btn-xs" ng-click="addRole()">
+                        <i class="glyphicon glyphicon-plus"></i>
+                    </button>
+                    Role
+                </th>
             </tr>
-</table>
+            <tr ng-repeat="role in roles">
+
+                <td>{{role}}</td>
+            </tr>
+        </table>
+
+        <div ng-show="roleRow">
+            <div class="form-group">
+                <label class="control-label">Role Name</label>
+                <input type="text" ng-model="newRole" class="form-control" />
+            </div>
+            <button class="btn btn-success" ng-click="createRole()">
+                <i class="glyphicon glyphicon-ok"></i>
+            </button>
+
+            <button class="btn btn-danger" ng-click="cancelCreateRole()">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
+
+        </div>
 
     </div>
 </div>
 
 
-<div class="col-lg-4">
-    <h4>Manage Roles </h4>
-    <table class="table table-striped">
-        <tr>
-            
-            <th>
-                <button class="btn btn-success btn-xs" ng-click="addRole()">
-                    <i class="glyphicon glyphicon-plus"></i>
-                </button>
-                Role
-            </th>
-        </tr>
-        <tr ng-repeat="role in roles">
-            
-            <td>{{role}}</td>
-        </tr>
-    </table>
-    
-    <div ng-show="roleRow">
-        <div class="form-group">
-            <label class="control-label">Role Name</label>
-            <input type="text" ng-model="newRole" class="form-control" />
-        </div>
-        <button class="btn btn-success" ng-click="createRole()">
-            <i class="glyphicon glyphicon-ok"></i>
-        </button>
+<div class="row">
+    <div class="col-lg-12">
+        <h4>Email Settings</h4>
         
-        <button class="btn btn-danger" ng-click="cancelCreateRole()">
-            <i class="glyphicon glyphicon-remove"></i>
-        </button>
+        <dl class="dl-horizontal">
+            <dt>Address</dt>
+            <dd ng-hide="emailUpdating">
+                {{emailSettings.Address}}
+            </dd>
+            <dd ng-show="emailUpdating">
+                <input type="text" ng-model="emailUpdate.Address" class="form-control" />
+            </dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Sender</dt>
+            
+            <dd ng-hide="emailUpdating">
+                {{emailSettings.Sender}}
+            </dd>
+            <dd ng-show="emailUpdating">
+                <input type="text" ng-model="emailUpdate.Sender" class="form-control" />
+            </dd>
+        </dl>
+        <dl class="dl-horizontal">
+            <dt>Username</dt>
+           
+            <dd ng-hide="emailUpdating">
+                {{emailSettings.UserName}}
+            </dd>
+            <dd ng-show="emailUpdating">
+                <input type="text" ng-model="emailUpdate.UserName" class="form-control" />
+            </dd>
+        </dl>
+        
+        <dl class="dl-horizontal">
+            <dt>Admin Email</dt>
+
+            <dd ng-hide="emailUpdating">
+                {{emailSettings.AdminEmail}}
+            </dd>
+            <dd ng-show="emailUpdating">
+                <input type="text" ng-model="emailUpdate.AdminEmail" class="form-control" />
+            </dd>
+        </dl>
+        
+        <dl class="dl-horizontal" ng-show="emailUpdating">
+            <dt>Password</dt>
+            <dd>
+                <input type="text" ng-model="emailUpdate.Password" class="form-control" />
+            </dd>
+        </dl>
+        
+        <dl class="dl-horizontal">
+            <dt>Update</dt>
+            <dd ng-hide="emailUpdating">
+                <button class="btn btn-primary" ng-click="editEmail()">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                </button>
+            </dd>
+            <dd ng-show="emailUpdating">
+                <button class="btn btn-success" ng-click="saveEmail()">
+                    <i class="glyphicon glyphicon-ok"></i>
+                </button>
+                <button class="btn btn-danger" ng-click="cancelEmail()">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+            </dd>
+        </dl>
+        
 
     </div>
-
 </div>
 
