@@ -128,4 +128,11 @@
     };
 
 
+    $scope.reset = function() {
+        spaceFactory.resetButton().then(function(data) {
+            console.log(data);
+        });
+    };
+
+
 }]);
