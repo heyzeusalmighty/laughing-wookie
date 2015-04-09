@@ -70,6 +70,7 @@
     <Compile Include="Tests\MapTests.cs" />
     <Compile Include="Tests\PlayerVMTests.cs" />
     <Compile Include="Tests\ShipTests.cs" />
+    <Compile Include="Tests\StartGameTests.cs" />
     <Compile Include="Tests\TurnTests.cs" />
   </ItemGroup>
   <ItemGroup>

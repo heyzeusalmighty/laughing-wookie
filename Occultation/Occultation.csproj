@@ -109,6 +109,7 @@
     <Compile Include="DataModels\Ship.cs" />
     <Compile Include="DataModels\User.cs" />
     <Compile Include="ViewModels\BuildMapViewModel.cs" />
+    <Compile Include="ViewModels\CreateGameJob.cs" />
     <Compile Include="ViewModels\GameCreator.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\PlayerViewModel.cs" />

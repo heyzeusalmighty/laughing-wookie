@@ -75,7 +75,7 @@ namespace Occultation.ViewModels
 
             foreach (var user in Users.Take(playerCount))
             {
-                creator.AddPlayerToGame(user.UserId, game.GameIdentifier, "");
+                creator.AddPlayerToGame(user.UserId, game.GameIdentifier);
             }
 
             creator.StartGame(game.GameIdentifier);

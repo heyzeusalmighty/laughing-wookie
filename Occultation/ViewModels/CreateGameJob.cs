@@ -1,56 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Occultation.DAL;
 using Occultation.DAL.EF;
 using Occultation.DataModels;
 
 namespace Occultation.ViewModels
 {
-    public class GameCreator
+    public class StartGameJob
     {
         private IGameRepository Repository;
-        private List<Player> Players;
-        private List<MapTile> PlayerTiles;
-        private AvailableMapTile TileBuilder;
+        public List<Player> Players;
+        public List<MapTile> PlayerTiles;
+        public AvailableMapTile TileBuilder;
+        public List<MapDeck> PlayerDeck;
 
         private List<PlayerShipModel> shipModels;
-        public GameCreator(IGameRepository repo)
+
+        public StartGameJob(IGameRepository repo)
         {
             Repository = repo;
             TileBuilder = new AvailableMapTile();
             PlayerTiles = TileBuilder.PlayerTiles();
-        }
-
-        
-        public string AddPlayerToGame(int userId, string gameGuid)
-        {
-            var game = Repository.GetGame(gameGuid);
-            if (game != null)
-            {
-                Players = Repository.GetPlayersForGame(game.GameId);
-                if (Players.Any(x => x.UserId == userId))
-                {
-                    return "Cannot play twice in one game";
-                }
-
-                //if (Players.Any(x => x.DiscColor == color))
-                //{
-                //    return "Please select a different color";
-                //}
-
-                var msg = Repository.AddPlayerToGame(userId, game.GameId);
-
-                if (Players.Count == 5)
-                {
-                    StartGame(gameGuid);
-                }
-
-                return msg;
-
-            }
-            return "Game Not Found";
         }
 
 
@@ -63,66 +36,21 @@ namespace Occultation.ViewModels
 
                 //build map tiles
                 BuildMapTiles(game.GameId);
-                
+
 
                 foreach (var playa in Players)
                 {
                     //build player science tracks
-                    BuildScienceTrack(playa.PlayerId);
+                    //BuildScienceTrack(playa.PlayerId);
 
                     //build ships
-                    BuildShip(playa.PlayerId);
+                    //BuildShip(playa.PlayerId);
                 }
-                
-                
-               
-
             }
         }
 
-
-
-        public void BuildScienceTrack(int playerId)
+        private void BuildMapTiles(int gameId)
         {
-            var spacePort = new PlayerTrack
-            {
-                PlayerId = playerId,
-                Position = 1,
-                Track = "Star",
-                TileId = 1
-            };
-            Repository.AddScienceTileToTrack(spacePort);
-        }
-
-        public string BuildGame(string title)
-        {
-
-            return "ddd";
-        }
-
-
-        public void BuildShip(int playerId)
-        {
-            if (shipModels == null)
-            {
-                shipModels = new List<PlayerShipModel>();
-            }
-
-            var interceptor = new Interceptor();
-            var model = new PlayerShipModel
-            {
-                ModelName = "interceptor",
-                PlayerId = playerId
-            };
-
-            shipModels.Add(Repository.AddNewShipModel(model, interceptor.Components));
-
-        }
-
-        public void BuildMapTiles(int gameId)
-        {
-
-            
             var gameMap = new List<MapDeck>();
 
             var counter = 1;
@@ -140,9 +68,9 @@ namespace Occultation.ViewModels
                 counter++;
             }
             //Player Bases
-            var playerTiles = BuildPlayerBases(gameId);
-            SavePlayerPositions(playerTiles);
-            gameMap.AddRange(playerTiles);
+            BuildPlayerBases(gameId);
+            SavePlayerPositions();
+            gameMap.AddRange(PlayerDeck);
 
             counter = 1;
             foreach (var tile2 in TileBuilder.DivisionTwo)
@@ -191,50 +119,48 @@ namespace Occultation.ViewModels
 
 
             Repository.AddTilesToNewGame(gameMap);
-
         }
 
-        public List<MapDeck> BuildPlayerBases(int gameId)
+        public void BuildPlayerBases(int gameId)
         {
-            var bases = new List<MapDeck>();
+            PlayerDeck = new List<MapDeck>();
 
             var playerCount = Players.Count();
 
             switch (playerCount)
             {
                 case 2:
-                    bases.Add(BuildBlackPlayer(gameId));
-                    bases.Add(BuildRedPlayer(gameId));
+                    PlayerDeck.Add(BuildBlackPlayer(gameId));
+                    PlayerDeck.Add(BuildRedPlayer(gameId));
                     break;
                 case 3:
-                    bases.Add(BuildYellowPlayer(gameId));
-                    bases.Add(BuildBlackPlayer(gameId));
-                    bases.Add(BuildBluePlayer(gameId));
+                    PlayerDeck.Add(BuildYellowPlayer(gameId));
+                    PlayerDeck.Add(BuildBlackPlayer(gameId));
+                    PlayerDeck.Add(BuildBluePlayer(gameId));
                     break;
                 case 4:
-                    bases.Add(BuildWhitePlayer(gameId));
-                    bases.Add(BuildYellowPlayer(gameId));
-                    bases.Add(BuildGreenPlayer(gameId));
-                    bases.Add(BuildBluePlayer(gameId));
+                    PlayerDeck.Add(BuildWhitePlayer(gameId));
+                    PlayerDeck.Add(BuildYellowPlayer(gameId));
+                    PlayerDeck.Add(BuildGreenPlayer(gameId));
+                    PlayerDeck.Add(BuildBluePlayer(gameId));
                     break;
                 case 5:
-                    bases.Add(BuildWhitePlayer(gameId));
-                    bases.Add(BuildYellowPlayer(gameId));
-                    bases.Add(BuildGreenPlayer(gameId));
-                    bases.Add(BuildBluePlayer(gameId));
-                    bases.Add(BuildBlackPlayer(gameId));
+                    PlayerDeck.Add(BuildWhitePlayer(gameId));
+                    PlayerDeck.Add(BuildYellowPlayer(gameId));
+                    PlayerDeck.Add(BuildGreenPlayer(gameId));
+                    PlayerDeck.Add(BuildBluePlayer(gameId));
+                    PlayerDeck.Add(BuildBlackPlayer(gameId));
                     break;
                 case 6:
-                    bases.Add(BuildWhitePlayer(gameId));
-                    bases.Add(BuildYellowPlayer(gameId));
-                    bases.Add(BuildGreenPlayer(gameId));
-                    bases.Add(BuildBluePlayer(gameId));
-                    bases.Add(BuildBlackPlayer(gameId));
-                    bases.Add(BuildRedPlayer(gameId));
+                    PlayerDeck.Add(BuildWhitePlayer(gameId));
+                    PlayerDeck.Add(BuildYellowPlayer(gameId));
+                    PlayerDeck.Add(BuildGreenPlayer(gameId));
+                    PlayerDeck.Add(BuildBluePlayer(gameId));
+                    PlayerDeck.Add(BuildBlackPlayer(gameId));
+                    PlayerDeck.Add(BuildRedPlayer(gameId));
                     break;
             }
 
-            return bases;
         }
 
         private MapDeck BuildBluePlayer(int gameId)
@@ -363,34 +289,17 @@ namespace Occultation.ViewModels
             return null;
         }
 
-        private void SavePlayerPositions(List<MapDeck> tiles)
+        private void SavePlayerPositions()
         {
             var playerList = Players.ToArray();
 
             var count = 0;
-            foreach (var tile in tiles)
+            foreach (var tile in PlayerDeck)
             {
                 Repository.SetPlayerColor(playerList[count].PlayerId, tile.Occupied);
                 count++;
             }
             Repository.Save();
-        }
-
-
-        private void PlaceShips(int gameId)
-        {
-            var playerTiles = BuildPlayerBases(gameId);
-
-            foreach (var tile in playerTiles)
-            {
-
-                var ship = new PlayerShip
-                {
-
-                };
-            }
-
-
         }
 
         private static Tuple<int, int> GetCoordsForColor(string color)

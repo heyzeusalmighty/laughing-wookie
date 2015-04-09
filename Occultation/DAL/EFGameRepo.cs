@@ -175,6 +175,7 @@ namespace Occultation.DAL
                 context.ShipModelComponents.Add(up);
             }
             context.SaveChanges();
+            return model;
         }
 
         public void AddTilesToNewGame(List<MapDeck> tiles)
