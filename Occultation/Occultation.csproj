@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\EFGameRepo.cs" />
+    <Compile Include="DAL\EF\PlayerShip.cs" />
     <Compile Include="DataModels\EmailSettings.cs" />
     <Compile Include="DAL\EF\Game.cs" />
     <Compile Include="DAL\EF\GameModel.cs" />
@@ -93,6 +94,14 @@
     <Compile Include="Migrations\201504012156304_EmailSettingsAdjustment.Designer.cs">
       <DependentUpon>201504012156304_EmailSettingsAdjustment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504071906235_PlayerShip.cs" />
+    <Compile Include="Migrations\201504071906235_PlayerShip.Designer.cs">
+      <DependentUpon>201504071906235_PlayerShip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504071925296_WormHole-MapDeck.cs" />
+    <Compile Include="Migrations\201504071925296_WormHole-MapDeck.Designer.cs">
+      <DependentUpon>201504071925296_WormHole-MapDeck.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModels\ScienceTrack.cs" />
@@ -121,6 +130,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504012156304_EmailSettingsAdjustment.resx">
       <DependentUpon>201504012156304_EmailSettingsAdjustment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504071906235_PlayerShip.resx">
+      <DependentUpon>201504071906235_PlayerShip.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504071925296_WormHole-MapDeck.resx">
+      <DependentUpon>201504071925296_WormHole-MapDeck.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

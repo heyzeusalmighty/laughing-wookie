@@ -14,6 +14,8 @@ namespace Occultation.ViewModels
         private List<Player> Players;
         private List<MapTile> PlayerTiles;
         private AvailableMapTile TileBuilder;
+
+        private List<PlayerShipModel> shipModels;
         public GameCreator(IGameRepository repo)
         {
             Repository = repo;
@@ -59,6 +61,9 @@ namespace Occultation.ViewModels
             {
                 Players = Repository.GetPlayersForGame(game.GameId);
 
+                //build map tiles
+                BuildMapTiles(game.GameId);
+                
 
                 foreach (var playa in Players)
                 {
@@ -68,13 +73,9 @@ namespace Occultation.ViewModels
                     //build ships
                     BuildShip(playa.PlayerId);
                 }
-
                 
-
-                //build map tiles
-                BuildMapTiles(game.GameId);
-                //arrange player tiles
-                //place ships
+                
+               
 
             }
         }
@@ -102,6 +103,10 @@ namespace Occultation.ViewModels
 
         public void BuildShip(int playerId)
         {
+            if (shipModels == null)
+            {
+                shipModels = new List<PlayerShipModel>();
+            }
 
             var interceptor = new Interceptor();
             var model = new PlayerShipModel
@@ -110,7 +115,7 @@ namespace Occultation.ViewModels
                 PlayerId = playerId
             };
 
-            Repository.AddNewShipModel(model, interceptor.Components);
+            shipModels.Add(Repository.AddNewShipModel(model, interceptor.Components));
 
         }
 
@@ -369,6 +374,23 @@ namespace Occultation.ViewModels
                 count++;
             }
             Repository.Save();
+        }
+
+
+        private void PlaceShips(int gameId)
+        {
+            var playerTiles = BuildPlayerBases(gameId);
+
+            foreach (var tile in playerTiles)
+            {
+                
+                var ship = new PlayerShip
+                {
+                    
+                }
+            }
+
+
         }
 
         private static Tuple<int, int> GetCoordsForColor(string color)

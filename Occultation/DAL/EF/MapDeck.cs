@@ -27,5 +27,6 @@ namespace Occultation.DAL.EF
         public string Occupied { get; set; }
 
         public int GameId { get; set; }
+        public int? WormHoleIndex { get; set; }
     }
 }

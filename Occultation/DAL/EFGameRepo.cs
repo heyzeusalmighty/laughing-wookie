@@ -160,7 +160,7 @@ namespace Occultation.DAL
             context.SaveChanges();
         }
 
-        public void AddNewShipModel(PlayerShipModel model, List<ShipComponent> components)
+        public PlayerShipModel AddNewShipModel(PlayerShipModel model, List<ShipComponent> components)
         {
             context.PlayerShipModels.Add(model);
             context.SaveChanges();

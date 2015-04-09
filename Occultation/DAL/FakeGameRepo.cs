@@ -200,6 +200,11 @@ namespace Occultation.DAL
             }
         }
 
+        PlayerShipModel IGameRepository.AddNewShipModel(PlayerShipModel model, List<ShipComponent> components)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddNewShipModel(PlayerShipModel model, List<ShipComponent> components)
         {
             if (ShipModel == null)

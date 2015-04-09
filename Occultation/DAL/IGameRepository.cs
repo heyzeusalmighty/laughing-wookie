@@ -19,7 +19,7 @@ namespace Occultation.DAL
         Game GetGame(int gameId);
         Game GetLastGame();
         void AddScienceTileToTrack(PlayerTrack track);
-        void AddNewShipModel(PlayerShipModel model, List<ShipComponent> components);
+        PlayerShipModel AddNewShipModel(PlayerShipModel model, List<ShipComponent> components);
         void AddTilesToNewGame(List<MapDeck> tiles);
         List<MapDeck> GetRevealedTiles(int gameId);
         MapDeck GetNextTile(int gameId, int div, int x, int y);

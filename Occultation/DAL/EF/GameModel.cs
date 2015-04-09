@@ -23,6 +23,7 @@ namespace Occultation.DAL.EF
         public virtual DbSet<ScienceTrack> ScienceTracks { get; set; }
         public virtual DbSet<ShipModelComponent> ShipModelComponents { get; set; }
         public virtual DbSet<Tile> Tiles { get; set; }
+        public virtual DbSet<PlayerShip> PlayerShips { get; set; }
 
         public virtual DbSet<EmailSettings> EmailSettings { get; set; }
 
