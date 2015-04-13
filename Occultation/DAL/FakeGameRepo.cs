@@ -82,6 +82,7 @@ namespace Occultation.DAL
         public List<PlayerShipModel> ShipModel { get; set; }
         public List<ShipModelComponent> ShipComponents { get; set; }
         public List<MapDeck> GameMapTiles { get; set; }
+        public List<PlayerShip> PlayerShips { get; set; }
         
         
         public GameBoard GetGameBoard(int gameId)
@@ -267,6 +268,10 @@ namespace Occultation.DAL
 
         public void SetPlayerColor(int playerId, string color)
         {
+            if (AddedPlayers == null)
+            {
+                AddedPlayers = new List<Player>();
+            }
             AddedPlayers.Add(new Player { PlayerId = playerId, DiscColor = color});
         }
 
@@ -278,6 +283,16 @@ namespace Occultation.DAL
         public List<Game> GetAllGames()
         {
             throw new NotImplementedException();
+        }
+
+        public void SaveNewShip(PlayerShip ship)
+        {
+            if (PlayerShips == null)
+            {
+                PlayerShips = new List<PlayerShip>();
+            }
+
+            PlayerShips.Add(ship);
         }
 
         private GameBoard GetFourPlayerBoard()

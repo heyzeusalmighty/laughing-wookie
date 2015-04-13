@@ -41,10 +41,10 @@ namespace Occultation.ViewModels
                 foreach (var playa in Players)
                 {
                     //build player science tracks
-                    //BuildScienceTrack(playa.PlayerId);
+                    BuildScienceTrack(playa.PlayerId);
 
                     //build ships
-                    //BuildShip(playa.PlayerId);
+                    BuildShip(playa.PlayerId);
                 }
             }
         }
@@ -160,6 +160,16 @@ namespace Occultation.ViewModels
                     PlayerDeck.Add(BuildRedPlayer(gameId));
                     break;
             }
+
+            var playerIds = Players.Select(x => x.PlayerId).ToArray();
+            var counter = 0;
+            foreach(var deck in PlayerDeck)
+            {
+                deck.PlayerId = playerIds[counter];
+                counter++;
+            }
+
+
 
         }
 
@@ -329,5 +339,65 @@ namespace Occultation.ViewModels
 
             }
         }
+
+        public void BuildScienceTrack(int playerId)
+        {
+            var spacePort = new PlayerTrack
+            {
+                PlayerId = playerId,
+                Position = 1,
+                Track = "Star",
+                TileId = 1
+            };
+            Repository.AddScienceTileToTrack(spacePort);
+        }
+
+        public void BuildShip(int playerId)
+        {
+            if (shipModels == null)
+            {
+                shipModels = new List<PlayerShipModel>();
+            }
+
+            var interceptor = new Interceptor();
+            var model = new PlayerShipModel
+            {
+                ModelName = "interceptor",
+                PlayerId = playerId
+            };
+
+            var shipModel = Repository.AddNewShipModel(model, interceptor.Components);
+
+            shipModels.Add(Repository.AddNewShipModel(model, interceptor.Components));
+
+            
+            var playerTile = PlayerDeck.FirstOrDefault(x => x.PlayerId == playerId);
+            if (playerTile != null)
+            {
+                var firstShip = new PlayerShip
+                {
+                    ModelId = shipModel.ModelId,
+                    PlayerId = playerId,
+                    XCoords = playerTile.XCoords,
+                    YCoords = playerTile.YCoords
+                };
+
+                var secondShip = new PlayerShip
+                {
+                    ModelId = shipModel.ModelId,
+                    PlayerId = playerId,
+                    XCoords = playerTile.XCoords,
+                    YCoords = playerTile.YCoords
+                };
+
+                Repository.SaveNewShip(firstShip);
+                Repository.SaveNewShip(secondShip);
+            }
+
+            Repository.Save();
+
+        }
+
+        
     }
 }

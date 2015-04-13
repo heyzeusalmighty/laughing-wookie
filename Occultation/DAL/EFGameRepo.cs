@@ -230,6 +230,11 @@ namespace Occultation.DAL
             return context.Games.ToList();
         }
 
+        public void SaveNewShip(PlayerShip ship)
+        {
+            context.PlayerShips.Add(ship);
+        }
+
         public Player GetCurrentUser(int gameId, string userName)
         {
             return null;

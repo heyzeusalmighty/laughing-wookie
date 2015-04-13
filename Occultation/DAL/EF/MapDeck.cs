@@ -28,5 +28,6 @@ namespace Occultation.DAL.EF
 
         public int GameId { get; set; }
         public int? WormHoleIndex { get; set; }
+        public int? PlayerId { get; set; }
     }
 }

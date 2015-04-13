@@ -102,6 +102,14 @@
     <Compile Include="Migrations\201504071925296_WormHole-MapDeck.Designer.cs">
       <DependentUpon>201504071925296_WormHole-MapDeck.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201504091650230_AddingPlayerIdToMapDeck.cs" />
+    <Compile Include="Migrations\201504091650230_AddingPlayerIdToMapDeck.Designer.cs">
+      <DependentUpon>201504091650230_AddingPlayerIdToMapDeck.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201504091851532_NullableXAndYCoords.cs" />
+    <Compile Include="Migrations\201504091851532_NullableXAndYCoords.Designer.cs">
+      <DependentUpon>201504091851532_NullableXAndYCoords.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModels\ScienceTrack.cs" />
@@ -137,6 +145,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504071925296_WormHole-MapDeck.resx">
       <DependentUpon>201504071925296_WormHole-MapDeck.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504091650230_AddingPlayerIdToMapDeck.resx">
+      <DependentUpon>201504091650230_AddingPlayerIdToMapDeck.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201504091851532_NullableXAndYCoords.resx">
+      <DependentUpon>201504091851532_NullableXAndYCoords.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

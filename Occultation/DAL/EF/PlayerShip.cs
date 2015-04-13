@@ -10,8 +10,8 @@ namespace Occultation.DAL.EF
         public int PlayerShipId { get; set; }
         public int ModelId { get; set; }
         public int PlayerId { get; set; }
-        public int XCoords { get; set; }
-        public int YCoords { get; set; }
+        public int? XCoords { get; set; }
+        public int? YCoords { get; set; }
 
     }
 }

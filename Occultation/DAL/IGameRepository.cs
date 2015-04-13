@@ -26,6 +26,7 @@ namespace Occultation.DAL
         void SetPlayerColor(int playerId, string color);
         List<GameUser> GetAllGameUsers();
         List<Game> GetAllGames();
+        void SaveNewShip(PlayerShip ship);
 
     }
 }
