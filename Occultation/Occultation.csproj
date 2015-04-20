@@ -77,6 +77,7 @@
     <Compile Include="DataModels\MapTile.cs" />
     <Compile Include="DataModels\PlacedMapTile.cs" />
     <Compile Include="DataModels\RemainingMapCounts.cs" />
+    <Compile Include="DataModels\ShipForMap.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Migrations\201503052221009_InitialCreate.cs" />
     <Compile Include="Migrations\201503052221009_InitialCreate.Designer.cs">

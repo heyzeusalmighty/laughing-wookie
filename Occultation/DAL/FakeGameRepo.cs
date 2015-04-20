@@ -295,6 +295,11 @@ namespace Occultation.DAL
             PlayerShips.Add(ship);
         }
 
+        public List<ShipForMap> GetShipsForGame(string gameGuid)
+        {
+            throw new NotImplementedException();
+        }
+
         private GameBoard GetFourPlayerBoard()
         {
             var game = new GameBoard(SetUpFourPlayers());

@@ -27,6 +27,7 @@ namespace Occultation.DAL
         List<GameUser> GetAllGameUsers();
         List<Game> GetAllGames();
         void SaveNewShip(PlayerShip ship);
+        List<ShipForMap> GetShipsForGame(string gameGuid);
 
     }
 }

@@ -47,10 +47,32 @@ namespace Occult_Tests.Tests
             var model = new StartGameJob(repo);
             model.StartGame("realGuid");
 
-            var playerCount = model.Players.Count() * 2;
+            var playerCount = model.Players.Count()*2;
             var ships = repo.PlayerShips.Count();
 
             Assert.AreEqual(playerCount, ships);
         }
-    }
+
+        [TestMethod]
+        public void CreateAGameForReal()
+        {
+            var repo = new EFGameRepo();
+            var gameCreator = repo.CreateGame("For Testing");
+            var game = repo.GetGame(gameCreator);
+
+            var creatorModel = new GameCreator(repo);
+            creatorModel.AddPlayerToGame(1, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(2, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(3, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(4, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(5, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(6, game.GameIdentifier);
+
+
+            var model = new StartGameJob(repo);
+            model.StartGame(game.GameIdentifier);
+
+           
+        }
+}
 }

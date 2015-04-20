@@ -235,6 +235,29 @@ namespace Occultation.DAL
             context.PlayerShips.Add(ship);
         }
 
+        public List<ShipForMap> GetShipsForGame(string gameGuid)
+        {
+            var game = GetGame(gameGuid);
+            
+            var playerShips = (from ship in context.PlayerShips
+                               join model in context.PlayerShipModels on ship.ModelId equals model.ModelId
+                               join players in context.Players on ship.PlayerId equals players.PlayerId
+                               //where players.Select(x => x.PlayerId).Contains(ship.PlayerId)
+                               where players.GameId == game.GameId
+
+                               select new ShipForMap
+                               {
+                                   Color = players.DiscColor,
+                                   ShipId = ship.PlayerShipId,
+                                   XCoords = ship.XCoords,
+                                   YCoords = ship.YCoords
+                               });
+
+            return playerShips.ToList();
+
+        }
+		
+
         public Player GetCurrentUser(int gameId, string userName)
         {
             return null;

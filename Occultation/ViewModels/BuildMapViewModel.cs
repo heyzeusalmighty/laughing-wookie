@@ -34,7 +34,8 @@ namespace Occultation.ViewModels
             var map = new GameMap
             {
                 MapTiles = GetMapTiles(gameGuid),
-                Counts = GetUnrevealedTiles(gameGuid)
+                Counts = GetUnrevealedTiles(gameGuid),
+                Ships = GetShipsForMap(gameGuid)
             };
             return map;
         }
@@ -117,6 +118,11 @@ namespace Occultation.ViewModels
                 }
             }
             return counts;
+        }
+
+        private List<ShipForMap> GetShipsForMap(string gameGuid)
+        {
+            return repository.GetShipsForGame(gameGuid);
         }
     }
 }

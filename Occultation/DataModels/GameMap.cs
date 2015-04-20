@@ -10,7 +10,7 @@ namespace Occultation.DataModels
     {
         public List<MapTile> MapTiles { get; set; }
         public RemainingMapCounts Counts { get; set; }
+        public List<ShipForMap> Ships { get; set; }
 
-
-}
+    }
 }
