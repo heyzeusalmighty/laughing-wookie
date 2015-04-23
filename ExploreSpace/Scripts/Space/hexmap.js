@@ -12,6 +12,7 @@ function HexagonGrid(canvasId, radius, background, orange, brown, pink, cols, ro
     this.softWhite = "rgba(103,155,153,0.2)";
     this.bigHexUp = false;
     this.gameTiles = [];
+    this.playerShips = [];
     this.cols = cols;
     this.rows = rows;
     this.explore = explore;
@@ -461,7 +462,17 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
     }
 
     //SHIPS
-    if (true) {
+
+    var containsShips = false;
+    for (var s = 0; s < this.playerShips.length; s++) {
+        //console.info('tile:' + tile.x + ',' + tile.y + ' :: ship: ' + this.playerShips[s].XCoords);
+        if (tile.x == this.playerShips[s].XCoords && tile.y == this.playerShips[s].YCoords) {
+            containsShips = true;
+            break;
+        }
+    }
+
+    if (containsShips) {
 
         if (tile.Aliens == 0) {
             var shipX = drawx + (this.width - 75);
@@ -549,7 +560,7 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
             y0 + ((height / 2)) + 25);
     } else {
         console.log("selected", selectedTile);
-        var cont = this.context;
+        
         if (selectedTile.VictoryPoints) {
 
             this.context.font = "Bold 72px Sans-Serif";
@@ -756,15 +767,65 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
 
         }
 
-        ////Add Image
-        //var img = new Image();
-        //img.src = '../Content/Images/advancedEconomy.png';
-        //img.onload = function() {
-        //    cont.drawImage(img, x0 + 120, y0 + 10);
-        //};
+        
+        if (selectedTile.Occupied != null) {
+            var color = this.getColor(selectedTile.Occupied);
+
+            console.log(color);
+            this.drawDiscColorBig(color, x0, y0);
+
+
+        }
 
         //wormholes
         this.drawWormHolesBig(x0, y0, selectedTile.Wormholes);
+
+
+        //SHIPS
+        var shipCount = 0;
+        var hexShips = { Interceptor : [], Cruiser : [], Dreadnought: []};
+        for (var s = 0; s < this.playerShips.length; s++) {
+            //console.info(s + ' => tile:' + column + ',' + row + ' :: ship: ' + this.playerShips[s].XCoords + ',' +this.playerShips[s].YCoords);
+            if (column == this.playerShips[s].XCoords && row == this.playerShips[s].YCoords) {
+                shipCount++;
+                switch(this.playerShips[s].ShipType) {
+                    case "interceptor":
+                        hexShips.Interceptor.push(this.playerShips[s]);
+                        break;
+                    case "cruiser":
+                        hexShips.Cruiser.push(this.playerShips[s]);
+                        break;
+                    case "dreadnought":
+                        hexShips.Dreadnought.push(this.playerShips[s]);
+                        break;
+                    default:
+                        console.info('Incorrect ShipType');
+                        break;
+                }
+
+                //hexShips.push(this.playerShips[s]);
+            }
+        }
+
+        if ( shipCount > 0) {
+
+            //console.info('tile:' + tile.x + ',' + tile.y + ' :: ship: ' + this.playerShips[s].XCoords);
+            var shipCon = this.context;
+            shipCon.globalAlpha = 1;
+            shipCon.font = "32px Sans-Serif";
+            shipCon.fillStyle = "#FFD300";
+            shipCon.fillText("Ships ", x0 + 120, y0 + (height / 2) + 100);
+
+            shipCon.font = "20px Sans-Serif";
+            var shipStartY = y0 + (height / 2) + 130;
+            var shipStartX = x0 + 120;
+            shipCon.fillText("Interceptors : " + hexShips.Interceptor.length, shipStartX, shipStartY);
+            shipCon.fillText("Cruisers : " + hexShips.Cruiser.length, shipStartX, shipStartY + 20);
+            shipCon.fillText("Dreadnoughts : " + hexShips.Dreadnought.length, shipStartX, shipStartY + 40);
+
+        }
+
+        
 
     }
 
@@ -1086,4 +1147,33 @@ HexagonGrid.prototype.drawWhiteSmall = function (x, y) {
     this.context.fillStyle = this.holeColor;
     this.context.fill();
     this.context.stroke();
+};
+
+HexagonGrid.prototype.processShips = function(ships) {
+    console.log('SHIPS!');
+    this.playerShips = ships;
+    console.info(this.playerShips.length);
+};
+
+HexagonGrid.prototype.drawDiscColorBig = function(color, x, y) {
+
+    var discX = x + 350;
+    var discY = y + 50;
+
+    this.context.globalAlpha = 1;
+    this.context.beginPath();
+    this.context.restore();
+    this.context.strokeStyle = this.outline;
+    this.context.setLineDash([]);
+    
+    this.context.arc(discX, discY, 30, 0, Math.PI * 2, false);
+
+    this.context.fillStyle = color;
+    this.context.fill();
+
+    this.context.stroke();
+};
+
+HexagonGrid.prototype.drawOrangeBig = function(x, y, count, active) {
+
 };

@@ -250,7 +250,8 @@ namespace Occultation.DAL
                                    Color = players.DiscColor,
                                    ShipId = ship.PlayerShipId,
                                    XCoords = ship.XCoords,
-                                   YCoords = ship.YCoords
+                                   YCoords = ship.YCoords,
+                                   ShipType = model.ModelName
                                });
 
             return playerShips.ToList();

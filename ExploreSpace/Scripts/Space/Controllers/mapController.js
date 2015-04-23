@@ -43,11 +43,14 @@
         } else {
             spaceFactory.getMapTiles().then(function(data) {
 
+                hexagonGrid.processShips(data.Ships);
                 $scope.mapTiles = data.MapTiles;
 
                 processMapTiles($scope.mapTiles);
 
                 $scope.tileCounts = data.Counts;
+
+                
 
                 $scope.loading = false;
             });
@@ -59,7 +62,7 @@
 
             switch (tiles[i].Division) {
                 case 1:
-                    tiles[i].color = divisionOne;
+                    tiles[i].color = divisionOne;   
                     break;
                 case 2:
                     tiles[i].color = divisionTwo;
