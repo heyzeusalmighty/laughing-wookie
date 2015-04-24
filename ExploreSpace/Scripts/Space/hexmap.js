@@ -555,9 +555,8 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
     if (selectedTile == undefined) {
         this.context.font = "62px Sans-Serif";
         this.context.fillStyle = "#FFD300";
-        this.context.fillText("Not discovered",
-            x0 + 50,
-            y0 + ((height / 2)) + 25);
+        this.context.fillText("Not discovered", x0 + 50, y0 + ((height / 2)) + 25);
+        
     } else {
         console.log("selected", selectedTile);
         
@@ -591,82 +590,22 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
 
         if (selectedTile.Pink > 0) {
             incomeY += 25;
-
-            this.context.beginPath();
-            this.context.restore();
-            this.context.strokeStyle = this.pink;
-            this.context.setLineDash([]);
-
-            var pinkX = incomeX;
-            var pinkY = incomeY;
-            
-            this.context.arc(pinkX, pinkY, 10, 0, Math.PI * 2, false);
-            this.context.fillStyle = this.pink;
-            this.context.fill();
-            this.context.stroke();
-
-            this.context.font = "20px Open Sans";
-            this.context.fillText(" " + selectedTile.Pink, pinkX + 10, pinkY + 5 );
+            this.drawIncomeBig(incomeX, incomeY, selectedTile.Pink, 0, this.pink);
         }
 
         if (selectedTile.Orange > 0) {
             incomeY += 25;
-
-            this.context.beginPath();
-            this.context.restore();
-            this.context.strokeStyle = this.orange;
-            this.context.setLineDash([]);
-
-            var orangeX = incomeX;
-            var orangeY = incomeY;
-
-            this.context.arc(orangeX, orangeY, 10, 0, Math.PI * 2, false);
-            this.context.fillStyle = this.orange;
-            this.context.fill();
-            this.context.stroke();
-
-            this.context.font = "20px Open Sans";
-            this.context.fillText(" " + selectedTile.Orange, orangeX + 10, orangeY + 5);
+            this.drawIncomeBig(incomeX, incomeY, selectedTile.Orange, 0, this.orange);
         }
 
         if (selectedTile.Brown > 0) {
             incomeY += 25;
-
-            this.context.beginPath();
-            this.context.restore();
-            this.context.strokeStyle = this.brown;
-            this.context.setLineDash([]);
-
-            var brownX = incomeX;
-            var brownY = incomeY;
-
-            this.context.arc(brownX, brownY, 10, 0, Math.PI * 2, false);
-            this.context.fillStyle = this.brown;
-            this.context.fill();
-            this.context.stroke();
-
-            this.context.font = "20px Open Sans";
-            this.context.fillText(" " + selectedTile.Brown, brownX + 10, brownY + 5);
+            this.drawIncomeBig(incomeX, incomeY, selectedTile.Brown, 0, this.brown);
         }
 
         if (selectedTile.White > 0) {
             incomeY += 25;
-
-            this.context.beginPath();
-            this.context.restore();
-            this.context.strokeStyle = "#111111";
-            this.context.setLineDash([]);
-
-            var whiteX = incomeX;
-            var whiteY = incomeY;
-
-            this.context.arc(whiteX, whiteY, 10, 0, Math.PI * 2, false);
-            this.context.fillStyle = "#111111";
-            this.context.fill();
-            this.context.stroke();
-
-            this.context.font = "20px Open Sans";
-            this.context.fillText(" " + selectedTile.Brown, whiteX + 10, whiteY + 5);
+            this.drawIncomeBig(incomeX, incomeY, selectedTile.White, 0, this.white);
         }
 
 
@@ -676,82 +615,18 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
 
         if (selectedTile.PinkAdvanced > 0) {
             adIncomeY += 25;
-            
-            this.context.beginPath();
-            this.context.restore();
-            this.context.strokeStyle = this.pink;
-            this.context.setLineDash([]);
-
-            var adPinkX = adIncomeX;
-            var adPinkY = adIncomeY;
-
-            this.context.arc(adPinkX, adPinkY, 10, 0, Math.PI * 2, false);
-            this.context.fillStyle = this.pink;
-            this.context.fill();
-            this.context.stroke();
-
-           
-            var pinkAdv = new Image();
-            pinkAdv.src = '../Content/Images/AdvancedStar.png';
-            var cont1 = this.context;
-            
-            pinkAdv.onload = function () {
-                //cont1.globalAlpha = 0.7;
-                cont1.drawImage(pinkAdv, adPinkX-10, adPinkY - 11, 20, 20);
-            };
-
-
+            this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.pink);
         }
 
         
         if (selectedTile.OrangeAdvanced > 0) {
             adIncomeY += 25;
-            this.context.beginPath();
-            this.context.restore();
-            this.context.strokeStyle = this.pink;
-            this.context.setLineDash([]);
-
-            var adOrX = adIncomeX;
-            var adOrY = adIncomeY;
-
-            this.context.arc(adOrX, adOrY, 10, 0, Math.PI * 2, false);
-            this.context.fillStyle = this.orange;
-            this.context.fill();
-            this.context.stroke();
-
-            var orAdv = new Image();
-            orAdv.src = '../Content/Images/AdvancedStar.png';
-            this.context.globalAlpha = 0.7;
-            var cont2 = this.context;
-            
-            //cont2.globalAlpha = 0.7;
-            orAdv.onload = function () {
-                cont2.drawImage(orAdv, adOrX - 10, adOrY - 11, 20, 20);
-            };
+            this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.orange);
         }
 
         if (selectedTile.BrownAdvanced > 0) {
             adIncomeY += 25;
-            this.context.beginPath();
-            this.context.restore();
-            this.context.strokeStyle = this.brown;
-            this.context.setLineDash([]);
-
-            var adBrownX = adIncomeX;
-            var adBrownY = adIncomeY;
-
-            this.context.arc(adBrownX, adBrownY, 10, 0, Math.PI * 2, false);
-            this.context.fillStyle = this.pink;
-            this.context.fill();
-            this.context.stroke();
-
-            var brownAdv = new Image();
-            brownAdv.src = '../Content/Images/AdvancedStar.png';
-            var cont3 = this.context;
-            cont3.globalAlpha = 0.7;
-            brownAdv.onload = function () {
-                cont3.drawImage(brownAdv, adBrownX - 10, adBrownY - 11, 20, 20);
-            };
+            this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.brown);
         }
 
         
@@ -770,11 +645,8 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
         
         if (selectedTile.Occupied != null) {
             var color = this.getColor(selectedTile.Occupied);
-
             console.log(color);
             this.drawDiscColorBig(color, x0, y0);
-
-
         }
 
         //wormholes
@@ -1174,6 +1046,41 @@ HexagonGrid.prototype.drawDiscColorBig = function(color, x, y) {
     this.context.stroke();
 };
 
-HexagonGrid.prototype.drawOrangeBig = function(x, y, count, active) {
+HexagonGrid.prototype.drawIncomeBig = function(x, y, count, active, color) {
+
+    this.context.beginPath();
+    this.context.restore();
+    this.context.strokeStyle = color;
+    this.context.setLineDash([]);
+
+    this.context.arc(x, y, 10, 0, Math.PI * 2, false);
+    this.context.fillStyle = color;
+    this.context.fill();
+    this.context.stroke();
+
+    this.context.font = "20px Open Sans";
+    this.context.fillText(" " + count, x + 10, y + 5);
+};
+
+HexagonGrid.prototype.drawAdvancedIncome = function(x, y, count, active, color) {
+    this.context.beginPath();
+    this.context.restore();
+    this.context.strokeStyle = color;
+    this.context.setLineDash([]);
+
+    this.context.arc(x, y, 10, 0, Math.PI * 2, false);
+    this.context.fillStyle = color;
+    this.context.fill();
+    this.context.stroke();
+
+
+    var img = new Image();
+    img.src = '../Content/Images/AdvancedStar.png';
+    var cont1 = this.context;
+
+    img.onload = function () {
+        //cont1.globalAlpha = 0.7;
+        cont1.drawImage(img, x - 10, y - 11, 20, 20);
+    };
 
 };

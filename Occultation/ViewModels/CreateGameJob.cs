@@ -210,6 +210,7 @@ namespace Occultation.ViewModels
                     XCoords = coords.Item1,
                     YCoords = coords.Item2,
                     Occupied = "Red"
+                    
                 };
             }
             return null;

@@ -193,19 +193,6 @@ app.controller('profileController', ['$scope', '$location', 'spaceFactory', '$ro
                 badChoice = discs[i];
                 console.log('new champion => ' + badChoice.cost);
             }
-
-            //if (!discs[i].occupied) {
-            //    console.log('disc v. champion => ' + (discs[i].cost < badChoice.cost))
-            //    if (discs[i].cost < badChoice.cost) {
-            //        badChoice = discs[i];
-            //        console.log('new champion => ' + badChoice.cost);
-            //    }
-            //}
-            //console.log(badChoice.cost + " vs. " + discs[i].cost + ' :: ' + !discs[i].occupied + ' :: ' + (discs[i].cost < badChoice.cost));
-            //if ((!discs[i].occupied) && (discs[i].cost > badChoice.cost)) {
-            //    badChoice = discs[i];
-            //    console.log('new champion => ' + badChoice.cost);
-            //}
         }
         badChoice.occupied = true;
     }
