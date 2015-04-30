@@ -331,9 +331,22 @@ HexagonGrid.prototype.clickEvent = function (e) {
             this.drawBigHex(tile.column, tile.row);
         }
     } else {
+
+        console.info('exploring: ', this.explore);
+
+        if (this.explore) {
+            console.info('exploration continues!');
+
+            //http://stackoverflow.com/questions/18758997/call-angular-function-with-jquery
+
+            $scope.tileCounts.DivisionOne = 100;
+        }
+
         console.log('Big hex up');
         this.bigHexUp = false;
         this.buildGameHexes();
+
+
     }
     
 };
@@ -442,6 +455,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
             var img1 = new Image();
             img1.src = '../Content/Images/alienHeadx25.png';
             var cont1 = this.context;
+            cont1.globalAlpha = 1;
             img1.onload = function() {
                 cont1.drawImage(img1, alienX, alienY - 7);
             };
@@ -455,6 +469,7 @@ HexagonGrid.prototype.buildGameHex = function(tile) {
             var img = new Image();
             img.src = '../Content/Images/alienHeadx25.png';
             var contUno = this.context;
+            contUno.globalAlpha = 1;
             img.onload = function () {
                 contUno.drawImage(img, alienX, alienY);
             };
