@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="DAL\EFGameRepo.cs" />
     <Compile Include="DAL\EF\PlayerShip.cs" />
+    <Compile Include="DAL\ITurnRepository.cs" />
     <Compile Include="DataModels\EmailSettings.cs" />
     <Compile Include="DAL\EF\Game.cs" />
     <Compile Include="DAL\EF\GameModel.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="DataModels\PlacedMapTile.cs" />
     <Compile Include="DataModels\RemainingMapCounts.cs" />
     <Compile Include="DataModels\ShipForMap.cs" />
+    <Compile Include="DataModels\TakingTurns.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Migrations\201503052221009_InitialCreate.cs" />
     <Compile Include="Migrations\201503052221009_InitialCreate.Designer.cs">
