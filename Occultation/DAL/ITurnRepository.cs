@@ -5,12 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Occultation.DAL.EF;
+using Occultation.DataModels;
 
 namespace Occultation.DAL
 {
     public interface ITurnRepository : IDisposable
     {
-        int GetPlayerId(string playerGuid, int gameId);
+        Tuple<int, int> GetPlayerAndGameIds(string name, string gameGuid);
+        MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId);
     }
 
     public class TurnRepository : ITurnRepository
@@ -80,16 +82,34 @@ namespace Occultation.DAL
 
         #region methods
 
-        public int GetPlayerId(string name, int gameId)
+        public Tuple<int, int> GetPlayerAndGameIds(string name, string gameGuid)
         {
             var gamePlayer = context.GameUsers.FirstOrDefault(x => x.UserName == name);
             if (gamePlayer != null)
             {
-                
+                var game = context.Games.FirstOrDefault(x => x.GameIdentifier == gameGuid);
+                if (game != null)
+                {
+                    var player =
+                        context.Players.FirstOrDefault(x => x.GameId == game.GameId && x.PlayerId == gamePlayer.UserId);
+                    return (player != null)
+                        ? new Tuple<int, int>(player.PlayerId, game.GameId)
+                        : new Tuple<int, int>(-1, -1);
+                }
+                return new Tuple<int, int>(-1, -1);
             }
-
+            return new Tuple<int, int>(-1, -1);
         }
 
+        public MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId)
+        {
+            var firstAvailable =
+                context.MapDecks.Where(x => x.GameId == gameId && x.XCoords == null && x.YCoords == null).OrderBy(x => x.SortOrder);
+            
+
+
+            return null;
+        }
 
         #endregion
 
