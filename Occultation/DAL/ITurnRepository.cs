@@ -12,7 +12,7 @@ namespace Occultation.DAL
     public interface ITurnRepository : IDisposable
     {
         Tuple<int, int> GetPlayerAndGameIds(string name, string gameGuid);
-        MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId);
+        MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId, int division);
     }
 
     public class TurnRepository : ITurnRepository
@@ -101,13 +101,39 @@ namespace Occultation.DAL
             return new Tuple<int, int>(-1, -1);
         }
 
-        public MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId)
+        public MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId, int division)
         {
             var firstAvailable =
-                context.MapDecks.Where(x => x.GameId == gameId && x.XCoords == null && x.YCoords == null).OrderBy(x => x.SortOrder);
+                context.MapDecks.Where(x => x.GameId == gameId && x.XCoords == null && x.YCoords == null && x.Division == division).OrderBy(x => x.SortOrder);
+            if (firstAvailable.Any())
+            {
+
+                if (context.MapDecks.Any(x => x.XCoords == xCoords && x.YCoords == yCoords && x.GameId == gameId))
+                {
+                    //TODO add logging for occupied tile
+                    return null;
+                }
+
+                var discovered = firstAvailable.First();
+                discovered.XCoords = xCoords;
+                discovered.YCoords = yCoords;
+                discovered.Revealed = true;
+                discovered.PlayerId = playerId;
+                context.SaveChanges();
+
+                var tiles = new AvailableMapTile();
+                var yay = tiles.AllTheTiles.FirstOrDefault(x => x.MapId == discovered.MapId);
+                if (yay != null)
+                {
+                    var player = context.Players.FirstOrDefault(x => x.PlayerId == playerId);
+
+                    yay.Occupied = (player != null) ? player.DiscColor : "unknown";
+                    yay.x = xCoords;
+                    yay.y = yCoords;
+                    return yay;
+                }
+            }
             
-
-
             return null;
         }
 

@@ -19,17 +19,20 @@ namespace Occultation.DataModels
             Repo = new TurnRepository();
         }
 
-        public MapTile Explore(string name, string game, int division)
+
+        public MapTile Explore(string name, string game, int division, int xCoords, int yCoords)
         {
             var gameThings = Repo.GetPlayerAndGameIds(name, game);
-            _playerId = gameThings.Item1;
-            _gameId = gameThings.Item2;
 
+            if (gameThings.Item1 > 0 && gameThings.Item2 > 0)
+            {
+                _playerId = gameThings.Item1;
+                _gameId = gameThings.Item2;
 
+                return Repo.GetNewExploredMapTile(_gameId, xCoords, yCoords, _playerId, division);
 
-            
-            
-            return new MapTile();
+            }
+            return null;
         }
     }
 }
