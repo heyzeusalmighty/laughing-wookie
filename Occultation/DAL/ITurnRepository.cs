@@ -4,6 +4,7 @@ using System.Data.Entity.Validation;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NLog;
 using Occultation.DAL.EF;
 using Occultation.DataModels;
 
@@ -17,7 +18,8 @@ namespace Occultation.DAL
 
     public class TurnRepository : ITurnRepository
     {
-        
+        private Logger _logger = LogManager.GetCurrentClassLogger();
+
         #region repoMethods
 
         private GameModel context;
@@ -91,13 +93,15 @@ namespace Occultation.DAL
                 if (game != null)
                 {
                     var player =
-                        context.Players.FirstOrDefault(x => x.GameId == game.GameId && x.PlayerId == gamePlayer.UserId);
+                        context.Players.FirstOrDefault(x => x.GameId == game.GameId && x.UserId == gamePlayer.UserId);
                     return (player != null)
                         ? new Tuple<int, int>(player.PlayerId, game.GameId)
                         : new Tuple<int, int>(-1, -1);
                 }
+                _logger.Info("{0} called {1} doesnt belong to a game", name, gameGuid);
                 return new Tuple<int, int>(-1, -1);
             }
+            _logger.Info("{0} isn't a game player", name);
             return new Tuple<int, int>(-1, -1);
         }
 
@@ -110,7 +114,7 @@ namespace Occultation.DAL
 
                 if (context.MapDecks.Any(x => x.XCoords == xCoords && x.YCoords == yCoords && x.GameId == gameId))
                 {
-                    //TODO add logging for occupied tile
+                    _logger.Info("{0} in Game {1} attempted to place tile on occupied spot", playerId, gameId);
                     return null;
                 }
 
@@ -130,9 +134,12 @@ namespace Occultation.DAL
                     yay.Occupied = (player != null) ? player.DiscColor : "unknown";
                     yay.x = xCoords;
                     yay.y = yCoords;
+
+                    _logger.Info("{0} successfully explored tile {1} in Game {2}", playerId, yay.MapId, gameId);
                     return yay;
                 }
             }
+            _logger.Info("{0} in Game {1} tried to explore where all tiles have been discovered", playerId, gameId);
             
             return null;
         }

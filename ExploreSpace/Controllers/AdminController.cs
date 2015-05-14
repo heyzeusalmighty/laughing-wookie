@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using ExploreSpace.Models;
 using Newtonsoft.Json;
+using NLog;
 using Occultation.DataModels;
 
 namespace ExploreSpace.Controllers
@@ -13,9 +14,11 @@ namespace ExploreSpace.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        
+        private Logger _logger = LogManager.GetCurrentClassLogger();
+
         public ActionResult Index()
         {
+            _logger.Info("hello from Admin");
             return View();
         }
 

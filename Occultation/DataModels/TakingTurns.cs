@@ -29,8 +29,9 @@ namespace Occultation.DataModels
                 _playerId = gameThings.Item1;
                 _gameId = gameThings.Item2;
 
-                return Repo.GetNewExploredMapTile(_gameId, xCoords, yCoords, _playerId, division);
+                var newTile = Repo.GetNewExploredMapTile(_gameId, xCoords, yCoords, _playerId, division);
 
+                return newTile;
             }
             return null;
         }
