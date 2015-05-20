@@ -16,6 +16,7 @@ function HexagonGrid(canvasId, radius, background, orange, brown, pink, cols, ro
     this.cols = cols;
     this.rows = rows;
     this.explore = explore;
+    this.exploreMode = false;
 
     //Player Colors
     this.greenPlayer = "#2C8437";
@@ -329,6 +330,10 @@ HexagonGrid.prototype.clickEvent = function (e) {
             this.drawHex(drawx, drawy - 6, "rgba(110,110,70,0.3)", "");
             this.bigHexUp = true;
             this.drawBigHex(tile.column, tile.row);
+
+            if (this.exploreMode) {
+                this.makeExploreCall(tile.column, tile.row, 2);
+            }
         }
     } else {
 
@@ -339,7 +344,7 @@ HexagonGrid.prototype.clickEvent = function (e) {
 
             //http://stackoverflow.com/questions/18758997/call-angular-function-with-jquery
 
-            $scope.tileCounts.DivisionOne = 100;
+            //$scope.tileCounts.DivisionOne = 100;
         }
 
         console.log('Big hex up');
@@ -558,7 +563,7 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
 
     //now get the tile attributes
     var tiles = this.gameTiles;
-    console.info(this.gameTiles);
+    //console.info(this.gameTiles);
     var selectedTile;
     for (var i = 0; i < tiles.length; i++) {
         if (tiles[i].y == row && tiles[i].x == column) {
@@ -573,7 +578,7 @@ HexagonGrid.prototype.drawBigHex = function(column, row) {
         this.context.fillText("Not discovered", x0 + 50, y0 + ((height / 2)) + 25);
         
     } else {
-        console.log("selected", selectedTile);
+        //console.log("selected", selectedTile);
         
         if (selectedTile.VictoryPoints) {
 
@@ -1098,4 +1103,13 @@ HexagonGrid.prototype.drawAdvancedIncome = function(x, y, count, active, color) 
         cont1.drawImage(img, x - 10, y - 11, 20, 20);
     };
 
+};
+
+HexagonGrid.prototype.toggleExploreMode = function(setting) {
+    this.exploreMode = setting;
+};
+
+HexagonGrid.prototype.makeExploreCall = function(x, y, div) {
+    //$('#messaging').text('Are you sure?');
+    $('#messaging').html('Are you sure?  <button class="btn btn-success exploreConfirm">Yep</button>');
 };

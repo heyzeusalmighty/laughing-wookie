@@ -14,5 +14,15 @@ namespace ExploreSpace.Controllers
         {
             return View();
         }
+
+        public ActionResult Game()
+        {
+            return View();
+        }
+
+        public ActionResult Easel()
+        {
+            return View();
+        }
     }
 }

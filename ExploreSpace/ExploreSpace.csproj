@@ -179,6 +179,10 @@
     <Content Include="Scripts\Crafty\crafty-min.js" />
     <Content Include="Scripts\Crafty\game.js" />
     <Content Include="Scripts\Crafty\HexHelper.js" />
+    <Content Include="Scripts\EaselJS-0.8.0.min.js" />
+    <Content Include="Scripts\Game\easel.js" />
+    <Content Include="Scripts\Game\easelHex.js" />
+    <Content Include="Scripts\Game\gameRules.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -273,6 +277,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Awaiting.cshtml" />
     <Content Include="Views\Space\Craft.cshtml" />
+    <Content Include="Views\Space\Game.cshtml" />
+    <Content Include="Views\Space\Easel.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

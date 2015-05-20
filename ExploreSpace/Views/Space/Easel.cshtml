@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Easel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Easel</h2>
+
+
+
+<div class="loadingModal" id="loadingSpinner" style="display: none"></div>
+
+<div>
+    <canvas id="demoCanvas" width="1000" height="1000" style="border: 1px solid black"></canvas>
+</div>
+
+
+
+
+@section scripts
+{
+    <script src="~/Scripts/EaselJS-0.8.0.min.js"></script>
+    <script src="~/Scripts/Game/easelHex.js"></script>
+    <script src="~/Scripts/Game/easel.js"></script>
+}
+
+
+
+
+

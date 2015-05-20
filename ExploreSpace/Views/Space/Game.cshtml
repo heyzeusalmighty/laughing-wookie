@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Game";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style type="text/css">
+    .clickable
+    {
+        cursor: pointer;
+    }
+
+    .clickable .glyphicon
+    {
+        background: rgba(0, 0, 0, 0.15);
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 4px
+    }
+</style>
+
+<h2>Game</h2>
+
+<div class="loadingModal" id="loadingSpinner" style="display: none"></div>
+
+
+<div class="row">
+    <div class="col-lg-1">
+        <button class="btn btn-default" id="actionExplore">Explore</button>
+    </div>
+</div>
+
+<div class="row" id="actionMessage" style="display: none">
+    <div class="col-lg-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="panel-title " id="msgPanelHeading"></span>
+                <span class="pull-right clickable" id="cancelAction">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </span>
+            </div>
+            <div class="panel-body">
+                <span id="messaging"></span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<canvas id="HexCanvas" width="1000" height="1000"></canvas>
+
+
+
+
+
+
+
+
+
+@section scripts
+{
+
+    <script src="~/Scripts/Space/hexmap.js"></script>
+    <script src="~/Scripts/Game/gameRules.js"></script>
+}
+
