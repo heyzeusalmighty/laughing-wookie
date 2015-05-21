@@ -20,6 +20,7 @@ namespace ExploreSpace.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public ActionResult Easel()
         {
             return View();

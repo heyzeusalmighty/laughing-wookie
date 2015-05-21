@@ -13,6 +13,7 @@
     this.rows = rows;
     this.explore = explore;
     this.exploreMode = false;
+    this.bigTile = 0;
 
     //Player Colors
     this.greenPlayer = "#2C8437";
@@ -43,7 +44,7 @@
 
     this.drawHexGrid(this.radius, this.radius, this.explore);
 
-    
+    //createjs.Ticker.addEventListener("tick", stage);
 
 }
 
@@ -138,11 +139,84 @@ HexGrid.prototype.drawHex = function (x0, y0, fillColor, debugText) {
 
 HexGrid.prototype.buildGameHexes = function(tiles, ships) {
     this.playerShips = ships;
+    this.gameTiles = tiles;
+    this.drawGameBoard();
+};
+
+HexGrid.prototype.drawGameBoard = function() {
+    this.stage.removeAllChildren();
+    this.stage.update();
+    this.buildActionBar();
+    this.drawHexGrid(this.radius, this.radius, this.explore);
+    var tiles = this.gameTiles;
     for (var i = 0; i < tiles.length; i++) {
         this.drawGameTile(tiles[i]);
     }
     this.stage.update();
 };
+
+HexGrid.prototype.buildActionBar = function() {
+    var explore = this.buildActionButton("EXP", 5, 10);
+    var influence = this.buildActionButton("INF", 70, 10);
+    var research = this.buildActionButton("RES", 135, 10);
+    var upgrade = this.buildActionButton("UPG", 200, 10);
+    var build = this.buildActionButton("BUI", 265, 10);
+    var move = this.buildActionButton("MOV", 330, 10);
+
+
+    var discs = 13;
+    var startX = 415;
+    for (var i = 0; i < 13; i++) {
+        this.buildIncomeDisc(true, startX, 25, i + 1, 20);
+        startX += 46;
+    }
+
+    this.stage.update();
+};
+
+
+HexGrid.prototype.buildIncomeDisc = function (filled, x, y, value, radius) {
+    var circle = new createjs.Shape();
+    circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, radius);
+    circle.x = x;
+    circle.y = y;
+
+    var label = new createjs.Text(value, "bold 12px Arial", "#FFFFFF");
+    label.name = "label";
+    label.textAlign = "center";
+    label.textBaseline = "middle";
+    label.x = x;
+    label.y = y;
+
+
+    this.stage.addChild(circle, label);
+}
+
+HexGrid.prototype.buildActionButton = function(name, x, y) {
+    var background = new createjs.Shape();
+    background.name = "background";
+    background.graphics.beginFill("orange").drawRoundRect(0, 0, 50, 30, 4);
+
+    var label = new createjs.Text(name, "bold 14px Arial", "#FFFFFF");
+    label.name = "label";
+    label.textAlign = "center";
+    label.textBaseline = "middle";
+    label.x = 50 / 2;
+    label.y = 30 / 2;
+
+    var button = new createjs.Container();
+    button.name = "button";
+    button.x = x;
+    button.y = y;
+    button.addChild(background, label);
+    button.mouseChildren = false;
+
+    button.on("click", function (evt) {
+        console.info(name);
+    });
+
+    this.stage.addChild(button);
+}
 
 HexGrid.prototype.drawGameTile = function(tile) {
     var y0 = tile.x % 2 == 0 ? (tile.y * this.height) + this.canvasOriginY : (tile.y * this.height) + this.canvasOriginY + (this.height / 2);
@@ -164,6 +238,7 @@ HexGrid.prototype.drawGameTile = function(tile) {
         .lineTo(x0 + this.width - this.side, y0 + this.height)
         .lineTo(x0, y0 + (this.height / 2));
     polygon.graphics.closePath();
+    
 
     this.stage.addChild(polygon);
 
@@ -233,8 +308,6 @@ HexGrid.prototype.drawGameTile = function(tile) {
         }
     }
 
-    console.info(tile.MapId, containsShips);
-
     if (containsShips) {
 
         if (tile.Occupied == 'Black') {
@@ -242,22 +315,24 @@ HexGrid.prototype.drawGameTile = function(tile) {
             ship.x = x0 + (this.width - 75);
             ship.y = y0 + ((this.height / 2) - 5);
             this.stage.addChild(ship);
-            console.info('wShip');
+            //console.info('wShip');
         } else {
             var bShip = new createjs.Bitmap(this.blackShip);
             bShip.x = x0 + (this.width - 75);
             bShip.y = y0 + ((this.height / 2) - 5);
             this.stage.addChild(bShip);
-            console.info('bship');
+            //console.info('bship');
         }
     }
 
-    
+    console.log(tile.Wormholes);
 
     //click event
-    polygon.on("click", function () { console.info(tile.MapId); });
+    polygon.name = tile.MapId;
+    polygon.addEventListener("click", this.examineMapTile.bind(this));
     polygon.mouseChildren = false;
 
+    
 };
 
 HexGrid.prototype.buildCentralHex = function(tile) {
@@ -266,7 +341,6 @@ HexGrid.prototype.buildCentralHex = function(tile) {
     seven.graphics.drawPolyStar(100, 100, 50, 7, 0.6, -90);
 
 };
-
 
 HexGrid.prototype.getColor = function (disc) {
     //console.log(disc);
@@ -290,7 +364,6 @@ HexGrid.prototype.getColor = function (disc) {
             return this.background;
     }
 };
-
 
 HexGrid.prototype.drawOrangeSmall = function (x, y) {
     var circle = new createjs.Shape();
@@ -331,4 +404,79 @@ HexGrid.prototype.drawWhiteSmall = function(x, y) {
     circle.y = y + ((this.height / 2) + 25);
     this.stage.addChild(circle);
 };
+
+HexGrid.prototype.examineMapTile = function(event) {
+
+    console.info(event.target.name);
+    var mapId = event.target.name;
+    var tile = null;
+    for (var i = 0; i < this.gameTiles.length; i++) {
+        if (this.gameTiles[i].MapId == mapId) {
+            tile = this.gameTiles[i];
+        }
+    }
+
+    if (tile == null) {
+        return false;
+    }
+
+
+    this.stage.removeAllChildren();
+    this.stage.update();
+    this.buildActionBar();
+
+    var x0 = 100;
+    var y0 = 100;
+    var radius = 250;
+
+    //var fillColor = "#003432";
+    var fillColor = this.getColor(tile.Occupied);
+
+    var height = Math.sqrt(3) * radius;
+    var width = 2 * radius;
+    var side = (3 / 2) * radius;
+
+    var polygon = new createjs.Shape();
+    polygon.graphics.beginStroke("#000000").beginFill(fillColor);
+    polygon.graphics.moveTo(x0 + width - side, y0)
+        .lineTo(x0 + side, y0)
+        .lineTo(x0 + width, y0 + (height / 2))
+        .lineTo(x0 + side, y0 + height)
+        .lineTo(x0 + width - side, y0 + height)
+        .lineTo(x0, y0 + (height / 2));
+    polygon.graphics.closePath();
+    this.stage.addChild(polygon);
+
+    if (tile.VictoryPoints) {
+
+        var vicLbl = new createjs.Text(tile.VictoryPoints, "Bold 72px Sans-Serif", "#FFD300");
+        vicLbl.name = "label";
+        vicLbl.textAlign = "center";
+        vicLbl.textBaseline = "middle";
+
+        vicLbl.x = x0 + 220;
+        vicLbl.y = y0 + ((this.height / 2) + 25);
+        this.stage.addChild(vicLbl);
+    }
+
+    if (tile.Division) {
+        var divLbl = new createjs.Text(tile.Division, "32px Sans-Serif", "#FFD300");
+        divLbl.x = x0 + 50;
+        divLbl.y = y0 + (height / 2) + 30;
+
+        this.stage.addChild(divLbl);
+    }
+
+
+
+    polygon.addEventListener("click", this.drawGameBoard.bind(this));
+    polygon.mouseChildren = false;
+    
+    this.stage.update();
+};
+
+HexGrid.prototype.drawWormHolesSmall = function(x, y, wormholes) {
+
+}
+
 

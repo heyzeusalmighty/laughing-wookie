@@ -17,7 +17,7 @@ $(document).ready(function() {
 
     var stage = new createjs.Stage("demoCanvas");
     buildHexGrid();
-    buildActionBar();
+    //buildActionBar();
 
     function init() {
         // code here.
@@ -47,69 +47,6 @@ $(document).ready(function() {
         stage.update();
     }
 
-    function buildActionBar() {
-
-         var explore = buildActionButtons("EXP", 5, 10);
-         var influence = buildActionButtons("INF", 70, 10);
-         var research = buildActionButtons("RES", 135, 10);
-         var upgrade = buildActionButtons("UPG", 200, 10);
-         var build = buildActionButtons("BUI", 265, 10);
-         var move = buildActionButtons("MOV", 330, 10);
-
-
-         var discs = 13;
-         var startX = 415;
-         for (var i = 0; i < 13; i++) {
-             buildIncomeDisc(true, startX, 25, i + 1, 20);
-             startX += 46;
-         }
-
-         stage.update();
-     }
-
-    function buildActionButtons(name, x, y) {
-        var background = new createjs.Shape();
-        background.name = "background";
-        background.graphics.beginFill("orange").drawRoundRect(0, 0, 50, 30, 4);
-
-        var label = new createjs.Text(name, "bold 14px Arial", "#FFFFFF");
-        label.name = "label";
-        label.textAlign = "center";
-        label.textBaseline = "middle";
-        label.x = 50 / 2;
-        label.y = 30 / 2;
-
-        var button = new createjs.Container();
-        button.name = "button";
-        button.x = x;
-        button.y = y;
-        button.addChild(background, label);
-        button.mouseChildren = false;
-
-        button.on("click", function (evt) {
-            console.info(name);
-        });
-
-        stage.addChild(button);
-    }
-
-    function buildIncomeDisc(filled, x, y, value, radius) {
-        var circle = new createjs.Shape();
-        circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, radius);
-        circle.x = x;
-        circle.y = y;
-
-        var label = new createjs.Text(value, "bold 12px Arial", "#FFFFFF");
-        label.name = "label";
-        label.textAlign = "center";
-        label.textBaseline = "middle";
-        label.x = x;
-        label.y = y;
-
-
-        stage.addChild(circle, label);
-    }
-    
     function buildHexGrid() {
         
 
@@ -123,6 +60,7 @@ $(document).ready(function() {
         var rows = 11;
 
         var hexagonGrid = new HexGrid(stage, radius, background, orange, brown, pink, cols, rows, false);
+        createjs.EventDispatcher.initialize(HexGrid.prototype);
 
 
         $.ajax({ url: "/api/map" }).done(function (data) {
