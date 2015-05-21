@@ -29,6 +29,10 @@
     //images 
     this.alienHead = new Image();
     this.alienHead.src = '../Content/Images/alienHeadx25.png';
+    this.whiteShip = new Image();
+    this.whiteShip.src = '../Content/Images/rocket-white-x25.png';
+    this.blackShip = new Image();
+    this.blackShip.src = '../Content/Images/rocketx25.png';
 
     this.setNewHexDimensions();
 
@@ -38,6 +42,8 @@
     this.canvasOriginY = 0;
 
     this.drawHexGrid(this.radius, this.radius, this.explore);
+
+    
 
 }
 
@@ -130,7 +136,8 @@ HexGrid.prototype.drawHex = function (x0, y0, fillColor, debugText) {
     
 };
 
-HexGrid.prototype.buildGameHexes = function(tiles) {
+HexGrid.prototype.buildGameHexes = function(tiles, ships) {
+    this.playerShips = ships;
     for (var i = 0; i < tiles.length; i++) {
         this.drawGameTile(tiles[i]);
     }
@@ -217,39 +224,34 @@ HexGrid.prototype.drawGameTile = function(tile) {
         
     }
 
+    var containsShips = false;
+    for (var s = 0; s < this.playerShips.length; s++) {
+        //console.info('tile:' + tile.x + ',' + tile.y + ' :: ship: ' + this.playerShips[s].XCoords);
+        if (tile.x == this.playerShips[s].XCoords && tile.y == this.playerShips[s].YCoords) {
+            containsShips = true;
+            break;
+        }
+    }
 
-    //ALIENS
-    //if (tile.Aliens > 0) {
-    //    var alienX = x0 + (this.width - 75);
-    //    var alienY = y0 + ((this.height / 2) - 10);
+    console.info(tile.MapId, containsShips);
 
-    //    if (tile.Aliens == 2) {
+    if (containsShips) {
 
-    //        alienY -= 8;
+        if (tile.Occupied == 'Black') {
+            var ship = new createjs.Bitmap(this.whiteShip);
+            ship.x = x0 + (this.width - 75);
+            ship.y = y0 + ((this.height / 2) - 5);
+            this.stage.addChild(ship);
+            console.info('wShip');
+        } else {
+            var bShip = new createjs.Bitmap(this.blackShip);
+            bShip.x = x0 + (this.width - 75);
+            bShip.y = y0 + ((this.height / 2) - 5);
+            this.stage.addChild(bShip);
+            console.info('bship');
+        }
+    }
 
-    //        var img1 = new Image();
-    //        img1.src = '../Content/Images/alienHeadx25.png';
-    //        var cont1 = this.context;
-    //        cont1.globalAlpha = 1;
-    //        img1.onload = function () {
-    //            cont1.drawImage(img1, alienX, alienY - 7);
-    //        };
-
-    //        var img2 = new Image();
-    //        img2.src = '../Content/Images/alienHeadx25.png';
-    //        img2.onload = function () {
-    //            cont1.drawImage(img2, alienX, alienY + 17);
-    //        };
-    //    } else {
-    //        var img = new Image();
-    //        img.src = '../Content/Images/alienHeadx25.png';
-    //        var contUno = this.context;
-    //        contUno.globalAlpha = 1;
-    //        img.onload = function () {
-    //            contUno.drawImage(img, alienX, alienY);
-    //        };
-    //    }
-    //}
     
 
     //click event

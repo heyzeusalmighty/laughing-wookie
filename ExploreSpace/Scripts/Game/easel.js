@@ -47,7 +47,7 @@ $(document).ready(function() {
         stage.update();
     }
 
-     function buildActionBar() {
+    function buildActionBar() {
 
          var explore = buildActionButtons("EXP", 5, 10);
          var influence = buildActionButtons("INF", 70, 10);
@@ -130,7 +130,7 @@ $(document).ready(function() {
             //hexagonGrid.processShips(data.Ships);
             tiles = data.MapTiles;
             processMapTiles();
-            hexagonGrid.buildGameHexes(tiles);
+            hexagonGrid.buildGameHexes(tiles, data.Ships);
         });
 
 
