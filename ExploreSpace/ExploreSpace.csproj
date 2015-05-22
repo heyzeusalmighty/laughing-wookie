@@ -159,6 +159,7 @@
     <Content Include="Content\Images\rocketx100.png" />
     <Content Include="Content\Images\rocketx128.png" />
     <Content Include="Content\Images\rocketx25.png" />
+    <Content Include="Content\Images\viking-x100.jpg" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\spaceStyles.css" />
     <Content Include="Content\toastr.min.css" />

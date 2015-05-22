@@ -20,7 +20,7 @@ namespace ExploreSpace.Controllers
             //hardcoding this for the time being
             //const string guid = "239d4ec4-1cd8-4beb-af88-6dbd9f361824";
             const string guid = "92e092f2-6920-4998-b557-5d55572ff174";
-            var model = new BuildMapViewModel(new EFGameRepo());
+            var model = new BuildMapViewModel();
             var lastGame = model.GetLastGame();
             return model.GetGameMap(lastGame);
         }

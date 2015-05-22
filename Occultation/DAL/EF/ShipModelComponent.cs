@@ -14,5 +14,6 @@ namespace Occultation.DAL.EF
         public int? ComponentId { get; set; }
 
         public int? ShipId { get; set; }
+        public string ComponentName { get; set; }
     }
 }

@@ -170,7 +170,8 @@ namespace Occultation.DAL
                 var up = new ShipModelComponent
                 {
                     ComponentId = com.ComponentId,
-                    ShipId = model.ModelId
+                    ShipId = model.ModelId,
+                    ComponentName = com.Name
                 };
                 context.ShipModelComponents.Add(up);
             }
@@ -242,7 +243,7 @@ namespace Occultation.DAL
             var playerShips = (from ship in context.PlayerShips
                                join model in context.PlayerShipModels on ship.ModelId equals model.ModelId
                                join players in context.Players on ship.PlayerId equals players.PlayerId
-                               //where players.Select(x => x.PlayerId).Contains(ship.PlayerId)
+                               //join comp in context.ShipModelComponents on model.ModelId equals comp.ShipId 
                                where players.GameId == game.GameId
 
                                select new ShipForMap
@@ -251,10 +252,15 @@ namespace Occultation.DAL
                                    ShipId = ship.PlayerShipId,
                                    XCoords = ship.XCoords,
                                    YCoords = ship.YCoords,
-                                   ShipType = model.ModelName
-                               });
+                                   ShipType = model.ModelName,
+                               }).ToList();
 
-            return playerShips.ToList();
+            foreach (var ship in playerShips)
+            {
+                ship.Components = context.ShipModelComponents.Where(x => x.ShipId == ship.ShipId).ToList();
+            }
+
+            return playerShips;
 
         }
 		

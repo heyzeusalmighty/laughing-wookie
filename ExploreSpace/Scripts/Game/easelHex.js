@@ -36,6 +36,8 @@
     this.blackShip.src = '../Content/Images/rocketx25.png';
     this.advancedIncome = new Image();
     this.advancedIncome.src = '../Content/Images/AdvancedStar.png';
+    this.viking = new Image();
+    this.viking.src = '../Content/Images/viking-x100.jpg';
 
     this.setNewHexDimensions();
 
@@ -552,6 +554,8 @@ HexGrid.prototype.examineMapTile = function(event) {
         var shipStartY = y0;
         var shipStartX = x0 + 550;
 
+        console.log('shipstartx', shipStartX);
+
         var shipTitleLbl = new createjs.Text("Ships ", "32px Sans-Serif", "#000000");
         shipTitleLbl.x = shipStartX;
         shipTitleLbl.y = shipStartY;
@@ -784,6 +788,7 @@ HexGrid.prototype.drawCloseButton = function() {
     button.y = 20;
     button.addChild(background, label);
     button.mouseChildren = false;
+    button.cursor = "pointer";
 
     button.addEventListener("click", this.drawGameBoard.bind(this));
     this.stage.addChild(button);
@@ -826,8 +831,78 @@ HexGrid.prototype.examineShip = function(event) {
     var shipType = event.target.name;
     console.log(shipType);
 
+    if (shipType < 0) {
+        console.log('nothing to see here');
+    }
+
+    var idx = -1;
+    for (var i = 0; i < this.playerShips.length; i++) {
+        if (this.playerShips[i].ShipId == shipType) {
+            idx = i;
+            break;
+        }
+    }
+
+    if (idx > 0) {
+
+        var spaceShip = this.playerShips[idx];
+        
+        if (spaceShip.ShipType == "interceptor") {
+            this.examineInterceptor(spaceShip);
+        } else {
+            for (var x = 0; x < spaceShip.Components.length; x++) {
+                console.info(spaceShip.Components[x].ComponentName);
+            }
+        }
 
 
+    } else {
+        console.log('ship not found');
+    }
+};
 
+HexGrid.prototype.examineInterceptor = function(ship) {
+
+    var infoX = 650;
+    var infoY = 300;
+    
+    var title = new createjs.Text("INTERCEPTOR", "32px Sans-Serif", "#000000");
+    title.x = infoX;
+    title.y = infoY;
+    this.stage.addChild(title);
+
+    var backOne = new createjs.Shape();
+    backOne.name = "background";
+    backOne.graphics.beginFill("red").drawRoundRect(infoX, infoY + 40, 120, 120, 5);
+
+    var backTwo = new createjs.Shape();
+    backTwo.name = "background";
+    backTwo.graphics.beginFill("red").drawRoundRect(infoX + 150, infoY + 40, 120, 120, 5);
+
+    var backThree = new createjs.Shape();
+    backThree.name = "background";
+    backThree.graphics.beginFill("red").drawRoundRect(infoX, infoY + 190, 120, 120, 5);
+
+    var backFour = new createjs.Shape();
+    backFour.name = "background";
+    backFour.graphics.beginFill("red").drawRoundRect(infoX + 150, infoY + 190, 120, 120, 5);
+
+    this.stage.addChild(backOne, backTwo, backThree, backFour);
+
+    var itemOne = new createjs.Bitmap(this.viking);
+    itemOne.x = infoX + 10;
+    itemOne.y = infoY + 50;
+
+    var itemTwo = new createjs.Bitmap(this.viking);
+    itemTwo.x = infoX + 160;
+    itemTwo.y = infoY + 50;
+
+    var itemThree = new createjs.Bitmap(this.viking);
+    itemThree.x = infoX + 10;
+    itemThree.y = infoY + 200;
+
+    this.stage.addChild(itemOne, itemTwo, itemThree);
+
+    this.stage.update();
 };
 

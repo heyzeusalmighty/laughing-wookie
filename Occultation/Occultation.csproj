@@ -116,6 +116,10 @@
     <Compile Include="Migrations\201504091851532_NullableXAndYCoords.Designer.cs">
       <DependentUpon>201504091851532_NullableXAndYCoords.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505221845568_ShipComponentName.cs" />
+    <Compile Include="Migrations\201505221845568_ShipComponentName.Designer.cs">
+      <DependentUpon>201505221845568_ShipComponentName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModels\ScienceTrack.cs" />
@@ -157,6 +161,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201504091851532_NullableXAndYCoords.resx">
       <DependentUpon>201504091851532_NullableXAndYCoords.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505221845568_ShipComponentName.resx">
+      <DependentUpon>201505221845568_ShipComponentName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
