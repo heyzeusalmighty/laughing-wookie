@@ -34,10 +34,13 @@
     this.whiteShip.src = '../Content/Images/rocket-white-x25.png';
     this.blackShip = new Image();
     this.blackShip.src = '../Content/Images/rocketx25.png';
+    this.advancedIncome = new Image();
+    this.advancedIncome.src = '../Content/Images/AdvancedStar.png';
 
     this.setNewHexDimensions();
 
     this.stage = stage;
+    this.stage.enableMouseOver(10);
 
     this.canvasOriginX = 0;
     this.canvasOriginY = 0;
@@ -174,7 +177,6 @@ HexGrid.prototype.buildActionBar = function() {
     this.stage.update();
 };
 
-
 HexGrid.prototype.buildIncomeDisc = function (filled, x, y, value, radius) {
     var circle = new createjs.Shape();
     circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, radius);
@@ -205,18 +207,16 @@ HexGrid.prototype.buildActionButton = function(name, x, y) {
     label.y = 30 / 2;
 
     var button = new createjs.Container();
-    button.name = "button";
+    button.name = name;
     button.x = x;
     button.y = y;
     button.addChild(background, label);
     button.mouseChildren = false;
-
-    button.on("click", function (evt) {
-        console.info(name);
-    });
+    
+    button.addEventListener("click", this.takeAction.bind(this));
 
     this.stage.addChild(button);
-}
+};
 
 HexGrid.prototype.drawGameTile = function(tile) {
     var y0 = tile.x % 2 == 0 ? (tile.y * this.height) + this.canvasOriginY : (tile.y * this.height) + this.canvasOriginY + (this.height / 2);
@@ -325,7 +325,8 @@ HexGrid.prototype.drawGameTile = function(tile) {
         }
     }
 
-    console.log(tile.Wormholes);
+    //console.log(tile.Wormholes);
+    this.drawWormHolesSmall(x0, y0, tile.Wormholes);
 
     //click event
     polygon.name = tile.MapId;
@@ -449,34 +450,384 @@ HexGrid.prototype.examineMapTile = function(event) {
 
     if (tile.VictoryPoints) {
 
+        var crest = new createjs.Shape();
+        crest.graphics.beginFill("red").drawRoundRect(x0 + 285, y0 + ((this.height / 2) - 10), 70, 70, 10);
+
         var vicLbl = new createjs.Text(tile.VictoryPoints, "Bold 72px Sans-Serif", "#FFD300");
         vicLbl.name = "label";
         vicLbl.textAlign = "center";
         vicLbl.textBaseline = "middle";
 
-        vicLbl.x = x0 + 220;
+        vicLbl.x = x0 + 320;
         vicLbl.y = y0 + ((this.height / 2) + 25);
-        this.stage.addChild(vicLbl);
+        this.stage.addChild(crest, vicLbl);
     }
 
     if (tile.Division) {
-        var divLbl = new createjs.Text(tile.Division, "32px Sans-Serif", "#FFD300");
+        var divLbl = new createjs.Text("Division " + tile.Division, "32px Sans-Serif", "#FFD300");
         divLbl.x = x0 + 50;
         divLbl.y = y0 + (height / 2) + 30;
 
         this.stage.addChild(divLbl);
     }
 
+    this.drawWormHolesBig(x0, y0, tile.Wormholes);
+
+    //Incomes
+
+    var incomeX = x0 + 135;
+    var incomeY = y0;
+
+    if (tile.Pink > 0) {
+        incomeY += 25;
+        this.drawIncomeBig(incomeX, incomeY, tile.Pink, 0, this.pink);
+    }
+
+    if (tile.Orange > 0) {
+        incomeY += 25;
+        this.drawIncomeBig(incomeX, incomeY, tile.Orange, 0, this.orange);
+    }
+
+    if (tile.Brown > 0) {
+        incomeY += 25;
+        this.drawIncomeBig(incomeX, incomeY, tile.Brown, 0, this.brown);
+    }
+
+    if (tile.White > 0) {
+        incomeY += 25;
+        this.drawIncomeBig(incomeX, incomeY, tile.White, 0, this.white);
+    }
+
+    //reset coordinates
+    var adIncomeX = x0 + 175;
+    var adIncomeY = y0;
+
+    if (tile.PinkAdvanced > 0) {
+        adIncomeY += 25;
+        this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.pink);
+    }
 
 
-    polygon.addEventListener("click", this.drawGameBoard.bind(this));
-    polygon.mouseChildren = false;
+    if (tile.OrangeAdvanced > 0) {
+        adIncomeY += 25;
+        this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.orange);
+    }
+
+    if (tile.BrownAdvanced > 0) {
+        adIncomeY += 25;
+        this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.brown);
+    }
+
+    console.info(tile);
+
+    //SHIPS
+    var shipCount = 0;
+
+    var hexShips = { Interceptor : [], Cruiser : [], Dreadnought: []};
+    for (var s = 0; s < this.playerShips.length; s++) {
+        //console.info(s + ' => tile:' + column + ',' + row + ' :: ship: ' + this.playerShips[s].XCoords + ',' +this.playerShips[s].YCoords);
+        if (tile.x == this.playerShips[s].XCoords && tile.y == this.playerShips[s].YCoords) {
+            shipCount++;
+            switch(this.playerShips[s].ShipType) {
+                case "interceptor":
+                    hexShips.Interceptor.push(this.playerShips[s]);
+                    break;
+                case "cruiser":
+                    hexShips.Cruiser.push(this.playerShips[s]);
+                    break;
+                case "dreadnought":
+                    hexShips.Dreadnought.push(this.playerShips[s]);
+                    break;
+                default:
+                    console.info('Incorrect ShipType');
+                    break;
+            }
+
+            //hexShips.push(this.playerShips[s]);
+        }
+    }
+
+    if ( shipCount > 0) {
+
+        var shipStartY = y0;
+        var shipStartX = x0 + 550;
+
+        var shipTitleLbl = new createjs.Text("Ships ", "32px Sans-Serif", "#000000");
+        shipTitleLbl.x = shipStartX;
+        shipTitleLbl.y = shipStartY;
+
+        this.stage.addChild(shipTitleLbl);
+
+        
+
+        var interLbl = new createjs.Text("Interceptors : " + hexShips.Interceptor.length, "20px Sans-Serif", "#000000");
+        interLbl.name = (hexShips.Interceptor.length > 0) ?
+            hexShips.Interceptor[0].ShipId : -1;
+        interLbl.x = shipStartX;
+        interLbl.y = shipStartY + 40;
+        interLbl.cursor = "pointer";
+        interLbl.addEventListener("click", this.examineShip.bind(this));
+        var interHit = new createjs.Shape();
+        interHit.graphics.beginFill("#000").drawRect(0, 0, interLbl.getMeasuredWidth(), interLbl.getMeasuredHeight());
+        interLbl.hitArea = interHit;
+        this.stage.addChild(interLbl);
+
+
+        var cruiserLbl = new createjs.Text("Cruisers : " + hexShips.Cruiser.length, "20px Sans-Serif", "#000000");
+        cruiserLbl.name = (hexShips.Cruiser.length > 0) ?
+            hexShips.Cruiser[0].ShipId : -1;
+        cruiserLbl.x = shipStartX;
+        cruiserLbl.y = shipStartY + 60;
+        cruiserLbl.cursor = "pointer";
+        cruiserLbl.addEventListener("click", this.examineShip.bind(this));
+        var cruiserHit = new createjs.Shape();
+        cruiserHit.graphics.beginFill("#000").drawRect(0, 0, cruiserLbl.getMeasuredWidth(), cruiserLbl.getMeasuredHeight());
+        cruiserLbl.hitArea = cruiserHit;
+
+        this.stage.addChild(cruiserLbl);
+
+        var dreadLbl = new createjs.Text("Dreadnoughts : " + hexShips.Dreadnought.length, "20px Sans-Serif", "#000000");
+        dreadLbl.name = (hexShips.Dreadnought.length > 0) ?
+            hexShips.Dreadnought[0].ShipId : -1;
+        dreadLbl.x = shipStartX;
+        dreadLbl.y = shipStartY + 80;
+        dreadLbl.cursor = "pointer";
+        dreadLbl.addEventListener("click", this.examineShip.bind(this));
+        var dreadHit = new createjs.Shape();
+        dreadHit.graphics.beginFill("#000").drawRect(0, 0, dreadLbl.getMeasuredWidth(), dreadLbl.getMeasuredHeight());
+        dreadLbl.hitArea = dreadHit;
+        this.stage.addChild(dreadLbl);
+        
+
+    }
+
+
+    this.drawCloseButton();
+
+
+    //polygon.addEventListener("click", this.drawGameBoard.bind(this));
+    //polygon.mouseChildren = false;
     
     this.stage.update();
 };
 
 HexGrid.prototype.drawWormHolesSmall = function(x, y, wormholes) {
+    //var wormHoleLine = this.outline;
 
-}
 
+    //hole 0
+    // hole[0]
+    if (wormholes[0] === 1) {
+        var holeOneX = x + (this.width - 45);
+        var holeOneY = y;
+        var zero = new createjs.Shape();
+        zero.graphics.f(this.holeColor).s(this.outline);
+        zero.graphics.arc(holeOneX, holeOneY, 7, 0, Math.PI);
+        this.stage.addChild(zero);
+    }
+
+    if (wormholes[1] === 1) {
+        var holeTwoX = x + (this.width - 12);
+        var holeTwoY = y + 18;
+        var one = new createjs.Shape();
+        //this.context.arc(holeTwoX, holeTwoY, 7, Math.PI * 1.333, Math.PI * 0.333, true);
+        one.graphics.f(this.holeColor).s(this.outline);
+        one.graphics.arc(holeTwoX, holeTwoY, 7, Math.PI * 0.333, Math.PI * 1.333);
+        this.stage.addChild(one);
+    }
+
+    if (wormholes[2] === 1) {
+        var holeThreeX = x + (this.width - 12);
+        var holeThreeY = y + 58;
+        var two = new createjs.Shape();
+        two.graphics.f(this.holeColor).s(this.outline);
+        two.graphics.arc(holeThreeX, holeThreeY, 7, Math.PI * 0.666, Math.PI * 1.666);
+        this.stage.addChild(two);
+    }
+
+    if (wormholes[3] === 1) {
+        var holeFourX = x + (this.width - 45);
+        var holeFourY = y + 78;
+        var three = new createjs.Shape();
+        three.graphics.f(this.holeColor).s(this.outline);
+        three.graphics.arc(holeFourX, holeFourY, 7, Math.PI, 0);
+        this.stage.addChild(three);
+    }
+
+    if (wormholes[4] === 1) {
+        var holeFiveX = x + (this.width - 79);
+        var holeFiveY = y + 57;
+        var four = new createjs.Shape();
+        four.graphics.f(this.holeColor).s(this.outline);
+        four.graphics.arc(holeFiveX, holeFiveY, 7, Math.PI * 1.333, Math.PI * 0.333);
+        this.stage.addChild(four);
+    }
+
+    if (wormholes[5] === 1) {
+        var holeSixX = x + (this.width - 79);
+        var holeSixY = y + 19;
+        var five = new createjs.Shape();
+        five.graphics.f(this.holeColor).s(this.outline);
+        five.graphics.arc(holeSixX, holeSixY, 7, Math.PI * 1.666, Math.PI * 0.666);
+        this.stage.addChild(five);
+    }
+
+
+};
+
+HexGrid.prototype.drawWormHolesBig = function(x, y, wormholes) {
+
+    var radius = 250;
+    var bigRad = 30;
+    var height = Math.sqrt(3) * radius;
+    var width = 2 * radius;
+
+    if (wormholes[0] === 1) {
+        var holeOneX = x + (width - 250);
+        var holeOneY = y;
+        var zero = new createjs.Shape();
+        zero.graphics.f(this.holeColor).s(this.outline);
+        zero.graphics.arc(holeOneX, holeOneY, bigRad, 0, Math.PI);
+        this.stage.addChild(zero);
+    }
+
+    if (wormholes[1] === 1) {
+        var holeTwoX = x + (width - 65);
+        var holeTwoY = y + 105;
+        var one = new createjs.Shape();
+        one.graphics.f(this.holeColor).s(this.outline);
+        one.graphics.arc(holeTwoX, holeTwoY, bigRad, Math.PI * 0.333, Math.PI * 1.333);
+        this.stage.addChild(one);
+    }
+
+    if (wormholes[2] === 1) {
+        var holeThreeX = x + (width - 62);
+        var holeThreeY = y + 323;
+        var two = new createjs.Shape();
+        two.graphics.f(this.holeColor).s(this.outline);
+        two.graphics.arc(holeThreeX, holeThreeY, bigRad, Math.PI * 0.666, Math.PI * 1.666);
+        this.stage.addChild(two);
+    }
+
+    if (wormholes[3] === 1) {
+        var holeFourX = x + (width - 250);
+        var holeFourY = y + height;
+        var three = new createjs.Shape();
+        three.graphics.f(this.holeColor).s(this.outline);
+        three.graphics.arc(holeFourX, holeFourY, bigRad, Math.PI, 0);
+        this.stage.addChild(three);
+    }
+
+    if (wormholes[4] === 1) {
+        var holeFiveX = x + 62;
+        var holeFiveY = y + 323;
+        var four = new createjs.Shape();
+        four.graphics.f(this.holeColor).s(this.outline);
+        four.graphics.arc(holeFiveX, holeFiveY, bigRad, Math.PI * 1.333, Math.PI * 0.333);
+        this.stage.addChild(four);
+    }
+
+    if (wormholes[5] === 1) {
+        var holeSixX = x + 65;
+        var holeSixY = y + 105;
+        var five = new createjs.Shape();
+        five.graphics.f(this.holeColor).s(this.outline);
+        five.graphics.arc(holeSixX, holeSixY, bigRad, Math.PI * 1.666, Math.PI * 0.666);
+        this.stage.addChild(five);
+    }
+};
+
+HexGrid.prototype.drawIncomeBig = function(x, y, income, active, color) {
+
+    var circle = new createjs.Shape();
+    circle.graphics.beginStroke(color);
+    circle.graphics.setStrokeStyle(1);
+    circle.graphics.beginFill(color).drawCircle(0, 0, 10);
+    circle.x = x;
+    circle.y = y;
+    this.stage.addChild(circle);
+
+};
+
+HexGrid.prototype.drawAdvancedIncome = function (x, y, count, active, color) {
+    var circle = new createjs.Shape();
+    circle.graphics.beginStroke(color);
+    circle.graphics.setStrokeStyle(1);
+    circle.graphics.beginFill(color).drawCircle(0, 0, 10);
+    circle.x = x;
+    circle.y = y;
+    this.stage.addChild(circle);
+
+
+    var advance = new createjs.Bitmap(this.advancedIncome);
+    advance.x = x - 12;
+    advance.y = y - 13 ;
+    this.stage.addChild(advance);
+
+
+    
+};
+
+HexGrid.prototype.drawCloseButton = function() {
+
+    var background = new createjs.Shape();
+    background.graphics.beginFill("red").drawRoundRect(0, 40, 150, 60, 10);
+
+    var label = new createjs.Text("Close", "bold 24px Sans-Serif", "#FFFFFF");
+    label.textAlign = "center";
+    label.textBaseline = "middle";
+    label.x = 150 / 2;
+    label.y = 70;
+
+    var button = new createjs.Container();
+    button.x = 20;
+    button.y = 20;
+    button.addChild(background, label);
+    button.mouseChildren = false;
+
+    button.addEventListener("click", this.drawGameBoard.bind(this));
+    this.stage.addChild(button);
+
+};
+
+HexGrid.prototype.takeAction = function(event) {
+    var mapId = event.target.name;
+    //console.info(mapId);
+
+    switch(mapId) {
+    
+        case 'EXP':
+            console.log('explore');
+            break;
+        case 'INF':
+            console.log('Influence');
+            break;
+        case 'RES':
+            console.log('Research');
+            break;
+        case 'UPG':
+            console.log('Upgrade');
+            break;
+        case 'BUI':
+            console.log('Build');
+            break;
+        case 'MOV':
+            console.log('Move');
+            break;
+        default:
+            console.log('dafuk');
+
+
+    }
+    
+};
+
+HexGrid.prototype.examineShip = function(event) {
+    var shipType = event.target.name;
+    console.log(shipType);
+
+
+
+
+};
 
