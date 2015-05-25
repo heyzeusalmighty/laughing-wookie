@@ -835,7 +835,7 @@ HexGrid.prototype.examineShip = function(event) {
 
     var idx = -1;
     for (var i = 0; i < this.playerShips.length; i++) {
-        console.log(this.playerShips[i].ShipId)
+        console.log(this.playerShips[i].ShipId);
         if (this.playerShips[i].ShipId == shipType) {
             idx = i;
             break;

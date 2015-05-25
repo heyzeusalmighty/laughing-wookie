@@ -14,6 +14,8 @@ namespace Occultation.DAL
     {
         Tuple<int, int> GetPlayerAndGameIds(string name, string gameGuid);
         MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId, int division);
+        int[] SetWormHoles(int index, int[] wormholes);
+        List<MapTile> GetExploredTiles(int gameId);
     }
 
     public class TurnRepository : ITurnRepository
@@ -144,6 +146,54 @@ namespace Occultation.DAL
             return null;
         }
 
+        public List<MapTile> GetExploredTiles(int gameId)
+        {
+            var mapdeck = context.MapDecks.Where(x => x.Revealed && x.WormHoleIndex != null).ToList();
+            var allZeTiles = new AvailableMapTile();
+
+            var tiles = (from deck in mapdeck
+                         join zTiles in allZeTiles.AllTheTiles on deck.MapId equals zTiles.MapId 
+                select new MapTile()
+                {
+                    x = deck.XCoords,
+                    y = deck.YCoords,
+                    Wormholes = SetWormHoles(deck.WormHoleIndex ?? 0, zTiles.Wormholes),
+                    MapId = zTiles.MapId
+                }
+                );
+
+
+
+            return tiles.ToList();
+        }
+
+
+
+        public int[] SetWormHoles(int index, int[] wormholes)
+        {
+            if (index == 0)
+            {
+                return wormholes;
+            }
+
+            var holes = new int[6];
+
+            var idx = 0;
+            for (int i = index; i < 6; i++)
+            {
+                holes[idx] = wormholes[i];
+                idx++;
+            }
+
+            for (int x = 0; x < index; x++)
+            {
+                holes[idx] = wormholes[x];
+                idx++;
+            }
+
+            return holes;
+
+        }
         #endregion
 
     }

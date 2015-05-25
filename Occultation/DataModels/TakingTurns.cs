@@ -35,5 +35,50 @@ namespace Occultation.DataModels
             }
             return null;
         }
+
+        public List<Coordinates> GetExploreOptions(int x, int y, int playerId)
+        {
+            var explored = Repo.GetExploredTiles();
+
+
+        }
+
+        public Coordinates[] GetNeighbors(int x, int y)
+        {
+            if (x%2 == 0)
+            {
+                return new Coordinates[]
+                {
+                    new Coordinates { X = x, Y = y - 1 },
+                    new Coordinates { X = x + 1, Y = y - 1 },
+                    new Coordinates { X = x + 1, Y = y },
+                    new Coordinates { X = x, Y = y + 1 },
+                    new Coordinates { X = x - 1, Y = y },
+                    new Coordinates { X = x - 1, Y = y - 1 }
+                };
+            }
+
+            return new Coordinates[]
+            {
+                new Coordinates { X = x, Y = y - 1 },
+                new Coordinates { X = x + 1, Y = y },
+                new Coordinates { X = x + 1, Y = y + 1 },
+                new Coordinates { X = x, Y = y + 1 },
+                new Coordinates { X = x - 1, Y = y + 1 },
+                new Coordinates { X = x - 1, Y = y }
+            };
+        
+
+        }
+
+
+        
+    }
+
+
+    public class Coordinates
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
     }
 }

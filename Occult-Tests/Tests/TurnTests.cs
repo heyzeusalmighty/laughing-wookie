@@ -52,6 +52,137 @@ namespace Occult_Tests.Tests
             CleanUpYourMess();
         }
 
+        [TestMethod]
+        public void GetNeighbors_EvenColumns()
+        {
+            var model = new TakingTurns();
+            var neighbors = model.GetNeighbors(2, 1);
+
+            Assert.AreEqual(6, neighbors.Count());
+
+            Assert.AreEqual(2, neighbors[0].X);
+            Assert.AreEqual(0, neighbors[0].Y);
+
+            Assert.AreEqual(3, neighbors[1].X);
+            Assert.AreEqual(0, neighbors[1].Y);
+
+            Assert.AreEqual(3, neighbors[2].X);
+            Assert.AreEqual(1, neighbors[2].Y);
+
+            Assert.AreEqual(2, neighbors[3].X);
+            Assert.AreEqual(2, neighbors[3].Y);
+            
+            Assert.AreEqual(1, neighbors[4].X);
+            Assert.AreEqual(1, neighbors[4].Y);
+
+            Assert.AreEqual(1, neighbors[5].X);
+            Assert.AreEqual(0, neighbors[5].Y);
+        }
+
+        [TestMethod]
+        public void GetNeighbors_OddColumns()
+        {
+            var model = new TakingTurns();
+            var neighbors = model.GetNeighbors(1, 1);
+
+            Assert.AreEqual(6, neighbors.Count());
+
+            Assert.AreEqual(1, neighbors[0].X);
+            Assert.AreEqual(0, neighbors[0].Y);
+
+            Assert.AreEqual(2, neighbors[1].X);
+            Assert.AreEqual(1, neighbors[1].Y);
+
+            Assert.AreEqual(2, neighbors[2].X);
+            Assert.AreEqual(2, neighbors[2].Y);
+
+            Assert.AreEqual(1, neighbors[3].X);
+            Assert.AreEqual(2, neighbors[3].Y);
+
+            Assert.AreEqual(0, neighbors[4].X);
+            Assert.AreEqual(2, neighbors[4].Y);
+
+            Assert.AreEqual(0, neighbors[5].X);
+            Assert.AreEqual(1, neighbors[5].Y);
+        }
+
+        [TestMethod]
+        public void GetNeighbors_EvenWildCards()
+        {
+            var model = new TakingTurns();
+            var neighbors = model.GetNeighbors(2, 2);
+
+            Assert.AreEqual(6, neighbors.Count());
+
+            Assert.AreEqual(2, neighbors[0].X);
+            Assert.AreEqual(1, neighbors[0].Y);
+
+            Assert.AreEqual(3, neighbors[1].X);
+            Assert.AreEqual(1, neighbors[1].Y);
+
+            Assert.AreEqual(3, neighbors[2].X);
+            Assert.AreEqual(2, neighbors[2].Y);
+
+            Assert.AreEqual(2, neighbors[3].X);
+            Assert.AreEqual(3, neighbors[3].Y);
+
+            Assert.AreEqual(1, neighbors[4].X);
+            Assert.AreEqual(2, neighbors[4].Y);
+
+            Assert.AreEqual(1, neighbors[5].X);
+            Assert.AreEqual(1, neighbors[5].Y);
+        }
+
+        [TestMethod]
+        public void GetNeighbors_OddWildCards()
+        {
+            var model = new TakingTurns();
+            var neighbors = model.GetNeighbors(9, 4);
+
+            Assert.AreEqual(6, neighbors.Count());
+
+            Assert.AreEqual(9, neighbors[0].X);
+            Assert.AreEqual(3, neighbors[0].Y);
+
+            Assert.AreEqual(10, neighbors[1].X);
+            Assert.AreEqual(4, neighbors[1].Y);
+
+            Assert.AreEqual(10, neighbors[2].X);
+            Assert.AreEqual(5, neighbors[2].Y);
+
+            Assert.AreEqual(9, neighbors[3].X);
+            Assert.AreEqual(5, neighbors[3].Y);
+
+            Assert.AreEqual(8, neighbors[4].X);
+            Assert.AreEqual(5, neighbors[4].Y);
+
+            Assert.AreEqual(8, neighbors[5].X);
+            Assert.AreEqual(4, neighbors[5].Y);
+        }
+
+
+        [TestMethod]
+        public void WormholeSetter()
+        {
+            var repo = new TurnRepository();
+
+            var worm = new int[] {0, 1, 0, 1, 1, 1};
+
+            const int first = 3;
+            var firstHoles = repo.SetWormHoles(first, worm);
+
+            Assert.AreEqual(1, firstHoles[0]);
+            Assert.AreEqual(1, firstHoles[1]);
+            Assert.AreEqual(1, firstHoles[2]);
+            Assert.AreEqual(0, firstHoles[3]);
+            Assert.AreEqual(1, firstHoles[4]);
+            Assert.AreEqual(0, firstHoles[5]);
+
+
+
+
+        }
+
 
         private void SetUpGame()
         {
