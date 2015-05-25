@@ -554,8 +554,6 @@ HexGrid.prototype.examineMapTile = function(event) {
         var shipStartY = y0;
         var shipStartX = x0 + 550;
 
-        console.log('shipstartx', shipStartX);
-
         var shipTitleLbl = new createjs.Text("Ships ", "32px Sans-Serif", "#000000");
         shipTitleLbl.x = shipStartX;
         shipTitleLbl.y = shipStartY;
@@ -837,13 +835,14 @@ HexGrid.prototype.examineShip = function(event) {
 
     var idx = -1;
     for (var i = 0; i < this.playerShips.length; i++) {
+        console.log(this.playerShips[i].ShipId)
         if (this.playerShips[i].ShipId == shipType) {
             idx = i;
             break;
         }
     }
 
-    if (idx > 0) {
+    if (idx > -1) {
 
         var spaceShip = this.playerShips[idx];
         
@@ -863,8 +862,10 @@ HexGrid.prototype.examineShip = function(event) {
 
 HexGrid.prototype.examineInterceptor = function(ship) {
 
+    console.info(ship);
+
     var infoX = 650;
-    var infoY = 300;
+    var infoY = 250;
     
     var title = new createjs.Text("INTERCEPTOR", "32px Sans-Serif", "#000000");
     title.x = infoX;
@@ -879,15 +880,41 @@ HexGrid.prototype.examineInterceptor = function(ship) {
     backTwo.name = "background";
     backTwo.graphics.beginFill("red").drawRoundRect(infoX + 150, infoY + 40, 120, 120, 5);
 
+
+
+
     var backThree = new createjs.Shape();
     backThree.name = "background";
-    backThree.graphics.beginFill("red").drawRoundRect(infoX, infoY + 190, 120, 120, 5);
+    backThree.graphics.beginFill("red").drawRoundRect(infoX, infoY + 210, 120, 120, 5);
 
     var backFour = new createjs.Shape();
     backFour.name = "background";
-    backFour.graphics.beginFill("red").drawRoundRect(infoX + 150, infoY + 190, 120, 120, 5);
+    backFour.graphics.beginFill("red").drawRoundRect(infoX + 150, infoY + 210, 120, 120, 5);
 
     this.stage.addChild(backOne, backTwo, backThree, backFour);
+
+
+    var oneName = (ship.Components[0].ComponentName != null) ? ship.Components[0].ComponentName : "Empty";
+    var oneDesc = new createjs.Text(oneName, "bold 14px Sans-Serif", "#000000");
+    oneDesc.x = infoX;
+    oneDesc.y = infoY + 170;
+
+    var twoName = (ship.Components[1] != null) ? ship.Components[1].ComponentName : "Empty";
+    var twoDesc = new createjs.Text(twoName, "bold 14px Sans-Serif", "#000000");
+    twoDesc.x = infoX + 150;
+    twoDesc.y = infoY + 170;
+
+    var threeName = (ship.Components[2] != null) ? ship.Components[2].ComponentName : "Empty";
+    var threeDesc = new createjs.Text(threeName, "bold 14px Sans-Serif", "#000000");
+    threeDesc.x = infoX;
+    threeDesc.y = infoY + 340;
+
+    var fourName = (ship.Components[3] != null) ? ship.Components[3].ComponentName : "Empty";
+    var fourDesc = new createjs.Text(fourName, "bold 14px Sans-Serif", "#000000");
+    fourDesc.x = infoX + 150;
+    fourDesc.y = infoY + 340;
+
+
 
     var itemOne = new createjs.Bitmap(this.viking);
     itemOne.x = infoX + 10;
@@ -899,9 +926,52 @@ HexGrid.prototype.examineInterceptor = function(ship) {
 
     var itemThree = new createjs.Bitmap(this.viking);
     itemThree.x = infoX + 10;
-    itemThree.y = infoY + 200;
+    itemThree.y = infoY + 220;
 
-    this.stage.addChild(itemOne, itemTwo, itemThree);
+    this.stage.addChild(itemOne, itemTwo, itemThree, oneDesc, twoDesc, threeDesc, fourDesc);
+
+    var initLbl = new createjs.Text("Initiative : " + ship.Stats.Initiative, "20px Sans-Serif", "#000000");
+    initLbl.x = infoX;
+    initLbl.y = infoY + 360;
+
+    var computerLbl = new createjs.Text("Computers : " + ship.Stats.Computers, "20px Sans-Serif", "#000000");
+    computerLbl.x = infoX;
+    computerLbl.y = infoY + 380;
+
+    var driveLbl = new createjs.Text("Drive : " + ship.Stats.Drive, "20px Sans-Serif", "#000000");
+    driveLbl.x = infoX;
+    driveLbl.y = infoY + 400;
+
+    var hullPointsLbl = new createjs.Text("Hull Points : " + ship.Stats.HullPoints, "20px Sans-Serif", "#000000");
+    hullPointsLbl.x = infoX;
+    hullPointsLbl.y = infoY + 420;
+
+    var totalPowerLbl = new createjs.Text("Total Power : " + ship.Stats.PowerAvailable, "20px Sans-Serif", "#000000");
+    totalPowerLbl.x = infoX;
+    totalPowerLbl.y = infoY + 440;
+
+    var powerConsumptionLbl = new createjs.Text("Power Consumed : " + ship.Stats.PowerConsumption, "20px Sans-Serif", "#000000");
+    powerConsumptionLbl.x = infoX;
+    powerConsumptionLbl.y = infoY + 460;
+
+    var shieldsLbl = new createjs.Text("Shields : " + ship.Stats.Shields, "20px Sans-Serif", "#000000");
+    shieldsLbl.x = infoX;
+    shieldsLbl.y = infoY + 480;
+
+    var yellowDiceLbl = new createjs.Text("Yellow Dice : " + ship.Stats.YellowDice, "20px Sans-Serif", "#000000");
+    yellowDiceLbl.x = infoX;
+    yellowDiceLbl.y = infoY + 500;
+
+    var orangeDiceLbl = new createjs.Text("Orange Dice : " + ship.Stats.OrangeDice, "20px Sans-Serif", "#000000");
+    orangeDiceLbl.x = infoX;
+    orangeDiceLbl.y = infoY + 520;
+
+    var redDiceLbl = new createjs.Text("Red Dice : " + ship.Stats.RedDice, "20px Sans-Serif", "#000000");
+    redDiceLbl.x = infoX;
+    redDiceLbl.y = infoY + 540;
+
+    this.stage.addChild(initLbl, computerLbl, driveLbl, hullPointsLbl, totalPowerLbl, powerConsumptionLbl, shieldsLbl, yellowDiceLbl, orangeDiceLbl, redDiceLbl);
+
 
     this.stage.update();
 };

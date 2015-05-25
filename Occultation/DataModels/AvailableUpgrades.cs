@@ -1,12 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Occultation.DataModels
 {
-   
+
+    public class AllUpgrades
+    {
+        public IEnumerable<ShipComponent> Components { get; set; }
+
+        public AllUpgrades()
+        {
+            Components= new List<ShipComponent>
+            {
+                new IonCannon(),
+                new Hull(),
+                new ElectronComputer(),
+                new NuclearSource(),
+                new NuclearDrive(),
+                new IonTurret(),
+                new AxionComputer(),
+                new FluxShield(),
+                new ConformalDrive(),
+                new ShardHull(),
+                new HyperGridSource(),
+                new PlasmaCannon(),
+                new PlasmaMissile(),
+                new PositronComputer(),
+                new GluonComputer(),
+                new AntiMatterCannon(),
+                new ImprovedHull(),
+                new GaussShield(),
+                new PhaseShield(),
+                new FusionDrive(),
+                new TachyonDrive(),
+                new FusionSource(),
+                new TachyonSource()
+            };
+        }
+
+    }
+        
+
         public class IonCannon : ShipComponent
         {
             public IonCannon()

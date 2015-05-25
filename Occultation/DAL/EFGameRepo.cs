@@ -258,6 +258,11 @@ namespace Occultation.DAL
             foreach (var ship in playerShips)
             {
                 ship.Components = context.ShipModelComponents.Where(x => x.ShipId == ship.ShipId).ToList();
+
+                if (ship.ShipType == "interceptor")
+                {
+                    ship.Stats = new Interceptor(ship.Components);
+                }
             }
 
             return playerShips;

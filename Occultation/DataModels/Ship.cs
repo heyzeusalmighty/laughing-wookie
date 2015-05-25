@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Occultation.DAL.EF;
 
 
 namespace Occultation.DataModels
@@ -176,6 +177,29 @@ namespace Occultation.DataModels
             Initialize(new NuclearSource());
             Initialize(new NuclearDrive());
             Initialize(new IonCannon());
+        }
+
+        public Interceptor(IEnumerable<ShipModelComponent> components)
+        {
+            var upgrades = new AllUpgrades();
+            TotalCompartments = new List<ShipPositions>
+            {
+                ShipPositions.Port1,
+                ShipPositions.Starboard1,
+                ShipPositions.Bow,
+                ShipPositions.Stern
+            };
+            Compartments = TotalCompartments.Count();
+            Initiative = 2;
+            Value = 5;
+            foreach (var comp in components)
+            {
+                var shipComp = upgrades.Components.FirstOrDefault(x => x.ComponentId == comp.ComponentId);
+                if (shipComp != null)
+                {
+                    Initialize(shipComp);
+                }
+            }
         }
 
     }

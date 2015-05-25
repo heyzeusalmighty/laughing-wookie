@@ -15,5 +15,6 @@ namespace Occultation.DataModels
         public string Color { get; set; }
         public string ShipType { get; set; }
         public List<ShipModelComponent> Components { get; set; }
+        public Ship Stats { get; set; }
     }
 }
