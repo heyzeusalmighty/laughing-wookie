@@ -34,11 +34,22 @@ namespace Occultation.ViewModels
         {
             CleanUpDatabase();
             
-            BuildGame(2);
-            BuildGame(3);
-            BuildGame(4);
-            BuildGame(5);
-            BuildGame(6);
+            //BuildGame(2);
+            //BuildGame(3);
+            //BuildGame(4);
+            //BuildGame(5);
+            //BuildGame(6);
+            var repo = new EFGameRepo();
+            var gameCreator = repo.CreateGame("For Testing");
+            var game = repo.GetGame(gameCreator);
+
+            var creatorModel = new GameCreator(repo);
+            creatorModel.AddPlayerToGame(1, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(2, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(3, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(4, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(5, game.GameIdentifier);
+            creatorModel.AddPlayerToGame(6, game.GameIdentifier);
 
             return "yay";
         }
@@ -96,6 +107,7 @@ namespace Occultation.ViewModels
                 context.Database.ExecuteSqlCommand("TRUNCATE TABLE [ScienceTrack]");
                 context.Database.ExecuteSqlCommand("TRUNCATE TABLE [ShipModelComponents]");
                 context.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tiles]");
+                context.Database.ExecuteSqlCommand("TRUNCATE TABLE [PlayerShips]");
             }
 
 

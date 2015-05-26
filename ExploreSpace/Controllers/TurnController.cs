@@ -37,16 +37,17 @@ namespace ExploreSpace.Controllers
         [HttpPost]
         public JsonResult ExploreByPlayer(int x, int y, string gameId, string player)
         {
-            var turns = new TakingTurns();
-            var explore = turns.Explore(player, gameId, x, y);
-            return Json(explore);
+            //var turns = new TakingTurns();
+            //var explore = turns.Explore(player, gameId, x, y);
+            //return Json(explore);
+            return Json("test");
         }
 
         [HttpPost]
         public void SetWormholeIndex(int map, int index, string gameId, string name)
         {
-            var turns = new TakingTurns();
-            turns.SetWormholeIndex(map, index, gameId, name);
+            //var turns = new TakingTurns();
+            //turns.SetWormholeIndex(map, index, gameId, name);
         }
 
     }

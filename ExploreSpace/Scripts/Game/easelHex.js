@@ -257,7 +257,8 @@ HexGrid.prototype.drawGameTile = function(tile) {
     var playerColor = this.getColor(tile.Occupied);
 
     var polygon = new createjs.Shape();
-    polygon.graphics.beginStroke("#003432").beginFill(playerColor);
+    //polygon.graphics.beginStroke("#003432").beginFill(playerColor);
+    polygon.graphics.beginStroke(playerColor).setStrokeStyle(3).beginFill("#004E4B");
     polygon.graphics.moveTo(x0 + this.width - this.side, y0)
         .lineTo(x0 + this.side, y0)
         .lineTo(x0 + this.width, y0 + (this.height / 2))
@@ -337,19 +338,19 @@ HexGrid.prototype.drawGameTile = function(tile) {
 
     if (containsShips) {
 
-        if (tile.Occupied == 'Black') {
+        //if (tile.Occupied == 'Black') {
             var ship = new createjs.Bitmap(this.whiteShip);
             ship.x = x0 + (this.width - 75);
             ship.y = y0 + ((this.height / 2) - 5);
             this.stage.addChild(ship);
             //console.info('wShip');
-        } else {
-            var bShip = new createjs.Bitmap(this.blackShip);
-            bShip.x = x0 + (this.width - 75);
-            bShip.y = y0 + ((this.height / 2) - 5);
-            this.stage.addChild(bShip);
-            //console.info('bship');
-        }
+        //} else {
+        //    var bShip = new createjs.Bitmap(this.blackShip);
+        //    bShip.x = x0 + (this.width - 75);
+        //    bShip.y = y0 + ((this.height / 2) - 5);
+        //    this.stage.addChild(bShip);
+        //    //console.info('bship');
+        //}
     }
 
     //console.log(tile.Wormholes);
@@ -1245,14 +1246,16 @@ HexGrid.prototype.rotateWormholes = function(event) {
 HexGrid.prototype.acceptWormholes = function(event) {
 
     console.log('i deem this acceptable', this.selectedTile.MapId, this.wormIndex);
-
+    var context = this;
     //SetWormholeIndex(int map, int index, string gameId, string name)
     $.ajax({ url: "/Turn/SetWormHoleIndex", method: "POST", data: { "map": this.selectedTile.MapId, "index": this.wormIndex, "gameId": this.gameId, "name": this.playerName } }).done(function() {
-       
-        for (var i = 0; i < this.gameTiles.length; i++) {
-            if (this.selectedTile.MapId == this.gameTiles[i].MapId) {
-                this.gameTiles[i].Wormholes = this.selectedTile.Wormholes;
-                this.drawGameBoard();
+
+        console.log(context.gameTiles);
+
+        for (var i = 0; i < context.gameTiles.length; i++) {
+            if (context.selectedTile.MapId == context.gameTiles[i].MapId) {
+                context.gameTiles[i].Wormholes = context.selectedTile.Wormholes;
+                context.drawGameBoard();
             }
         }
 
