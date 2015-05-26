@@ -95,6 +95,7 @@ namespace Occult_Tests.Tests
                 context.Database.ExecuteSqlCommand("TRUNCATE TABLE [ScienceTrack]");
                 context.Database.ExecuteSqlCommand("TRUNCATE TABLE [ShipModelComponents]");
                 context.Database.ExecuteSqlCommand("TRUNCATE TABLE [Tiles]");
+                context.Database.ExecuteSqlCommand("TRUNCATE TABLE [PlayerShips]");
                 //context.Database.ExecuteSqlCommand("TRUNCATE TABLE []");
             }
 

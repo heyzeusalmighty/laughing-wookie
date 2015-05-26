@@ -57,25 +57,33 @@ namespace Occultation.ViewModels
         public void StartGame(string gameGuid)
         {
             var game = Repository.GetGame(gameGuid);
+
+
+
             if (game != null)
             {
-                Players = Repository.GetPlayersForGame(game.GameId);
 
-                //build map tiles
-                BuildMapTiles(game.GameId);
-                
-
-                foreach (var playa in Players)
+                if (game.Status == "CREATED")
                 {
-                    //build player science tracks
-                    BuildScienceTrack(playa.PlayerId);
+                    Players = Repository.GetPlayersForGame(game.GameId);
 
-                    //build ships
-                    BuildShip(playa.PlayerId);
+                    //build map tiles
+                    BuildMapTiles(game.GameId);
+
+
+                    foreach (var playa in Players)
+                    {
+                        //build player science tracks
+                        BuildScienceTrack(playa.PlayerId);
+
+                        //build ships
+                        BuildShip(playa.PlayerId);
+                    }
+
+                    Repository.SetGameStatus("STARTED", game.GameId);
+
                 }
-                
-                
-               
+
 
             }
         }

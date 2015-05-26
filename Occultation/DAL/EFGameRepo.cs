@@ -181,10 +181,7 @@ namespace Occultation.DAL
 
         public void AddTilesToNewGame(List<MapDeck> tiles)
         {
-            foreach (var tile in tiles)
-            {
-                context.MapDecks.Add(tile);
-            }
+            context.MapDecks.AddRange(tiles);
             context.SaveChanges();
         }
 
@@ -280,7 +277,15 @@ namespace Occultation.DAL
             return null;
         }
 
-
+        public void SetGameStatus(string status, int gameId)
+        {
+            var game = context.Games.FirstOrDefault(x => x.GameId == gameId);
+            if (game != null)
+            {
+                game.Status = status;
+                context.SaveChanges();
+            }
+        }
 
     }
 }

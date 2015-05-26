@@ -319,5 +319,10 @@ namespace Occultation.DAL
         }
 
         //private MapDeck GetTile()
+
+        public void SetGameStatus(string status, int gameId)
+        {
+            
+        }
     }
 }

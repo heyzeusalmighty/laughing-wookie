@@ -38,6 +38,11 @@ namespace Occultation.ViewModels
                 BuildMapTiles(game.GameId);
 
 
+                using (var db = new GameModel())
+                {
+                    var count = db.MapDecks.Count(x => x.GameId == game.GameId);
+                }
+
                 foreach (var playa in Players)
                 {
                     //build player science tracks
@@ -369,7 +374,7 @@ namespace Occultation.ViewModels
 
             var shipModel = Repository.AddNewShipModel(model, interceptor.Components);
 
-            shipModels.Add(Repository.AddNewShipModel(model, interceptor.Components));
+            shipModels.Add(shipModel);
 
             
             var playerTile = PlayerDeck.FirstOrDefault(x => x.PlayerId == playerId);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Occultation.DAL;
+using Occultation.DAL.EF;
 using Occultation.DataModels;
 
 namespace Occultation.ViewModels
@@ -35,7 +36,8 @@ namespace Occultation.ViewModels
             {
                 MapTiles = GetMapTiles(gameGuid),
                 Counts = GetUnrevealedTiles(gameGuid),
-                Ships = GetShipsForMap(gameGuid)
+                Ships = GetShipsForMap(gameGuid),
+                Players = GetPlayersForGame(gameGuid)
             };
             return map;
         }
@@ -83,7 +85,8 @@ namespace Occultation.ViewModels
         private RemainingMapCounts GetUnrevealedTiles(string gameGuid)
         {
             var game = repository.GetGame(gameGuid);
-            var counts = new RemainingMapCounts();
+            var counts = new RemainingMapCounts {GameId = gameGuid};
+
             if (game != null)
             {
                 var realTiles = new AvailableMapTile().AllTheTiles;
@@ -123,6 +126,25 @@ namespace Occultation.ViewModels
         private List<ShipForMap> GetShipsForMap(string gameGuid)
         {
             return repository.GetShipsForGame(gameGuid);
+        }
+
+        private List<Player> GetPlayersForGame(string gameGuid)
+        {
+            var game = repository.GetGame(gameGuid);
+            var fullPlayers = repository.GetPlayersForGame(game.GameId);
+            var simpleList = (from player in fullPlayers
+                select new Player
+                {
+                    Username = player.Username,
+                    DiscColor = player.DiscColor,
+                    CurrentBrown = player.CurrentBrown,
+                    CurrentOrange = player.CurrentOrange,
+                    CurrentPink = player.CurrentPink,
+                    TurnOrder = player.TurnOrder,
+                    Pass = player.Pass
+                }
+                );
+            return simpleList.ToList();
         }
     }
 }

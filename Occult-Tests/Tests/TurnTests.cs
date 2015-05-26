@@ -32,18 +32,18 @@ namespace Occult_Tests.Tests
                     var firstPlayer = db.Players.First(x => x.GameId == testGame.GameId);
 
                     var turnTaker = new TakingTurns();
-                    var tile = turnTaker.Explore(firstPlayer.Username, testGame.GameIdentifier, 1, 5, 4);
+                    var tile = turnTaker.Explore(firstPlayer.Username, testGame.GameIdentifier, 5, 4);
                     Assert.AreEqual(firstPlayer.DiscColor, tile.Occupied);
 
                     //Tests that the coordinates are already used
-                    var unTile = turnTaker.Explore(firstPlayer.Username, testGame.GameIdentifier, 1, 5, 4);
+                    var unTile = turnTaker.Explore(firstPlayer.Username, testGame.GameIdentifier,  5, 4);
                     Assert.IsNull(unTile);
 
                     //mark remaining Division One tiles as discovered
                     db.Database.ExecuteSqlCommand("update Mapdeck set XCoords = 1, YCoords = 1 where GameId = {0}",
                         GameId);
 
-                    var noMoreTiles = turnTaker.Explore(firstPlayer.Username, testGame.GameIdentifier, 1, 5, 4);
+                    var noMoreTiles = turnTaker.Explore(firstPlayer.Username, testGame.GameIdentifier, 5, 4);
                     Assert.IsNull(noMoreTiles);
 
 
@@ -159,8 +159,7 @@ namespace Occult_Tests.Tests
             Assert.AreEqual(8, neighbors[5].X);
             Assert.AreEqual(4, neighbors[5].Y);
         }
-
-
+        
         [TestMethod]
         public void WormholeSetter()
         {
@@ -183,6 +182,23 @@ namespace Occult_Tests.Tests
 
         }
 
+        [TestMethod]
+        public void CheckDiv()
+        {
+            var turn = new TakingTurns();
+
+            Assert.AreEqual(2, turn.GetDivisionForCoordinates(8, 5));
+            Assert.AreEqual(3, turn.GetDivisionForCoordinates(8, 7));
+            Assert.AreEqual(1, turn.GetDivisionForCoordinates(7, 4));
+
+            Assert.AreEqual(2, turn.GetDivisionForCoordinates(4, 5));
+            Assert.AreEqual(3, turn.GetDivisionForCoordinates(2, 7));
+            Assert.AreEqual(1, turn.GetDivisionForCoordinates(6, 6));
+            Assert.AreEqual(2, turn.GetDivisionForCoordinates(5, 6));
+            Assert.AreEqual(1, turn.GetDivisionForCoordinates(6, 4));
+
+
+        }
 
         private void SetUpGame()
         {

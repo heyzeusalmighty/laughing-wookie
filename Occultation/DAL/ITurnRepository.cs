@@ -13,7 +13,7 @@ namespace Occultation.DAL
     public interface ITurnRepository : IDisposable
     {
         Tuple<int, int> GetPlayerAndGameIds(string name, string gameGuid);
-        MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId, int division);
+        MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId,int division);
         int[] SetWormHoles(int index, int[] wormholes);
         List<MapTile> GetExploredTiles(int gameId);
     }
@@ -158,7 +158,8 @@ namespace Occultation.DAL
                     x = deck.XCoords,
                     y = deck.YCoords,
                     Wormholes = SetWormHoles(deck.WormHoleIndex ?? 0, zTiles.Wormholes),
-                    MapId = zTiles.MapId
+                    MapId = zTiles.MapId,
+                    PlayerId = deck.PlayerId
                 }
                 );
 

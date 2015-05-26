@@ -25,6 +25,7 @@ namespace Occultation.DataModels
         public int Aliens { get; set; }
         public string Occupied { get; set; }
         public bool Reward { get; set; }
+        public int? PlayerId { get; set; }
 
     }
 

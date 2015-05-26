@@ -14,6 +14,9 @@
     this.explore = explore;
     this.exploreMode = false;
     this.bigTile = 0;
+    this.gameId = 'game';
+    this.exploreTiles = [];
+    this.playerName = "";
 
     //Player Colors
     this.greenPlayer = "#2C8437";
@@ -52,6 +55,14 @@
     //createjs.Ticker.addEventListener("tick", stage);
 
 }
+
+HexGrid.prototype.setGameIdentifier = function(game) {
+    this.gameId = game;
+};
+
+HexGrid.prototype.setPlayerName = function(name) {
+    this.playerName = name;
+};
 
 HexGrid.prototype.setNewHexDimensions = function () {
     this.height = Math.sqrt(3) * this.radius;
@@ -801,6 +812,7 @@ HexGrid.prototype.takeAction = function(event) {
     
         case 'EXP':
             console.log('explore');
+            this.prepareExplore();
             break;
         case 'INF':
             console.log('Influence');
@@ -974,5 +986,90 @@ HexGrid.prototype.examineInterceptor = function(ship) {
 
 
     this.stage.update();
+};
+
+HexGrid.prototype.prepareExplore = function() {
+    this.drawGameBoard();
+    var context = this;
+
+    $.ajax({ url: "/Turn/GetExploreNeighborsByPlayer", data: { "gameId": this.gameId, "player": this.playerName } }).done(function (data) {
+        context.drawExploreTiles(data);
+    });
+};
+
+HexGrid.prototype.drawExploreTiles = function(tiles) {
+
+    this.exploreTiles = tiles;
+    for (var i = 0; i < this.exploreTiles.length; i++) {
+        console.log(this.exploreTiles[i].X, this.exploreTiles[i].Y);
+        this.drawExploreCandidateTile(this.exploreTiles[i].X, this.exploreTiles[i].Y);
+    }
+
+    this.stage.update();
+
+};
+
+HexGrid.prototype.drawExploreCandidateTile = function(xCoord, yCoord) {
+
+    var y0 = xCoord % 2 == 0 ? (yCoord * this.height) + this.canvasOriginY : (yCoord * this.height) + this.canvasOriginY + (this.height / 2);
+    var x0 = (xCoord * this.side) + this.canvasOriginX;
+    
+    var polygon = new createjs.Shape();
+    polygon.graphics.beginStroke("#003432").beginFill("DeepSkyBlue");
+    polygon.graphics.moveTo(x0 + this.width - this.side, y0)
+        .lineTo(x0 + this.side, y0)
+        .lineTo(x0 + this.width, y0 + (this.height / 2))
+        .lineTo(x0 + this.side, y0 + this.height)
+        .lineTo(x0 + this.width - this.side, y0 + this.height)
+        .lineTo(x0, y0 + (this.height / 2));
+    polygon.graphics.closePath();
+
+    this.stage.addChild(polygon);
+
+
+    var background = new createjs.Shape();
+    background.graphics.beginFill("gray").drawCircle(0, 0, 25);
+    background.x = x0 + 25;
+    background.y = y0 + 20;
+
+    var label = new createjs.Text("Select", "bold 14px Sans-Serif", "#FFFFFF");
+    label.textAlign = "center";
+    label.textBaseline = "middle";
+    label.x = x0 + 25;
+    label.y = y0 + 20;
+
+    var button = new createjs.Container();
+    button.x = 20;
+    button.y = 20;
+    button.addChild(background, label);
+    button.mouseChildren = false;
+    button.cursor = "pointer";
+    button.name = xCoord + "," + yCoord;
+
+    button.addEventListener("click", this.exploreThisTile.bind(this));
+    this.stage.addChild(button);
+
+
+};
+
+HexGrid.prototype.exploreThisTile = function(event) {
+    this.drawGameBoard();
+
+    console.log(event.target.name);
+
+    var x, y;
+    var coords = event.target.name.split(',');
+    x = coords[0];
+    y = coords[1];
+    console.info(x, y);
+    var context = this;
+
+    //int x, int y, string gameId, string player
+    $.ajax({ url: '/Turn/ExploreByPlayer', method: "POST", data: { "x" : x, "y": y, "gameId": this.gameId, "player": this.playerName} }).done(function(data) {
+        console.info(data);
+        context.drawGameTile(data);
+    });
+
+
 };
 

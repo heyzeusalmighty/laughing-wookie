@@ -28,6 +28,7 @@ namespace Occultation.DAL
         List<Game> GetAllGames();
         void SaveNewShip(PlayerShip ship);
         List<ShipForMap> GetShipsForGame(string gameGuid);
+        void SetGameStatus(string status, int gameId);
 
     }
 }

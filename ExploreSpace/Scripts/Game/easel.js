@@ -13,9 +13,19 @@ $(document).ready(function() {
     var pink = "#D46A6A";
     var tiles = [];
     var ships = [];
-    
+    var radius = 45;
+    var sx = 6;
+    var sy = 5;
+    var cols = 13;
+    var rows = 11;
 
     var stage = new createjs.Stage("demoCanvas");
+    var hexagonGrid = new HexGrid(stage, radius, background, orange, brown, pink, cols, rows, false);
+    createjs.EventDispatcher.initialize(HexGrid.prototype);
+    
+
+    
+    
     buildHexGrid();
     //buildActionBar();
 
@@ -49,26 +59,22 @@ $(document).ready(function() {
 
     function buildHexGrid() {
         
-
-
         $('#loadingSpinner').show();
-
-        var radius = 45;
-        var sx = 6;
-        var sy = 5;
-        var cols = 13;
-        var rows = 11;
-
-        var hexagonGrid = new HexGrid(stage, radius, background, orange, brown, pink, cols, rows, false);
-        createjs.EventDispatcher.initialize(HexGrid.prototype);
-
-
+        
         $.ajax({ url: "/api/map" }).done(function (data) {
             $('#loadingSpinner').hide();
             //hexagonGrid.processShips(data.Ships);
             tiles = data.MapTiles;
             processMapTiles();
             hexagonGrid.buildGameHexes(tiles, data.Ships);
+            hexagonGrid.setGameIdentifier(data.Counts.GameId);
+
+            $.each(data.Players, function() {
+                $('#player').append($("<option />").text(this.Username).val(this.Username));
+            });
+
+            hexagonGrid.setPlayerName(data.Players[0].Username);
+
         });
 
 
@@ -94,13 +100,20 @@ $(document).ready(function() {
                     tiles[i].color = divisionThree;
                     break;
                 default:
-                    console.log('division not found');
+                    console.log('division not found', tiles[i].Division);
             }
 
             //hexagonGrid.buildGameHex(tiles[i]);
         }
         
     }
+
+    $('#player').change(function() {
+        var currentPlayer = $('#player option:selected').val();
+        console.info('Current Player', currentPlayer);
+        hexagonGrid.setPlayerName(currentPlayer);
+    });
+
 
 });
 

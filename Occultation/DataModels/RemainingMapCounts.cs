@@ -11,5 +11,6 @@ namespace Occultation.DataModels
         public int DivisionOne { get; set; }
         public int DivisionTwo { get; set; }
         public int DivisionThree { get; set; }
+        public string GameId { get; set; }
     }
 }

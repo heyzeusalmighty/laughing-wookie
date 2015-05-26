@@ -803,7 +803,7 @@ HexagonGrid.prototype.whatDivAmI = function(x, y) {
             }
             break;
         default:
-            console.warn('div not found');
+            console.warn('div not found', x, y);
     }
 
 

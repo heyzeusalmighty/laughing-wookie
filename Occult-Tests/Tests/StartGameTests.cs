@@ -56,6 +56,11 @@ namespace Occult_Tests.Tests
         [TestMethod]
         public void CreateAGameForReal()
         {
+            var clean = new DataPopulate();
+            clean.CleanUpDatabase();
+
+            
+
             var repo = new EFGameRepo();
             var gameCreator = repo.CreateGame("For Testing");
             var game = repo.GetGame(gameCreator);
