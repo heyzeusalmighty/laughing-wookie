@@ -73,7 +73,7 @@ namespace Occult_Tests.Tests
             creatorModel.AddPlayerToGame(5, game.GameIdentifier);
             creatorModel.AddPlayerToGame(6, game.GameIdentifier);
 
-
+            //if there are 6 players, it starts the game automagically
             var model = new StartGameJob(repo);
             model.StartGame(game.GameIdentifier);
 

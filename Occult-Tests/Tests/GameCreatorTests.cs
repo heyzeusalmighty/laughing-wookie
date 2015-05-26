@@ -73,7 +73,9 @@ namespace Occult_Tests.Tests
             var model = new GameCreator(repo);
             var msg = model.AddPlayerToGame(6, "realGuid");
 
-            model.StartGame("realGuid");
+            var start = new StartGameJob(repo);
+            start.StartGame("realGuid");
+
 
             //Assert.AreEqual(5, repo.ShipModel.Count);
 

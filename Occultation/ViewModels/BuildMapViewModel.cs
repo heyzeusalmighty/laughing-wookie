@@ -56,6 +56,32 @@ namespace Occultation.ViewModels
                     var realTile = realTiles.FirstOrDefault(x => x.MapId == tiley.MapId);
                     if (realTile != null)
                     {
+                        var holes = new int[6];
+                        if (tiley.WormHoleIndex != null)
+                        {
+                            var idx = 0;
+                            var tId = tiley.WormHoleIndex ?? 0;
+
+
+                            for (var i = tId; i < 6; i++)
+                            {
+                                holes[idx] = realTile.Wormholes[i];
+                                idx++;
+                            }
+
+                            for (var x = 0; x < tId; x++)
+                            {
+                                holes[idx] = realTile.Wormholes[x];
+                                idx++;
+                            }
+                        }
+                        else
+                        {
+                            holes = realTile.Wormholes;
+                        }
+
+
+
                         var occupied = new MapTile
                         {
                             Aliens = realTile.Aliens,
@@ -70,9 +96,11 @@ namespace Occultation.ViewModels
                             PinkAdvanced = realTile.PinkAdvanced,
                             VictoryPoints = realTile.VictoryPoints,
                             White = realTile.White,
-                            Wormholes = realTile.Wormholes,
+                            Wormholes = holes,
                             x = tiley.XCoords,
-                            y = tiley.YCoords
+                            y = tiley.YCoords,
+                            IsSet = (tiley.WormHoleIndex != null),
+                            PlayerId = tiley.PlayerId
                         };
                         revealed.Add(occupied);
 
@@ -141,7 +169,8 @@ namespace Occultation.ViewModels
                     CurrentOrange = player.CurrentOrange,
                     CurrentPink = player.CurrentPink,
                     TurnOrder = player.TurnOrder,
-                    Pass = player.Pass
+                    Pass = player.Pass,
+                    PlayerId = player.PlayerId
                 }
                 );
             return simpleList.ToList();

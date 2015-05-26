@@ -23,7 +23,7 @@ namespace Occultation.DAL
         void AddTilesToNewGame(List<MapDeck> tiles);
         List<MapDeck> GetRevealedTiles(int gameId);
         MapDeck GetNextTile(int gameId, int div, int x, int y);
-        void SetPlayerColor(int playerId, string color);
+        void SetPlayerColor(int playerId, string color, int mapDeckId);
         List<GameUser> GetAllGameUsers();
         List<Game> GetAllGames();
         void SaveNewShip(PlayerShip ship);

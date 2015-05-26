@@ -17,13 +17,15 @@
     this.gameId = 'game';
     this.exploreTiles = [];
     this.playerName = "";
+    this.selectedTile = {};
+    this.wormIndex = 0;
 
     //Player Colors
     this.greenPlayer = "#2C8437";
     this.blackPlayer = "#010101";
-    this.bluePlayer = "rgba(2,105,255,0.5)";
+    this.bluePlayer = "#2F4FD4";
     this.redPlayer = "#D10F40";
-    this.yellowPlayer = "rgba(255,215,0,0.3)";
+    this.yellowPlayer = "#FFF51D";
     this.whitePlayer = "#C4C2B6";
     this.central = "rgba(215,40,40,0.8)";
     this.holeColor = "#D4D4D4";
@@ -60,8 +62,20 @@ HexGrid.prototype.setGameIdentifier = function(game) {
     this.gameId = game;
 };
 
-HexGrid.prototype.setPlayerName = function(name) {
+HexGrid.prototype.setPlayerName = function(name, playerId) {
     this.playerName = name;
+    this.drawGameBoard();
+    console.info("current", playerId);
+    for (var i = 0; i < this.gameTiles.length; i++) {
+        if (!this.gameTiles[i].IsSet && this.gameTiles[i].PlayerId == playerId) {
+            this.wormIndex = 0;
+            //this.drawGameBoard();
+            this.setWormholesOnTile(this.gameTiles[i]);
+            break;
+        }
+    }
+
+
 };
 
 HexGrid.prototype.setNewHexDimensions = function () {
@@ -1073,3 +1087,177 @@ HexGrid.prototype.exploreThisTile = function(event) {
 
 };
 
+HexGrid.prototype.setWormholesOnTile = function(tile) {
+
+    this.selectedTile = tile;
+
+    var y0 = tile.x % 2 == 0 ? (tile.y * this.height) + this.canvasOriginY : (tile.y * this.height) + this.canvasOriginY + (this.height / 2);
+    var x0 = (tile.x * this.side) + this.canvasOriginX;
+    
+    //make sure the box isn't covering up the tile
+    var rectX = (x0 > 500) ? 25 : 525;
+    var rectY = (y0 > 500) ? 25 : 525;
+
+
+
+    var background = new createjs.Shape();
+    background.graphics.beginStroke("red");
+    background.graphics.setStrokeStyle(2);
+    background.graphics.beginFill("white").drawRoundRect(rectX, rectY, 450, 150, 10);
+
+    var label = new createjs.Text("Select wormhole orientation", "bold 24px Sans-Serif", "#000000");
+    label.x = rectX + 25;
+    label.y = rectY + 25;
+
+    var startAngle = 120 * Math.PI / 180;
+    var endAngle = 60 * Math.PI / 180;
+
+    var arc = new createjs.Shape();
+    arc.graphics.beginStroke("black");
+    arc.graphics.setStrokeStyle(4);
+    arc.graphics.arc(rectX + 50, rectY + 100, 25, startAngle, endAngle);
+
+    var arrow = new createjs.Shape();
+    arrow.graphics.beginStroke("black").setStrokeStyle(4).moveTo(-10, +10).lineTo(0, 0).lineTo(-10, -10);
+    var degree = 120 / Math.PI * 180;
+    arrow.x = rectX + 41;
+    arrow.y = rectY + 124;
+    arrow.rotation = degree;
+
+    var counterBack = new createjs.Shape();
+    counterBack.graphics.beginStroke("red");
+    counterBack.graphics.setStrokeStyle(2);
+    counterBack.graphics.beginFill("#FFAAAA").drawRoundRect(rectX + 20, rectY + 70, 60, 60, 10);
+
+    var counter = new createjs.Container();
+    counter.x = 0;
+    counter.y = 0;
+    counter.addChild(counterBack, arc, arrow);
+    counter.mouseChildren = false;
+    counter.cursor = "pointer";
+    counter.name = "counter";
+    counter.addEventListener("click", this.rotateWormholes.bind(this));
+
+    var clockArc = new createjs.Shape();
+    clockArc.graphics.beginStroke("black");
+    clockArc.graphics.setStrokeStyle(4);
+    clockArc.graphics.arc(rectX + 150, rectY + 100, 25, startAngle, endAngle);
+
+    var clockArrow = new createjs.Shape();
+    clockArrow.graphics.beginStroke("black").setStrokeStyle(4).moveTo(-10, +10).lineTo(0, 0).lineTo(-10, -10);
+    clockArrow.x = rectX + 160;
+    clockArrow.y = rectY + 124;
+    clockArrow.rotation = (400 / Math.PI);
+
+    var clockBack = new createjs.Shape();
+    clockBack.graphics.beginStroke("red");
+    clockBack.graphics.setStrokeStyle(2);
+    clockBack.graphics.beginFill("#FFAAAA").drawRoundRect(rectX + 120, rectY + 70, 60, 60, 10);
+
+    var clockwise = new createjs.Container();
+    clockwise.x = 0;
+    clockwise.y = 0;
+    clockwise.addChild(clockBack, clockArc, clockArrow);
+    clockwise.mouseChildren = false;
+    clockwise.cursor = "pointer";
+    clockwise.name = "clockwise";
+    clockwise.addEventListener("click", this.rotateWormholes.bind(this));
+    
+
+
+    var acceptBack = new createjs.Shape();
+    acceptBack.graphics.beginStroke("black");
+    acceptBack.graphics.setStrokeStyle(2);
+    acceptBack.graphics.beginFill("green").drawRoundRect(rectX + 240, rectY + 70, 120, 60, 10);
+
+    var acceptLbl = new createjs.Text("Acceptable", "bold 20px Sans-Serif", "#FFFFFF");
+    acceptLbl.textAlign = "center";
+    acceptLbl.textBaseline = "middle";
+    acceptLbl.x = rectX + 300;
+    acceptLbl.y = rectY + 100;
+
+    var accept = new createjs.Container();
+    accept.x = 0;
+    accept.y = 0;
+    accept.addChild(acceptBack, acceptLbl);
+    accept.mouseChildren = false;
+    accept.cursor = "pointer";
+    accept.name = "clockwise";
+    accept.addEventListener("click", this.acceptWormholes.bind(this));
+
+
+    this.stage.addChild(background, label, counter, clockwise, accept);
+
+    
+    
+    var playerColor = this.getColor(tile.Occupied);
+
+    var polygon = new createjs.Shape();
+    polygon.graphics.beginStroke("#003432").beginFill(playerColor);
+    polygon.graphics.moveTo(x0 + this.width - this.side, y0)
+        .lineTo(x0 + this.side, y0)
+        .lineTo(x0 + this.width, y0 + (this.height / 2))
+        .lineTo(x0 + this.side, y0 + this.height)
+        .lineTo(x0 + this.width - this.side, y0 + this.height)
+        .lineTo(x0, y0 + (this.height / 2));
+    polygon.graphics.closePath();
+    this.stage.addChild(polygon);
+
+    this.drawWormHolesSmall(x0, y0, tile.Wormholes);
+
+    
+    this.stage.update();
+
+};
+
+HexGrid.prototype.rotateWormholes = function(event) {
+
+    var direction = event.target.name;
+    console.info("turning", direction);
+    var holes = this.selectedTile.Wormholes;
+    console.log(holes, this.selectedTile.MapId);
+
+    if (direction == 'clockwise') {
+        var popped = holes.pop();
+        holes.unshift(popped);
+
+        if (this.wormIndex == 0) {
+            this.wormIndex = 5;
+        } else {
+            this.wormIndex--;
+        }
+
+    } else {
+        var shifted = holes.shift();
+        holes.push(shifted);
+
+        if (this.wormIndex == 5) {
+            this.wormIndex = 0;
+        } else {
+            this.wormIndex++;
+        }
+    }
+    this.selectedTile.Wormholes = holes;
+    this.setWormholesOnTile(this.selectedTile);
+
+};
+
+HexGrid.prototype.acceptWormholes = function(event) {
+
+    console.log('i deem this acceptable', this.selectedTile.MapId, this.wormIndex);
+
+    //SetWormholeIndex(int map, int index, string gameId, string name)
+    $.ajax({ url: "/Turn/SetWormHoleIndex", method: "POST", data: { "map": this.selectedTile.MapId, "index": this.wormIndex, "gameId": this.gameId, "name": this.playerName } }).done(function() {
+       
+        for (var i = 0; i < this.gameTiles.length; i++) {
+            if (this.selectedTile.MapId == this.gameTiles[i].MapId) {
+                this.gameTiles[i].Wormholes = this.selectedTile.Wormholes;
+                this.drawGameBoard();
+            }
+        }
+
+        
+    });
+
+
+};

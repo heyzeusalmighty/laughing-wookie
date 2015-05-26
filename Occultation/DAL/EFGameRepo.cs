@@ -207,13 +207,19 @@ namespace Occultation.DAL
             }
         }
 
-        public void SetPlayerColor(int playerId, string color)
+        public void SetPlayerColor(int playerId, string color, int mapDeckId)
         {
 
             var user = context.Players.FirstOrDefault(x => x.PlayerId == playerId);
             if (user != null)
             {
                 user.DiscColor = color;
+            }
+
+            var tile = context.MapDecks.FirstOrDefault(x => x.MapDeckId == mapDeckId);
+            if (tile != null)
+            {
+                tile.PlayerId = playerId;
             }
 
         }
@@ -269,7 +275,7 @@ namespace Occultation.DAL
 
         public Player GetCurrentUser(int gameId, string userName)
         {
-            return null;
+            return context.Players.FirstOrDefault(x => x.GameId == gameId && x.Username.Equals(userName));
         }
 
         public List<ScienceTile> GetScienceTrack(int gameId, int playerId)

@@ -16,6 +16,7 @@ namespace Occultation.DAL
         MapTile GetNewExploredMapTile(int gameId, int xCoords, int yCoords, int playerId,int division);
         int[] SetWormHoles(int index, int[] wormholes);
         List<MapTile> GetExploredTiles(int gameId);
+        void SetWormHoleIndex(int mapId, int index, int gameId, int playerId);
     }
 
     public class TurnRepository : ITurnRepository
@@ -195,6 +196,22 @@ namespace Occultation.DAL
             return holes;
 
         }
+
+
+        public void SetWormHoleIndex(int mapId, int index, int gameId, int playerId)
+        {
+
+            var tile = context.MapDecks.FirstOrDefault(x => x.GameId == gameId && x.MapId == mapId);
+            if (tile != null)
+            {
+                if (playerId == tile.PlayerId)
+                {
+                    tile.WormHoleIndex = index;
+                    context.SaveChanges();
+                }
+            }
+        }
+
         #endregion
 
     }

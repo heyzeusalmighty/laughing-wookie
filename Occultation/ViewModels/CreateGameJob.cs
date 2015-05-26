@@ -32,24 +32,24 @@ namespace Occultation.ViewModels
             var game = Repository.GetGame(gameGuid);
             if (game != null)
             {
-                Players = Repository.GetPlayersForGame(game.GameId);
-
-                //build map tiles
-                BuildMapTiles(game.GameId);
-
-
-                using (var db = new GameModel())
+                if (game.Status == "CREATED")
                 {
-                    var count = db.MapDecks.Count(x => x.GameId == game.GameId);
-                }
+                    Players = Repository.GetPlayersForGame(game.GameId);
 
-                foreach (var playa in Players)
-                {
-                    //build player science tracks
-                    BuildScienceTrack(playa.PlayerId);
+                    //build map tiles
+                    BuildMapTiles(game.GameId);
+                    
 
-                    //build ships
-                    BuildShip(playa.PlayerId);
+                    foreach (var playa in Players)
+                    {
+                        //build player science tracks
+                        BuildScienceTrack(playa.PlayerId);
+
+                        //build ships
+                        BuildShip(playa.PlayerId);
+                    }
+
+                    Repository.SetGameStatus("STARTED", game.GameId);
                 }
             }
         }
@@ -74,7 +74,6 @@ namespace Occultation.ViewModels
             }
             //Player Bases
             BuildPlayerBases(gameId);
-            SavePlayerPositions();
             gameMap.AddRange(PlayerDeck);
 
             counter = 1;
@@ -121,9 +120,9 @@ namespace Occultation.ViewModels
                 XCoords = 6,
                 YCoords = 5
             });
-
-
+            
             Repository.AddTilesToNewGame(gameMap);
+            SavePlayerPositions();
         }
 
         public void BuildPlayerBases(int gameId)
@@ -312,7 +311,7 @@ namespace Occultation.ViewModels
             var count = 0;
             foreach (var tile in PlayerDeck)
             {
-                Repository.SetPlayerColor(playerList[count].PlayerId, tile.Occupied);
+                Repository.SetPlayerColor(playerList[count].PlayerId, tile.Occupied, tile.MapDeckId);
                 count++;
             }
             Repository.Save();

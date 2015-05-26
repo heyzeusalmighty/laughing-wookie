@@ -17,7 +17,7 @@ namespace Occultation.ViewModels
         private int GameId { get; set; }
         private string GameGuid { get; set; }
         private string UserName { get; set; }
-        private int PlayerId { get; set; }
+        public int PlayerId { get; set; }
         public Player CurrentPlayer { get; set; }
         public GameBoard CurrentGame { get; set; }
         private IGameRepository Repo { get; set; }
@@ -47,9 +47,10 @@ namespace Occultation.ViewModels
             
             CurrentGame = Repo.GetGameBoard(GameId);
             CurrentPlayer = Repo.GetCurrentUser(GameId, UserName);
-            PlayerId = CurrentPlayer.PlayerId;
 
-            ScienceTrack = GetScienceTrack();
+            PlayerId = (CurrentPlayer != null) ? CurrentPlayer.PlayerId : 0;
+
+            //ScienceTrack = GetScienceTrack();
 
         }
 

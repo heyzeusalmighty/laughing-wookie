@@ -18,6 +18,7 @@ $(document).ready(function() {
     var sy = 5;
     var cols = 13;
     var rows = 11;
+    var gameGuid = "";
 
     var stage = new createjs.Stage("demoCanvas");
     var hexagonGrid = new HexGrid(stage, radius, background, orange, brown, pink, cols, rows, false);
@@ -68,12 +69,13 @@ $(document).ready(function() {
             processMapTiles();
             hexagonGrid.buildGameHexes(tiles, data.Ships);
             hexagonGrid.setGameIdentifier(data.Counts.GameId);
+            gameGuid = data.Counts.GameId;
 
             $.each(data.Players, function() {
                 $('#player').append($("<option />").text(this.Username).val(this.Username));
             });
 
-            hexagonGrid.setPlayerName(data.Players[0].Username);
+            hexagonGrid.setPlayerName(data.Players[0].Username, data.Players[0].PlayerId);
 
         });
 
@@ -111,7 +113,13 @@ $(document).ready(function() {
     $('#player').change(function() {
         var currentPlayer = $('#player option:selected').val();
         console.info('Current Player', currentPlayer);
-        hexagonGrid.setPlayerName(currentPlayer);
+
+        $.ajax({ url: "/api/player", data: { "name": currentPlayer, "gameId": gameGuid } }).done(function(data) {
+            console.log(data);
+            hexagonGrid.setPlayerName(currentPlayer, data.PlayerId);
+        });
+
+        
     });
 
 

@@ -42,5 +42,12 @@ namespace ExploreSpace.Controllers
             return Json(explore);
         }
 
+        [HttpPost]
+        public void SetWormholeIndex(int map, int index, string gameId, string name)
+        {
+            var turns = new TakingTurns();
+            turns.SetWormholeIndex(map, index, gameId, name);
+        }
+
     }
 }

@@ -13,10 +13,10 @@ namespace ExploreSpace.Controllers
     public class PlayerController : ApiController
     {
 
-        public PlayerViewModel GetPlayer()
+        public PlayerViewModel GetPlayer(string name, string gameId)
         {
-            var repo = new FakeGameRepo();
-            var model = new PlayerViewModel(0, User.Identity.Name, repo);
+            var repo = new EFGameRepo();
+            var model = new PlayerViewModel(gameId, name, repo);
             return model;
         }
     }

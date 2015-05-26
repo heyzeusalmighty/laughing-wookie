@@ -75,7 +75,9 @@ namespace Occult_Tests.Tests
                 creator.AddPlayerToGame(user.UserId, game.GameIdentifier);
             }
 
-            creator.StartGame(game.GameIdentifier);
+            var start = new StartGameJob(db);
+            start.StartGame(game.GameIdentifier);
+            
         }
 
         public void CleanUpDatabase()

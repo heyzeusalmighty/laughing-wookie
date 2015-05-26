@@ -78,7 +78,8 @@ namespace Occultation.ViewModels
                 creator.AddPlayerToGame(user.UserId, game.GameIdentifier);
             }
 
-            creator.StartGame(game.GameIdentifier);
+            var start = new StartGameJob(Repo);
+            start.StartGame(game.GameIdentifier);
         }
 
 

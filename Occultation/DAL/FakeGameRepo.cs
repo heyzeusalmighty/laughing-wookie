@@ -266,7 +266,7 @@ namespace Occultation.DAL
             }
         }
 
-        public void SetPlayerColor(int playerId, string color)
+        public void SetPlayerColor(int playerId, string color, int mapDeckId)
         {
             if (AddedPlayers == null)
             {
