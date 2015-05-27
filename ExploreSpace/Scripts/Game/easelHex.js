@@ -31,6 +31,7 @@
     this.holeColor = "#D4D4D4";
     this.outline = "#000000";
     this.background = "rgba(225,93,15,0.2)";
+    this.alien = "#231858";
 
     //images 
     this.alienHead = new Image();
@@ -255,16 +256,25 @@ HexGrid.prototype.drawGameTile = function(tile) {
     }
 
     var playerColor = this.getColor(tile.Occupied);
+    var stroke = 3;
 
     var polygon = new createjs.Shape();
     //polygon.graphics.beginStroke("#003432").beginFill(playerColor);
-    polygon.graphics.beginStroke(playerColor).setStrokeStyle(3).beginFill("#004E4B");
-    polygon.graphics.moveTo(x0 + this.width - this.side, y0)
-        .lineTo(x0 + this.side, y0)
-        .lineTo(x0 + this.width, y0 + (this.height / 2))
-        .lineTo(x0 + this.side, y0 + this.height)
-        .lineTo(x0 + this.width - this.side, y0 + this.height)
-        .lineTo(x0, y0 + (this.height / 2));
+    polygon.graphics.beginStroke(playerColor).setStrokeStyle(stroke*2).beginFill("#004E4B");
+    //polygon.graphics.moveTo(x0 + this.width - this.side, y0)
+    //    .lineTo(x0 + this.side, y0)
+    //    .lineTo(x0 + this.width, y0 + (this.height / 2))
+    //    .lineTo(x0 + this.side, y0 + this.height)
+    //    .lineTo(x0 + this.width - this.side, y0 + this.height)
+    //    .lineTo(x0, y0 + (this.height / 2));
+
+    polygon.graphics.moveTo(x0 + this.width - this.side, y0 + stroke)
+        .lineTo(x0 + this.side , y0 + stroke)
+        .lineTo(x0 + this.width - stroke, y0 + (this.height / 2))
+        .lineTo(x0 + this.side, y0 + this.height - stroke)
+        .lineTo(x0 + this.width - this.side, y0 + this.height - stroke)
+        .lineTo(x0 + stroke, y0 + (this.height / 2));
+
     polygon.graphics.closePath();
     
 
@@ -389,6 +399,8 @@ HexGrid.prototype.getColor = function (disc) {
             return this.yellowPlayer;
         case 'Central':
             return this.central;
+        case 'Aliens':
+            return this.alien;
         default:
             return this.background;
     }
@@ -1082,7 +1094,9 @@ HexGrid.prototype.exploreThisTile = function(event) {
     //int x, int y, string gameId, string player
     $.ajax({ url: '/Turn/ExploreByPlayer', method: "POST", data: { "x" : x, "y": y, "gameId": this.gameId, "player": this.playerName} }).done(function(data) {
         console.info(data);
-        context.drawGameTile(data);
+        //context.drawGameTile(data);
+        context.drawNewTile(data);
+
     });
 
 
@@ -1262,5 +1276,18 @@ HexGrid.prototype.acceptWormholes = function(event) {
         
     });
 
+
+};
+
+HexGrid.prototype.drawNewTile = function(tile) {
+
+    var background = new createjs.Shape();
+    background.graphics.beginStroke("red");
+    background.graphics.setStrokeStyle(2);
+    background.graphics.beginFill("white").drawRoundRect(100, 100, 750, 550, 10);
+    this.stage.addChild(background);
+
+    this.drawCloseButton();
+    this.stage.update();
 
 };

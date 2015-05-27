@@ -153,11 +153,15 @@ namespace Occultation.DataModels
             return 1;
         }
 
-        public void SetWormholeIndex(int map, int index, string game, string player)
+        public string SetWormholeIndex(int map, int index, string game, string player)
         {
             var gameData = Repo.GetPlayerAndGameIds(player, game);
+            if (gameData.Item1 > 0 && gameData.Item2 > 0)
+            {
+                return Repo.SetWormHoleIndex(map, index, gameData.Item2, gameData.Item1);
+            }
+            return "Game or User not found";
 
-            Repo.SetWormHoleIndex(map, index,gameData.Item2, gameData.Item2);
         }
 
     }
