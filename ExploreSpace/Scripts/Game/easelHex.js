@@ -19,6 +19,8 @@
     this.playerName = "";
     this.selectedTile = {};
     this.wormIndex = 0;
+    this.tileCounts = {};
+    this.player = {};
 
     //Player Colors
     this.greenPlayer = "#2C8437";
@@ -30,7 +32,8 @@
     this.central = "rgba(215,40,40,0.8)";
     this.holeColor = "#D4D4D4";
     this.outline = "#000000";
-    this.background = "rgba(225,93,15,0.2)";
+    //this.background = "rgba(225,93,15,0.2)";
+    this.background = "#004E4B";
     this.alien = "#231858";
 
     //images 
@@ -63,8 +66,9 @@ HexGrid.prototype.setGameIdentifier = function(game) {
     this.gameId = game;
 };
 
-HexGrid.prototype.setPlayerName = function(name, playerId) {
+HexGrid.prototype.setPlayerName = function(name, playerId, info) {
     this.playerName = name;
+    this.player = info;
     this.drawGameBoard();
     console.info("current", playerId);
     for (var i = 0; i < this.gameTiles.length; i++) {
@@ -77,6 +81,10 @@ HexGrid.prototype.setPlayerName = function(name, playerId) {
     }
 
 
+};
+
+HexGrid.prototype.setTileCounts = function(counts) {
+    this.tileCounts = counts;
 };
 
 HexGrid.prototype.setNewHexDimensions = function () {
@@ -124,6 +132,49 @@ HexGrid.prototype.drawHexGrid = function (originX, originY, explore) {
     }
 };
 
+HexGrid.prototype.whatDivAmI = function (x, y) {
+
+    if (x < 4 || x > 8 || y < 3 || y > 7) {
+        return 3;
+    }
+
+    switch (x) {
+        case 4:
+        case 8:
+            if (y < 4 || y > 6) {
+                return 3;
+            } else {
+                return 2;
+            }
+            break;
+        case 5:
+        case 7:
+            if (y < 3 || y > 6) {
+                return 3;
+            } else if (y == 3 || y == 6) {
+                return 2;
+            } else {
+                return 1;
+            }
+            break;
+
+        case 6:
+            if (y < 3 || y > 7) {
+                return 3;
+            } else if (y == 3 || y == 7) {
+                return 2;
+            } else if (y === 4 || y === 6) {
+                return 1;
+            } else {
+                return 0;
+            }
+            break;
+        default:
+            console.warn('div not found', x, y);
+    }
+    return null;
+};
+
 HexGrid.prototype.drawHex = function (x0, y0, fillColor, debugText) {
 
     var polygon = new createjs.Shape();
@@ -149,8 +200,8 @@ HexGrid.prototype.drawHex = function (x0, y0, fillColor, debugText) {
         label.name = "label";
         label.textAlign = "center";
         label.textBaseline = "middle";
-        label.x = x0 + (this.width / 2) - 10;
-        label.y = y0 + (this.height - 25);
+        label.x = x0 + (this.width / 2);
+        label.y = y0 + (this.height - 20);
 
     } else {
         label = new createjs.Text(debugText, "10px Sans-Serif", "#000");
@@ -178,7 +229,8 @@ HexGrid.prototype.drawGameBoard = function() {
     this.stage.removeAllChildren();
     this.stage.update();
     this.buildActionBar();
-    this.drawHexGrid(this.radius, this.radius, this.explore);
+    this.buildPlayerBar(0);
+    this.drawHexGrid(this.radius, this.radius + 50, this.explore);
     var tiles = this.gameTiles;
     for (var i = 0; i < tiles.length; i++) {
         this.drawGameTile(tiles[i]);
@@ -244,6 +296,109 @@ HexGrid.prototype.buildActionButton = function(name, x, y) {
     button.addEventListener("click", this.takeAction.bind(this));
 
     this.stage.addChild(button);
+};
+
+HexGrid.prototype.buildPlayerBar = function(player) {
+
+    var pY = 55;
+    var pX = 10;
+
+    var income = new createjs.Text("Income:", "bold 14px Sans-Serif", "#000000");
+    income.x = pX;
+    income.y = pY;
+    this.stage.addChild(income);
+
+    pX += 60;
+    var oInc = new createjs.Shape();
+    oInc.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.orange).drawRect(pX, pY, 15, 15);
+
+    pX += 20;
+    var orangeIncome = new createjs.Text(this.player.OrangeIncome, "14px Sans-Serif", "#000000");
+    orangeIncome.x = pX;
+    orangeIncome.y = pY;
+
+    pX += 25;
+    var pInc = new createjs.Shape();
+    pInc.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.pink).drawRect(pX, pY, 15, 15);
+
+    pX += 20;
+    var pinkIncome = new createjs.Text(this.player.PinkIncome, "14px Sans-Serif", "#000000");
+    pinkIncome.x = pX;
+    pinkIncome.y = pY;
+
+    pX += 25;
+    var bInc = new createjs.Shape();
+    bInc.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.brown).drawRect(pX, pY, 15, 15);
+
+    pX += 20;
+    var brownIncome = new createjs.Text(this.player.BrownIncome, "14px Sans-Serif", "#000000");
+    brownIncome.x = pX;
+    brownIncome.y = pY;
+
+    pX += 20;
+    var current = new createjs.Text("Current:", "bold 14px Sans-Serif", "#000000");
+    current.x = pX;
+    current.y = pY;
+    this.stage.addChild(current);
+
+    pX += 65;
+    var oMoney = new createjs.Shape();
+    oMoney.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.orange).drawRect(pX, pY, 15, 15);
+
+    pX += 20;
+    var orangeMoney = new createjs.Text(this.player.CurrentOrange, "14px Sans-Serif", "#000000");
+    orangeMoney.x = pX;
+    orangeMoney.y = pY;
+
+    pX += 25;
+    var pMoney = new createjs.Shape();
+    pMoney.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.pink).drawRect(pX, pY, 15, 15);
+
+    pX += 20;
+    var pinkMoney = new createjs.Text(this.player.CurrentPink, "14px Sans-Serif", "#000000");
+    pinkMoney.x = pX;
+    pinkMoney.y = pY;
+
+    pX += 25;
+    var bMoney = new createjs.Shape();
+    bMoney.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.brown).drawRect(pX, pY, 15, 15);
+
+    pX += 20;
+    var brownMoney = new createjs.Text(this.player.CurrentBrown, "14px Sans-Serif", "#000000");
+    brownMoney.x = pX;
+    brownMoney.y = pY;
+
+    pX += 20;
+    var divText = "Tiles Left: 1: " + this.tileCounts.DivisionOne + "    2: " + this.tileCounts.DivisionTwo + "    3: " + this.tileCounts.DivisionThree;
+    var division = new createjs.Text(divText, "14px Sans-Serif", "#000000");
+    division.x = pX;
+    division.y = pY;
+
+    pX += 200;
+    var profile = new createjs.Shape();
+    profile.name = "background";
+    profile.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.background).drawRoundRect(pX, pY - 5, 125, 30, 4);
+
+    var profileLabel = new createjs.Text("View Profile", "bold 14px Sans-Serif", "#FFFFFF");
+    profileLabel.name = "label";
+    profileLabel.textAlign = "center";
+    profileLabel.textBaseline = "middle";
+    profileLabel.x = pX + (125 /2);
+    profileLabel.y = pY - 5 + (30/2);
+
+    //this.stage.addChild(profile, profileLabel);
+
+    var profileBtn = new createjs.Container();
+    profileBtn.name = 'profileButton';
+    profileBtn.x = 0;
+    profileBtn.y = 0;
+    profileBtn.addChild(profile, profileLabel);
+    profileBtn.mouseChildren = false;
+    profileBtn.addEventListener("click", this.viewProfile.bind(this));
+    this.stage.addChild(profileBtn);
+
+    this.stage.addChild(current, oInc, orangeIncome, pInc, pinkIncome, bInc, brownIncome, oMoney, orangeMoney, pMoney, pinkMoney, bMoney, brownMoney, division);
+
 };
 
 HexGrid.prototype.drawGameTile = function(tile) {
@@ -1290,4 +1445,8 @@ HexGrid.prototype.drawNewTile = function(tile) {
     this.drawCloseButton();
     this.stage.update();
 
+};
+
+HexGrid.prototype.viewProfile = function() {
+    console.log('profiling');
 };

@@ -69,14 +69,15 @@ $(document).ready(function() {
             processMapTiles();
             hexagonGrid.buildGameHexes(tiles, data.Ships);
             hexagonGrid.setGameIdentifier(data.Counts.GameId);
+            hexagonGrid.setTileCounts(data.Counts);
             gameGuid = data.Counts.GameId;
 
             $.each(data.Players, function() {
                 $('#player').append($("<option />").text(this.Username).val(this.Username));
             });
 
-            hexagonGrid.setPlayerName(data.Players[0].Username, data.Players[0].PlayerId);
-
+            //hexagonGrid.setPlayerName(data.Players[0].Username, data.Players[0].PlayerId);
+            setPlayer(data.Players[0].Username);
         });
 
 
@@ -113,14 +114,15 @@ $(document).ready(function() {
     $('#player').change(function() {
         var currentPlayer = $('#player option:selected').val();
         console.info('Current Player', currentPlayer);
-
-        $.ajax({ url: "/api/player", data: { "name": currentPlayer, "gameId": gameGuid } }).done(function(data) {
-            console.log(data);
-            hexagonGrid.setPlayerName(currentPlayer, data.PlayerId);
-        });
-
-        
+        setPlayer(currentPlayer);
     });
+
+    function setPlayer(name) {
+        $.ajax({ url: "/api/player", data: { "name": name, "gameId": gameGuid } }).done(function (data) {
+            //console.log(data);
+            hexagonGrid.setPlayerName(name, data.PlayerId, data.CurrentPlayer);
+        });
+    }
 
 
 });
