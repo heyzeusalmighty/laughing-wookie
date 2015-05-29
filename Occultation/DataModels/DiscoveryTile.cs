@@ -59,9 +59,9 @@ namespace Occultation.DataModels
                 new DiscoveryTile { Id = 18, Name = "Ancient Ship Part", Discovery = Discovery.AncientShipPart, ShipPart = 1},
                 new DiscoveryTile { Id = 19, Name = "Ancient Ship Part", Discovery = Discovery.AncientShipPart, ShipPart = 1},
                 new DiscoveryTile { Id = 20, Name = "Ancient Ship Part", Discovery = Discovery.AncientShipPart, ShipPart = 1},
-                new DiscoveryTile { Id = 21, Name = "Ancient Ship Part", Discovery = Discovery.AncientShipPart, ShipPart = 1},
-                
+                new DiscoveryTile { Id = 21, Name = "Ancient Ship Part", Discovery = Discovery.AncientShipPart, ShipPart = 1}
             };
+            Tiles.Shuffle();
         }
 
 

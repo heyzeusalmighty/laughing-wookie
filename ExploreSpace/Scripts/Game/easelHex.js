@@ -35,6 +35,7 @@
     //this.background = "rgba(225,93,15,0.2)";
     this.background = "#004E4B";
     this.alien = "#231858";
+    this.colonyShip = "#32716e";
 
     //images 
     this.alienHead = new Image();
@@ -369,12 +370,12 @@ HexGrid.prototype.buildPlayerBar = function(player) {
     brownMoney.y = pY;
 
     pX += 20;
-    var divText = "Tiles Left: 1: " + this.tileCounts.DivisionOne + "    2: " + this.tileCounts.DivisionTwo + "    3: " + this.tileCounts.DivisionThree;
+    var divText = "Tiles Left: Inner: " + this.tileCounts.DivisionOne + "  Middle: " + this.tileCounts.DivisionTwo + "  Outer: " + this.tileCounts.DivisionThree;
     var division = new createjs.Text(divText, "14px Sans-Serif", "#000000");
     division.x = pX;
     division.y = pY;
 
-    pX += 200;
+    pX += 275;
     var profile = new createjs.Shape();
     profile.name = "background";
     profile.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.background).drawRoundRect(pX, pY - 5, 125, 30, 4);
@@ -397,7 +398,20 @@ HexGrid.prototype.buildPlayerBar = function(player) {
     profileBtn.addEventListener("click", this.viewProfile.bind(this));
     this.stage.addChild(profileBtn);
 
-    this.stage.addChild(current, oInc, orangeIncome, pInc, pinkIncome, bInc, brownIncome, oMoney, orangeMoney, pMoney, pinkMoney, bMoney, brownMoney, division);
+    pX += 150;
+    var colony1 = new createjs.Shape();
+    colony1.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.colonyShip).drawRect(pX, pY, 25, 15);
+    
+    pX += 30;
+    var colony2 = new createjs.Shape();
+    colony2.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.colonyShip).drawRect(pX, pY, 25, 15);
+    
+    pX += 30;
+    var colony3 = new createjs.Shape();
+    colony3.graphics.beginStroke("black").setStrokeStyle(1).beginFill(this.colonyShip).drawRect(pX, pY, 25, 15);
+
+
+    this.stage.addChild(current, oInc, orangeIncome, pInc, pinkIncome, bInc, brownIncome, oMoney, orangeMoney, pMoney, pinkMoney, bMoney, brownMoney, division, colony1, colony2, colony3);
 
 };
 

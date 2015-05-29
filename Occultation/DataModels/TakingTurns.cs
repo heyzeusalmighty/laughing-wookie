@@ -40,6 +40,43 @@ namespace Occultation.DataModels
             return null;
         }
 
+        public ExploratoryPackage ExploreTile(string name, string game, int xCoords, int yCoords)
+        {
+            var gameThings = Repo.GetPlayerAndGameIds(name, game);
+
+            if (gameThings.Item1 > 0 && gameThings.Item2 > 0)
+            {
+                _playerId = gameThings.Item1;
+                _gameId = gameThings.Item2;
+                var division = GetDivisionForCoordinates(xCoords, yCoords);
+
+
+                var package = new ExploratoryPackage();
+                var tile = Repo.GetNewExploredMapTile(_gameId, xCoords, yCoords, _playerId, division);
+                var reward = Repo.GetDiscoveryTile(_gameId, _playerId);
+
+                if (tile == null)
+                {
+                    package.Message = "There are no more tiles to discover in this sector";
+                    return package;
+                }
+
+                if (reward == null)
+                {
+                    package.Message = "There are no more rewards for discovery";
+                    package.Tile = tile;
+                    return package;
+                }
+
+                package.Message = "Success";
+                package.Tile = tile;
+                package.Reward = reward;
+                return package;
+            }
+            return null;
+        }
+        
+
         public List<Coordinates> GetExploreOptions(string game, string playerName)
         {
             var gameData = Repo.GetPlayerAndGameIds(playerName, game);

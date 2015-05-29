@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NLog;
 using Occultation.DAL.EF;
 using Occultation.DataModels;
+using Occultation.Migrations;
 
 namespace Occultation.DAL
 {
@@ -17,6 +18,7 @@ namespace Occultation.DAL
         int[] SetWormHoles(int index, int[] wormholes);
         List<MapTile> GetExploredTiles(int gameId);
         string SetWormHoleIndex(int mapId, int index, int gameId, int playerId);
+        DiscoveryTile GetDiscoveryTile(int gameId, int playerId);
     }
 
     public class TurnRepository : ITurnRepository
@@ -213,6 +215,24 @@ namespace Occultation.DAL
                 return "Tile found but does not belong to player " + playerId;
             }
             return "Tile not found";
+        }
+
+        public DiscoveryTile GetDiscoveryTile(int gameId, int playerId)
+        {
+            var tile = context.GameDiscoveries.Where(x => x.GameId == gameId && x.Revealed == false).OrderBy(y => y.SortOrder).First();
+            if (tile != null)
+            {
+                var allDiscoveries = new AllDiscoveryTiles().Tiles;
+                var actual = allDiscoveries.FirstOrDefault(x => x.Id == tile.DiscoveryId);
+                if (actual != null)
+                {
+                    tile.PlayerId = playerId;
+                    tile.Claimed = false;
+                    context.SaveChanges();
+                    return actual;
+                }
+            }
+            return null;
         }
 
         #endregion

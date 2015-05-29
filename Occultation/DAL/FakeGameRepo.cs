@@ -83,6 +83,7 @@ namespace Occultation.DAL
         public List<ShipModelComponent> ShipComponents { get; set; }
         public List<MapDeck> GameMapTiles { get; set; }
         public List<PlayerShip> PlayerShips { get; set; }
+        public List<GameDiscovery> Discoveries { get; set; }
         
         
         public GameBoard GetGameBoard(int gameId)
@@ -323,6 +324,11 @@ namespace Occultation.DAL
         public void SetGameStatus(string status, int gameId)
         {
             
+        }
+
+        public void SetDiscoveryTilesForGame(List<GameDiscovery> tiles)
+        {
+            Discoveries = tiles;
         }
     }
 }

@@ -118,7 +118,7 @@ namespace Occultation.DAL
                     CurrentPink = 3,
                     CurrentOrange = 2,
                     DiscColor = "Super",
-                    //DiscColor = color,
+                    AvailableColonyShips = 3,
                     Pass = false,
                     TurnOrder = 0,
                     UserId = userId,
@@ -293,5 +293,9 @@ namespace Occultation.DAL
             }
         }
 
+        public void SetDiscoveryTilesForGame(List<GameDiscovery> tiles)
+        {
+            context.GameDiscoveries.AddRange(tiles);
+        }
     }
 }

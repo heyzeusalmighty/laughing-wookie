@@ -16,8 +16,8 @@ namespace Occultation.ViewModels
         public List<MapTile> PlayerTiles;
         public AvailableMapTile TileBuilder;
         public List<MapDeck> PlayerDeck;
-
         private List<PlayerShipModel> shipModels;
+        public List<DiscoveryTile> DiscoveryTiles;
 
         public StartGameJob(IGameRepository repo)
         {
@@ -38,7 +38,8 @@ namespace Occultation.ViewModels
 
                     //build map tiles
                     BuildMapTiles(game.GameId);
-                    
+                    BuildDiscoveryTiles(game.GameId);
+                    Repository.Save();
 
                     foreach (var playa in Players)
                     {
@@ -401,6 +402,27 @@ namespace Occultation.ViewModels
 
             Repository.Save();
 
+        }
+
+        public void BuildDiscoveryTiles(int gameId)
+        {
+            DiscoveryTiles = new AllDiscoveryTiles().Tiles;
+            
+            var tileList = new List<GameDiscovery>();
+            var counter = 1;
+            foreach (var tile in DiscoveryTiles)
+            {
+                tileList.Add(new GameDiscovery
+                {
+                    DiscoveryId = tile.Id, 
+                    Revealed = false, 
+                    SortOrder = counter,
+                    GameId = gameId,
+                    Claimed = null
+                });
+                counter++;
+            }
+            Repository.SetDiscoveryTilesForGame(tileList);
         }
 
         

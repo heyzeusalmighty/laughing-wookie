@@ -24,8 +24,8 @@ namespace Occultation.DAL.EF
         public virtual DbSet<ShipModelComponent> ShipModelComponents { get; set; }
         public virtual DbSet<Tile> Tiles { get; set; }
         public virtual DbSet<PlayerShip> PlayerShips { get; set; }
-
         public virtual DbSet<EmailSettings> EmailSettings { get; set; }
+        public virtual DbSet<GameDiscovery> GameDiscoveries { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

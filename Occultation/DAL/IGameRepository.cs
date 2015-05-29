@@ -29,6 +29,7 @@ namespace Occultation.DAL
         void SaveNewShip(PlayerShip ship);
         List<ShipForMap> GetShipsForGame(string gameGuid);
         void SetGameStatus(string status, int gameId);
+        void SetDiscoveryTilesForGame(List<GameDiscovery> tiles);
 
     }
 }

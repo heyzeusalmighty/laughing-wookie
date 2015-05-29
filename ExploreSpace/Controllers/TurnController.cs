@@ -38,9 +38,8 @@ namespace ExploreSpace.Controllers
         public JsonResult ExploreByPlayer(int x, int y, string gameId, string player)
         {
             var turns = new TakingTurns();
-            var explore = turns.Explore(player, gameId, x, y);
+            var explore = turns.ExploreTile(player, gameId, x, y);
             return Json(explore);
-            return Json("test");
         }
 
         [HttpPost]

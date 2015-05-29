@@ -79,5 +79,21 @@ namespace Occult_Tests.Tests
 
            
         }
+
+        [TestMethod]
+        public void DiscoveryTiles_Shuffle()
+        {
+            var repo = new FakeGameRepo();
+            var model = new StartGameJob(repo);
+            const int numberOfTheBeast = 666;
+            model.BuildDiscoveryTiles(numberOfTheBeast);
+
+            Assert.AreNotEqual(model.DiscoveryTiles[0].Id, 1);
+
+            foreach (var tile in repo.Discoveries)
+            {
+                Assert.AreEqual(numberOfTheBeast, tile.GameId);
+            }
+        }
 }
 }
