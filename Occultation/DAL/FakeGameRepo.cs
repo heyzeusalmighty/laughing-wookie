@@ -330,5 +330,10 @@ namespace Occultation.DAL
         {
             Discoveries = tiles;
         }
+
+        public void SetFirstPlayerTurn(int gameId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

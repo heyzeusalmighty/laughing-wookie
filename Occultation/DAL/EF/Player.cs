@@ -44,5 +44,8 @@ namespace Occultation.DAL.EF
         public int UserId { get; set; }
 
         public int AvailableColonyShips { get; set; }
+
+        public int PassOrder { get; set; }
+        public bool WhosTurn { get; set; }
     }
 }

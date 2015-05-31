@@ -51,6 +51,7 @@ namespace Occultation.ViewModels
                     }
 
                     Repository.SetGameStatus("STARTED", game.GameId);
+                    SetFirstPlayerTurn(game.GameId);
                 }
             }
         }
@@ -423,6 +424,11 @@ namespace Occultation.ViewModels
                 counter++;
             }
             Repository.SetDiscoveryTilesForGame(tileList);
+        }
+
+        public void SetFirstPlayerTurn(int gameId)
+        {
+            Repository.SetFirstPlayerTurn(gameId);
         }
 
         

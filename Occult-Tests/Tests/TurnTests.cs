@@ -241,6 +241,7 @@ namespace Occult_Tests.Tests
                         gameId);
                     db.Database.ExecuteSqlCommand("delete from PLayer where GameId = {0}", gameId);
                     db.Database.ExecuteSqlCommand("delete from Game where GameId = {0}", gameId);
+                    db.Database.ExecuteSqlCommand("delete from GameDiscoveries where GameId = {0}", gameId);
                 }
             }
         }

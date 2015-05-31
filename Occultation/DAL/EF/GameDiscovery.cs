@@ -15,5 +15,6 @@ namespace Occultation.DAL.EF
         public bool Revealed { get; set; }
         public int PlayerId { get; set; }
         public bool? Claimed { get; set; }
+        public int MapDeckId { get; set; }
     }
 }

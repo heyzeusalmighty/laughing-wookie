@@ -21,6 +21,7 @@
     this.wormIndex = 0;
     this.tileCounts = {};
     this.player = {};
+    this.reward = {};
 
     //Player Colors
     this.greenPlayer = "#2C8437";
@@ -884,9 +885,12 @@ HexGrid.prototype.drawWormHolesSmall = function(x, y, wormholes) {
 
 };
 
-HexGrid.prototype.drawWormHolesBig = function(x, y, wormholes) {
+HexGrid.prototype.drawWormHolesBig = function(x, y, wormholes, rad) {
 
     var radius = 250;
+    if (rad != undefined) {
+        radius = rad;
+    }
     var bigRad = 30;
     var height = Math.sqrt(3) * radius;
     var width = 2 * radius;
@@ -998,6 +1002,39 @@ HexGrid.prototype.drawCloseButton = function() {
     button.addEventListener("click", this.drawGameBoard.bind(this));
     this.stage.addChild(button);
 
+};
+
+HexGrid.prototype.drawSecondScreen = function() {
+    var background = new createjs.Shape();
+    background.graphics.beginStroke("red");
+    background.graphics.setStrokeStyle(2);
+    background.graphics.beginFill("white").drawRoundRect(100, 100, 800, 550, 10);
+    this.stage.addChild(background);
+    
+    this.drawSmallCloseButton();
+};
+
+HexGrid.prototype.drawSmallCloseButton = function() {
+    var background = new createjs.Shape();
+    background.graphics.beginFill("red").drawCircle(0, 0, 20);
+    background.x = 850;
+    background.y = 110;
+
+    var label = new createjs.Text("X", "bold 24px Sans-Serif", "#FFFFFF");
+    label.textAlign = "center";
+    label.textBaseline = "middle";
+    label.x = 850;
+    label.y = 110;
+
+    var button = new createjs.Container();
+    button.x = 20;
+    button.y = 20;
+    button.addChild(background, label);
+    button.mouseChildren = false;
+    button.cursor = "pointer";
+
+    button.addEventListener("click", this.drawGameBoard.bind(this));
+    this.stage.addChild(button);
 };
 
 HexGrid.prototype.takeAction = function(event) {
@@ -1260,10 +1297,11 @@ HexGrid.prototype.exploreThisTile = function(event) {
     console.info(x, y);
     var context = this;
 
-    //int x, int y, string gameId, string player
     $.ajax({ url: '/Turn/ExploreByPlayer', method: "POST", data: { "x" : x, "y": y, "gameId": this.gameId, "player": this.playerName} }).done(function(data) {
         console.info(data);
         //context.drawGameTile(data);
+        context.gameTiles.push(data.Tile);
+        context.selectedTile = data.Tile;
         context.drawNewTile(data);
 
     });
@@ -1432,9 +1470,7 @@ HexGrid.prototype.acceptWormholes = function(event) {
     var context = this;
     //SetWormholeIndex(int map, int index, string gameId, string name)
     $.ajax({ url: "/Turn/SetWormHoleIndex", method: "POST", data: { "map": this.selectedTile.MapId, "index": this.wormIndex, "gameId": this.gameId, "name": this.playerName } }).done(function() {
-
-        console.log(context.gameTiles);
-
+        
         for (var i = 0; i < context.gameTiles.length; i++) {
             if (context.selectedTile.MapId == context.gameTiles[i].MapId) {
                 context.gameTiles[i].Wormholes = context.selectedTile.Wormholes;
@@ -1449,18 +1485,313 @@ HexGrid.prototype.acceptWormholes = function(event) {
 };
 
 HexGrid.prototype.drawNewTile = function(tile) {
+    
+    this.drawSecondScreen();
 
-    var background = new createjs.Shape();
-    background.graphics.beginStroke("red");
-    background.graphics.setStrokeStyle(2);
-    background.graphics.beginFill("white").drawRoundRect(100, 100, 750, 550, 10);
-    this.stage.addChild(background);
+    if (tile.Message == "Success") {
+        
+        //var divText = "Tiles Left: Inner: " + this.tileCounts.DivisionOne + "  Middle: " + this.tileCounts.DivisionTwo + "  Outer: " + this.tileCounts.DivisionThree;
 
-    this.drawCloseButton();
+        switch(tile.Tile.Division) {
+        
+            case 3:
+                this.tileCounts.DivisionThree--;
+                break;
+            case 2:
+                this.tileCounts.DivisionTwo--;
+                break;
+            case 1:
+                this.tileCounts.DivisionOne--;
+                break;
+            default:
+                console.error('tile count not found');
+        }
+        this.buildPlayerBar();
+
+
+        var label = new createjs.Text("Explore was a success", "bold 48px Sans-Serif", "#000000");
+        label.textAlign = "center";
+        label.textBaseline = "middle";
+        label.x = 850 / 2;
+        label.y = 150;
+
+        this.stage.addChild(label);
+
+        if (tile.Tile.Aliens == 2) {
+            var dblAlien = new createjs.Text("Double Aliens!", "bold 48px Sans-Serif", "#000000");
+            dblAlien.textAlign = "center";
+            dblAlien.textBaseline = "middle";
+            dblAlien.x = 850 / 2;
+            dblAlien.y = 200;
+            this.stage.addChild(dblAlien);
+        }
+
+        if (tile.Tile.Aliens == 1) {
+            var alien = new createjs.Text("Aliens!", "bold 48px Sans-Serif", "#000000");
+            alien.textAlign = "center";
+            alien.textBaseline = "middle";
+            alien.x = 850 / 2;
+            alien.y = 200;
+            this.stage.addChild(alien);
+        }
+
+        var x0 = 125;
+        var y0 = 250;
+        var radius = 200;
+        var height = Math.sqrt(3) * radius;
+        var width = 2 * radius;
+        var side = (3 / 2) * radius;
+
+        var polygon = new createjs.Shape();
+        polygon.graphics.beginStroke("#000000").beginFill(this.background);
+        polygon.graphics.moveTo(x0 + width - side, y0)
+            .lineTo(x0 + side, y0)
+            .lineTo(x0 + width, y0 + (height / 2))
+            .lineTo(x0 + side, y0 + height)
+            .lineTo(x0 + width - side, y0 + height)
+            .lineTo(x0, y0 + (height / 2));
+        polygon.graphics.closePath();
+        this.stage.addChild(polygon);
+
+        //this.drawWormHolesBig(x0, y0, tile.Tile.Wormholes, radius);
+
+        if (tile.Tile.VictoryPoints) {
+
+            var crest = new createjs.Shape();
+            crest.graphics.beginFill("red").drawRoundRect(x0 + 235, y0 + ((this.height / 2) - 10), 70, 70, 10);
+
+            var vicLbl = new createjs.Text(tile.Tile.VictoryPoints, "Bold 72px Sans-Serif", "#FFD300");
+            vicLbl.name = "label";
+            vicLbl.textAlign = "center";
+            vicLbl.textBaseline = "middle";
+
+            vicLbl.x = x0 + 270;
+            vicLbl.y = y0 + ((this.height / 2) + 25);
+            this.stage.addChild(crest, vicLbl);
+        }
+
+        //Incomes
+
+        var incomeX = x0 + 135;
+        var incomeY = y0;
+
+        if (tile.Tile.Pink > 0) {
+            incomeY += 25;
+            this.drawIncomeBig(incomeX, incomeY, tile.Tile.Pink, 0, this.pink);
+        }
+
+        if (tile.Tile.Orange > 0) {
+            incomeY += 25;
+            this.drawIncomeBig(incomeX, incomeY, tile.Tile.Orange, 0, this.orange);
+        }
+
+        if (tile.Tile.Brown > 0) {
+            incomeY += 25;
+            this.drawIncomeBig(incomeX, incomeY, tile.Tile.Brown, 0, this.brown);
+        }
+
+        if (tile.Tile.White > 0) {
+            incomeY += 25;
+            this.drawIncomeBig(incomeX, incomeY, tile.Tile.White, 0, this.white);
+        }
+
+        //reset coordinates
+        var adIncomeX = x0 + 175;
+        var adIncomeY = y0;
+
+        if (tile.Tile.PinkAdvanced > 0) {
+            adIncomeY += 25;
+            this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.pink);
+        }
+
+
+        if (tile.Tile.OrangeAdvanced > 0) {
+            adIncomeY += 25;
+            this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.orange);
+        }
+
+        if (tile.Tile.BrownAdvanced > 0) {
+            adIncomeY += 25;
+            this.drawAdvancedIncome(adIncomeX, adIncomeY, 1, 0, this.brown);
+        }
+
+
+        this.addInfluenceDialogue();
+
+
+    } else {
+        var mesg = new createjs.Text(tile.Message, "bold 24px Sans-Serif", "#000000");
+        mesg.textAlign = "center";
+        mesg.textBaseline = "middle";
+        mesg.x = 850 / 2;
+        mesg.y = 150;
+
+        this.stage.addChild(mesg);
+    }
+
+    console.log(tile);
+
     this.stage.update();
 
 };
 
 HexGrid.prototype.viewProfile = function() {
     console.log('profiling');
+};
+
+HexGrid.prototype.addInfluenceDialogue = function() {
+
+
+    var influenceMsg = new createjs.Text("Influence this tile?", "bold 24px Sans-Serif", "#000000");
+    influenceMsg.x = 600;
+    influenceMsg.y = 250;
+
+    
+    var yesBack = new createjs.Shape();
+    yesBack.graphics.beginFill("green").drawRoundRect(600, 300, 60, 40, 4);
+    //background.x = 850;
+    //background.y = 110;
+
+    var yesLbl = new createjs.Text("Yes", "bold 24px Sans-Serif", "#FFFFFF");
+    yesLbl.textAlign = "center";
+    yesLbl.textBaseline = "middle";
+    yesLbl.x = 630;
+    yesLbl.y = 320;
+
+    var yesBtn = new createjs.Container();
+    yesBtn.x = 20;
+    yesBtn.y = 20;
+    yesBtn.addChild(yesBack, yesLbl);
+    yesBtn.mouseChildren = false;
+    yesBtn.cursor = "pointer";
+
+    yesBtn.addEventListener("click", this.influenceTileFromExplore.bind(this));
+    this.stage.addChild(yesBtn);
+
+    var noBack = new createjs.Shape();
+    noBack.graphics.beginFill("red").drawRoundRect(700, 300, 60, 40, 4);
+
+    var noLbl = new createjs.Text("No", "bold 24px Sans-Serif", "#FFFFFF");
+    noLbl.textAlign = "center";
+    noLbl.textBaseline = "middle";
+    noLbl.x = 730;
+    noLbl.y = 320;
+
+    var noBtn = new createjs.Container();
+    noBtn.x = 20;
+    noBtn.y = 20;
+    noBtn.addChild(noBack, noLbl);
+    noBtn.mouseChildren = false;
+    noBtn.cursor = "pointer";
+
+    noBtn.addEventListener("click", this.drawGameBoard.bind(this));
+
+    var influencingContainer = new createjs.Container();
+    influencingContainer.x = 25;
+    influencingContainer.y = 25;
+    influencingContainer.name = "influencingContainer";
+    influencingContainer.addChild(influenceMsg, yesBtn, noBtn);
+
+    this.stage.addChild(influencingContainer);
+
+
+};
+
+HexGrid.prototype.addRewardDialogue = function() {
+
+    var reward = this.reward.Name;
+    console.log(reward);
+
+
+
+    var rewardMsg = new createjs.Text("Reward!!", "bold 24px Sans-Serif", "#000000");
+    rewardMsg.x = 600;
+    rewardMsg.y = 250;
+
+
+    var yesBack = new createjs.Shape();
+    yesBack.graphics.beginFill("green").drawRoundRect(600, 300, 60, 40, 4);
+    //background.x = 850;
+    //background.y = 110;
+
+    var yesLbl = new createjs.Text("Reward", "bold 24px Sans-Serif", "#FFFFFF");
+    yesLbl.textAlign = "center";
+    yesLbl.textBaseline = "middle";
+    yesLbl.x = 630;
+    yesLbl.y = 320;
+
+    var yesBtn = new createjs.Container();
+    yesBtn.x = 20;
+    yesBtn.y = 20;
+    yesBtn.addChild(yesBack, yesLbl);
+    yesBtn.mouseChildren = false;
+    yesBtn.cursor = "pointer";
+
+    yesBtn.addEventListener("click", this.drawGameBoard.bind(this));
+    this.stage.addChild(yesBtn);
+
+    var noBack = new createjs.Shape();
+    noBack.graphics.beginFill("red").drawRoundRect(700, 300, 60, 40, 4);
+
+    var noLbl = new createjs.Text("Points", "bold 24px Sans-Serif", "#FFFFFF");
+    noLbl.textAlign = "center";
+    noLbl.textBaseline = "middle";
+    noLbl.x = 730;
+    noLbl.y = 320;
+
+    var noBtn = new createjs.Container();
+    noBtn.x = 20;
+    noBtn.y = 20;
+    noBtn.addChild(noBack, noLbl);
+    noBtn.mouseChildren = false;
+    noBtn.cursor = "pointer";
+
+    noBtn.addEventListener("click", this.drawGameBoard.bind(this));
+
+    var influencingContainer = new createjs.Container();
+    influencingContainer.x = 25;
+    influencingContainer.y = 25;
+    influencingContainer.name = "rewardMessage";
+    influencingContainer.addChild(rewardMsg, yesBtn, noBtn);
+
+    this.stage.addChild(influencingContainer);
+};
+
+HexGrid.prototype.influenceTileFromExplore = function() {
+        
+    var lastTile = this.gameTiles[this.gameTiles.length - 1];
+    console.log("influence mapId", lastTile.MapId);
+    console.log("influence selected", this.selectedTile.MapId);
+
+    console.log(this.stage);
+
+    var children = this.stage.children;
+    for (var i = 0; i < children.length; i++) {
+        if (children[i].name == "influencingContainer") {
+            this.stage.removeChild(children[i]);
+            break;
+        }
+    }
+
+    var context = this;
+    //InfluenceTileFromExplore(int map, string gameId, string name, bool answer)
+    $.ajax({ url: '/Turn/InfluenceTileFromExplore', method: "POST", data: { "map": this.selectedTile.MapId, "gameId": this.gameId, "name": this.playerName, "answer": true } }).done(function (data) {
+        console.info(data);
+        //context.drawGameTile(data);
+        context.reward = data.Reward;
+
+
+    });
+
+    if (this.reward != null) {
+        this.addRewardDialogue();
+    }
+
+    
+
+    this.stage.update();
+
+    //this.stage.removeChild(influencingContainer);
+
+
 };

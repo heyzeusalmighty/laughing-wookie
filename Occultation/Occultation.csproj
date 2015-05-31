@@ -135,6 +135,14 @@
     <Compile Include="Migrations\201505282003037_EvenMoreDiscoveryTiles.Designer.cs">
       <DependentUpon>201505282003037_EvenMoreDiscoveryTiles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201505311444492_SettingUpTurnSystem.cs" />
+    <Compile Include="Migrations\201505311444492_SettingUpTurnSystem.Designer.cs">
+      <DependentUpon>201505311444492_SettingUpTurnSystem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201505311936452_MapDeckIdToDiscoveryTile.cs" />
+    <Compile Include="Migrations\201505311936452_MapDeckIdToDiscoveryTile.Designer.cs">
+      <DependentUpon>201505311936452_MapDeckIdToDiscoveryTile.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataModels\ScienceTrack.cs" />
@@ -188,6 +196,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201505282003037_EvenMoreDiscoveryTiles.resx">
       <DependentUpon>201505282003037_EvenMoreDiscoveryTiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505311444492_SettingUpTurnSystem.resx">
+      <DependentUpon>201505311444492_SettingUpTurnSystem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201505311936452_MapDeckIdToDiscoveryTile.resx">
+      <DependentUpon>201505311936452_MapDeckIdToDiscoveryTile.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

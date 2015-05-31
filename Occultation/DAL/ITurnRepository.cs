@@ -19,6 +19,12 @@ namespace Occultation.DAL
         List<MapTile> GetExploredTiles(int gameId);
         string SetWormHoleIndex(int mapId, int index, int gameId, int playerId);
         DiscoveryTile GetDiscoveryTile(int gameId, int playerId);
+        void SetDiscoveryTile(int mapDeckId);
+        DiscoveryTile ClaimDiscoveryTile(int gameId, int playerId, int mapDeckId);
+        int InfluenceTile(int mapId, int gameId, int playerId);
+        string RemoveInfluence(int mapId, int gameId, int playerId);
+        void DecrementDiscFromPlayer(int playerId);
+        void IncrementDiscForPlayer(int playerId);
     }
 
     public class TurnRepository : ITurnRepository
@@ -140,6 +146,11 @@ namespace Occultation.DAL
                     yay.x = xCoords;
                     yay.y = yCoords;
 
+                    if (yay.Reward)
+                    {
+                        SetDiscoveryTile(discovered.MapDeckId);
+                    }
+
                     _logger.Info("{0} successfully explored tile {1} in Game {2}", playerId, yay.MapId, gameId);
                     return yay;
                 }
@@ -227,6 +238,7 @@ namespace Occultation.DAL
                 if (actual != null)
                 {
                     tile.PlayerId = playerId;
+                    tile.Revealed = true;
                     tile.Claimed = false;
                     context.SaveChanges();
                     return actual;
@@ -235,6 +247,96 @@ namespace Occultation.DAL
             return null;
         }
 
+        public void SetDiscoveryTile(int mapDeckId)
+        {
+            var tile = context.MapDecks.FirstOrDefault(x => x.MapDeckId == mapDeckId);
+            if (tile != null)
+            {
+                var discovery =
+                    context.GameDiscoveries.Where(x => x.GameId == tile.GameId && x.Revealed == false)
+                        .OrderBy(y => y.SortOrder)
+                        .First();
+                if (discovery != null)
+                {
+                    discovery.MapDeckId = mapDeckId;
+                    discovery.Revealed = true;
+                    discovery.Claimed = false;
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public DiscoveryTile ClaimDiscoveryTile(int gameId, int playerId, int mapDeckId)
+        {
+            var tile =
+                context.GameDiscoveries.FirstOrDefault(x => x.MapDeckId == mapDeckId);
+                    
+            if (tile != null)
+            {
+                
+                var allDiscoveries = new AllDiscoveryTiles().Tiles;
+                var actual = allDiscoveries.FirstOrDefault(x => x.Id == tile.DiscoveryId);
+                if (actual != null)
+                {
+                    tile.Claimed = true;
+                    tile.PlayerId = playerId;
+                    context.SaveChanges();
+                    return actual;
+                }
+               
+                
+            }
+            return null;
+        }
+
+        public int InfluenceTile(int mapId, int gameId, int playerId)
+        {
+            var tile = context.MapDecks.FirstOrDefault(x => x.MapId == mapId && x.GameId == gameId);
+            if (tile != null)
+            {
+                tile.PlayerId = playerId;
+                context.SaveChanges();
+                return tile.MapDeckId;
+            }
+            return -1;
+        }
+
+        public string RemoveInfluence(int mapId, int gameId, int playerId)
+        {
+            var tile = context.MapDecks.FirstOrDefault(x => x.MapId == mapId && x.GameId == gameId);
+            if (tile != null)
+            {
+                tile.PlayerId = 0;
+                tile.Occupied = "";
+                context.SaveChanges();
+                return "Success";
+            }
+            return "Tile Not Found";
+        }
+
+        public void DecrementDiscFromPlayer(int playerId)
+        {
+            var player = context.Players.FirstOrDefault(x => x.PlayerId == playerId);
+            if (player != null)
+            {
+                player.AvailableDiscs--;
+                context.SaveChanges();
+                _logger.Info("{0} for game {1} used a disc", player.PlayerId, player.GameId);
+            }
+            _logger.Info("{0} not found", playerId);
+        }
+
+        public void IncrementDiscForPlayer(int playerId)
+        {
+            var player = context.Players.FirstOrDefault(x => x.PlayerId == playerId);
+            if (player != null)
+            {
+                player.AvailableDiscs++;
+                context.SaveChanges();
+                _logger.Info("{0} for game {1} used a disc", player.PlayerId, player.GameId);
+            }
+            _logger.Info("{0} not found", playerId);
+        }
         #endregion
 
     }

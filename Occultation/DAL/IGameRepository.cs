@@ -30,6 +30,8 @@ namespace Occultation.DAL
         List<ShipForMap> GetShipsForGame(string gameGuid);
         void SetGameStatus(string status, int gameId);
         void SetDiscoveryTilesForGame(List<GameDiscovery> tiles);
+        void SetFirstPlayerTurn(int gameId);
+
 
     }
 }

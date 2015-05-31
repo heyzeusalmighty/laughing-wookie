@@ -49,5 +49,12 @@ namespace ExploreSpace.Controllers
             return turns.SetWormholeIndex(map, index, gameId, name);
         }
 
+        [HttpPost]
+        public JsonResult InfluenceTileFromExplore(int map, string gameId, string name, bool answer)
+        {
+            var turns = new TakingTurns();
+            var influencing = turns.InfluenceTileFromExplore(map, gameId, name, answer);
+            return Json(influencing);
+        }
     }
 }

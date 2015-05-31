@@ -53,7 +53,7 @@ namespace Occultation.DataModels
 
                 var package = new ExploratoryPackage();
                 var tile = Repo.GetNewExploredMapTile(_gameId, xCoords, yCoords, _playerId, division);
-                var reward = Repo.GetDiscoveryTile(_gameId, _playerId);
+                //var reward = Repo.GetDiscoveryTile(_gameId, _playerId);
 
                 if (tile == null)
                 {
@@ -61,21 +61,16 @@ namespace Occultation.DataModels
                     return package;
                 }
 
-                if (reward == null)
-                {
-                    package.Message = "There are no more rewards for discovery";
-                    package.Tile = tile;
-                    return package;
-                }
+
 
                 package.Message = "Success";
                 package.Tile = tile;
-                package.Reward = reward;
+                //package.Reward = reward;
                 return package;
             }
             return null;
         }
-        
+
 
         public List<Coordinates> GetExploreOptions(string game, string playerName)
         {
@@ -107,7 +102,10 @@ namespace Occultation.DataModels
                 {
                     if (!_exploredTiles.Any(z => z.x == allNeighbors[i].X && z.y == allNeighbors[i].Y))
                     {
-                        validCoords.Add(allNeighbors[i]);
+                        if (allNeighbors[i].X > -1 && allNeighbors[i].Y > -1)
+                        {
+                            validCoords.Add(allNeighbors[i]);
+                        }
                     }
                 }
             }
@@ -122,25 +120,25 @@ namespace Occultation.DataModels
             {
                 return new Coordinates[]
                 {
-                    new Coordinates { X = x, Y = y - 1 },
-                    new Coordinates { X = x + 1, Y = y - 1 },
-                    new Coordinates { X = x + 1, Y = y },
-                    new Coordinates { X = x, Y = y + 1 },
-                    new Coordinates { X = x - 1, Y = y },
-                    new Coordinates { X = x - 1, Y = y - 1 }
+                    new Coordinates {X = x, Y = y - 1},
+                    new Coordinates {X = x + 1, Y = y - 1},
+                    new Coordinates {X = x + 1, Y = y},
+                    new Coordinates {X = x, Y = y + 1},
+                    new Coordinates {X = x - 1, Y = y},
+                    new Coordinates {X = x - 1, Y = y - 1}
                 };
             }
 
             return new Coordinates[]
             {
-                new Coordinates { X = x, Y = y - 1 },
-                new Coordinates { X = x + 1, Y = y },
-                new Coordinates { X = x + 1, Y = y + 1 },
-                new Coordinates { X = x, Y = y + 1 },
-                new Coordinates { X = x - 1, Y = y + 1 },
-                new Coordinates { X = x - 1, Y = y }
+                new Coordinates {X = x, Y = y - 1},
+                new Coordinates {X = x + 1, Y = y},
+                new Coordinates {X = x + 1, Y = y + 1},
+                new Coordinates {X = x, Y = y + 1},
+                new Coordinates {X = x - 1, Y = y + 1},
+                new Coordinates {X = x - 1, Y = y}
             };
-        
+
 
         }
 
@@ -151,35 +149,51 @@ namespace Occultation.DataModels
                 return 3;
             }
 
-            switch(xCoord) {
-    
+            switch (xCoord)
+            {
+
                 case 4:
                 case 8:
-                    if (yCoord < 4 || yCoord > 6) {
+                    if (yCoord < 4 || yCoord > 6)
+                    {
                         return 3;
-                    } else {
+                    }
+                    else
+                    {
                         return 2;
                     }
                     break;
                 case 5:
                 case 7:
-                    if (yCoord < 3 || yCoord > 6) {
+                    if (yCoord < 3 || yCoord > 6)
+                    {
                         return 3;
-                    } else if (yCoord == 3 || yCoord == 6) {
+                    }
+                    else if (yCoord == 3 || yCoord == 6)
+                    {
                         return 2;
-                    } else {
+                    }
+                    else
+                    {
                         return 1;
                     }
                     break;
 
                 case 6:
-                    if (yCoord < 3 || yCoord > 7) {
+                    if (yCoord < 3 || yCoord > 7)
+                    {
                         return 3;
-                    } else if (yCoord == 3 || yCoord == 7) {
+                    }
+                    else if (yCoord == 3 || yCoord == 7)
+                    {
                         return 2;
-                    } else if (yCoord == 4 || yCoord == 6) {
+                    }
+                    else if (yCoord == 4 || yCoord == 6)
+                    {
                         return 1;
-                    } else {
+                    }
+                    else
+                    {
                         return 0;
                     }
                     break;
@@ -201,12 +215,82 @@ namespace Occultation.DataModels
 
         }
 
-    }
+        public ExploratoryPackage InfluenceTileFromExplore(int map, string game, string player, bool answer)
+        {
+            var gameData = Repo.GetPlayerAndGameIds(player, game);
+            if (gameData.Item1 > 0 && gameData.Item2 > 0)
+            {
+                _gameId = gameData.Item2;
+                _playerId = gameData.Item1;
+                if (answer)
+                {
+                    var tile = Repo.InfluenceTile(map, _gameId, _playerId);
+                    Repo.DecrementDiscFromPlayer(_playerId);
 
 
-    public class Coordinates
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
+                    var package = new ExploratoryPackage();
+
+                    var allTheTiles = new AvailableMapTile().AllTheTiles;
+                    var actualTile = allTheTiles.FirstOrDefault(x => x.MapId == map);
+                    if (actualTile != null)
+                    {
+                        if (actualTile.Reward)
+                        {
+                            var reward = Repo.ClaimDiscoveryTile(_gameId, _playerId, tile);
+                            if (reward == null)
+                            {
+                                package.Message = "There are no more rewards for discovery";
+                                return package;
+                            }
+
+                            package.Message = "Influenced";
+                            package.Reward = reward;
+                            return package;
+                        }
+                        else
+                        {
+                            package.Message = "No Reward";
+                            return package;
+                        }
+                    }
+
+                    package.Message = "Tile not found for some reason";
+                    return package;
+
+                }
+                else
+                {
+                    var tiel = Repo.RemoveInfluence(map, gameData.Item2, gameData.Item1);
+                    return new ExploratoryPackage {Message = "Not influencing"};
+                }
+
+
+            }
+
+            return new ExploratoryPackage {Message = "Game or User not found"};
+        }
+
+        public string InfluenceTile(int map, string game, string player, bool answer)
+        {
+            var gameData = Repo.GetPlayerAndGameIds(player, game);
+            if (gameData.Item1 > 0 && gameData.Item2 > 0)
+            {
+                if (Repo.InfluenceTile(map, gameData.Item2, gameData.Item1) >= 0)
+                {
+                    return "Success";
+                }
+            }
+
+            return "Game or User not found";
+
+        }
+
+
+        public class Coordinates
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
     }
+
 }

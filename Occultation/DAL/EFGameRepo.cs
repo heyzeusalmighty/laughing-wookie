@@ -6,6 +6,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Win32;
+using NLog;
 using Occultation.DAL.EF;
 using Occultation.DataModels;
 
@@ -15,6 +16,10 @@ namespace Occultation.DAL
     // ReSharper disable once InconsistentNaming
     public class EFGameRepo : IGameRepository
     {
+
+        //private Logger _logger = new 
+
+        
 
         #region repoMethods
 
@@ -106,10 +111,11 @@ namespace Occultation.DAL
             var user = context.GameUsers.FirstOrDefault(x => x.UserId == userId);
             if (user != null)
             {
+                var playerCount = context.Players.Count(x => x.GameId == gameId);
                 var playa = new Player
                 {
                     Username = user.UserName,
-                    AvailableDiscs = 17,
+                    AvailableDiscs = 13,
                     TotalDiscs = 17,
                     BrownIncome = 0,
                     OrangeIncome = 0,
@@ -120,7 +126,7 @@ namespace Occultation.DAL
                     DiscColor = "Super",
                     AvailableColonyShips = 3,
                     Pass = false,
-                    TurnOrder = 0,
+                    TurnOrder = playerCount + 1,
                     UserId = userId,
                     GameId = gameId
                 };
@@ -296,6 +302,17 @@ namespace Occultation.DAL
         public void SetDiscoveryTilesForGame(List<GameDiscovery> tiles)
         {
             context.GameDiscoveries.AddRange(tiles);
+        }
+
+        public void SetFirstPlayerTurn(int gameId)
+        {
+            var player = context.Players.FirstOrDefault(x => x.GameId == gameId && x.TurnOrder == 1);
+            if (player != null)
+            {
+                player.WhosTurn = true;
+                context.SaveChanges();
+            }
+            
         }
     }
 }
